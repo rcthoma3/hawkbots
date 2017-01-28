@@ -17,6 +17,7 @@ public class RobotMovement {
 	public RobotMovement(){
 	}
 	
+	
 	public RobotMovement(double newWheelBase){
 		wheelBase = newWheelBase;
 	}
@@ -55,6 +56,8 @@ public class RobotMovement {
     //set drive forward and backward//
     //in: nothing
     //out: nothing
+    //speed>0, moves forward
+    //speed<0, moves backward
     public void DrivefowardBackward(double speed){
     	if(speed>1.0){
     		speed=1;
@@ -154,14 +157,12 @@ public class RobotMovement {
 	    }
 	    
 	}
-	public void stopatfrontobstacle(){
-		
+	
+	//Stop when there is something forward//
+	public void drivefowardunsafe(double speed){
+		float distance = sensors.FrontSensors();
+		if(distance==1 && speed>0){
+				myRobot.drive(0,0);
+			}
+		}
 	}
-	
-	
-	
-	
-	
-	
-	
-}
