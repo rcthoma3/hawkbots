@@ -6,12 +6,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 public class RobotMovement {
-
-	RobotDrive myRobot = new RobotDrive(0 , 1, 2, 3); // why is there 0, 1, 2, 3? What are those?
-	Joystick leftStick;
-	Joystick rightStick;
-	
-    Scanner in = new Scanner(System.in);
 	
 	private boolean modeArcade = true; 
 
@@ -20,7 +14,35 @@ public class RobotMovement {
     private boolean squaredInputs = true; 
     
     private static double wheelBase = 24.0;
-    
+   
+	public RobotMovement(){
+	}
+	
+	public RobotMovement(double newWheelBase){
+		wheelBase = newWheelBase;
+	}
+	
+	public RobotMovement(Joystick Left, Joystick Right){
+		//set left joystick set right joystick
+		SetLeftJoystick(Left);
+		SetRightJoystick(Right);
+	}
+	
+
+	public RobotMovement(Joystick Left, Joystick Right, double newWheelBase){
+		//set left joystick set right joystick
+		SetLeftJoystick(Left);
+		SetRightJoystick(Right);
+		wheelBase = newWheelBase;
+	}
+
+	RobotDrive myRobot = new RobotDrive(0 , 1, 2, 3); // why is there 0, 1, 2, 3? What are those?
+	Joystick leftStick;
+	Joystick rightStick;
+	
+    Scanner in = new Scanner(System.in);
+	
+	
     //set left stick//
     public void SetLeftJoystick(Joystick lJoystick){
     	leftStick = lJoystick;
