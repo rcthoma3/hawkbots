@@ -6,14 +6,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 public class RobotMovement {
-	
 	private boolean modeArcade = true; 
-
 	private boolean modeFine = true; 
-
     private boolean squaredInputs = true; 
-    
     private static double wheelBase = 24.0;
+    
+    private Sensors sensors = new Sensors();
    
 	public RobotMovement(){
 	}
@@ -56,8 +54,14 @@ public class RobotMovement {
     //set drive forward and backward//
     //in: nothing
     //out: nothing
-    public void DrivefowardBackward(){
+    public void DrivefowardBackward(int speed){
+    	float distance = sensors.FrontSensors();
+    	if (speed>0 && distance < 1) {
+    		return;   		
+    	}
+    	//It's ok to move forward.
     	
+    	//code to move forward here.
     }
     
     private double rToCurve(double r){
@@ -137,36 +141,15 @@ public class RobotMovement {
 	//change the mode of drive and speed//
 	public void modeChange(){
 	
-	if(modeArcade == true && modeFine == true){
-    	myRobot.arcadeDrive(leftStick, squaredInputs);
-    }else if(modeArcade == false && modeFine == true){
-    	myRobot.tankDrive(leftStick, rightStick, squaredInputs);
-    }else if(modeArcade == true && modeFine == false){
-    	myRobot.arcadeDrive(leftStick);
-    }else{
-    	myRobot.tankDrive(leftStick, rightStick); 
-    }
-    
-}
-	
-   	//tell when to stop at a front obstacle//
-	public void stopatfrontobstacle(float distance){
-		if(distance == 1){
-			if(outputMaganitude>0){
-			    outputMaganitude=0;
-		}
-	}
-	}	
-	
-	//tell when to stop at a backward obstacle//
-	public void stopatbackwardobstacle(float distance){
-	    if(distance == -1){
-           if(outputMaganitude<0){
-        	   outputMaganitude=0;
-           }
-
+		if(modeArcade == true && modeFine == true){
+	    	myRobot.arcadeDrive(leftStick, squaredInputs);
+	    }else if(modeArcade == false && modeFine == true){
+	    	myRobot.tankDrive(leftStick, rightStick, squaredInputs);
+	    }else if(modeArcade == true && modeFine == false){
+	    	myRobot.arcadeDrive(leftStick);
+	    }else{
+	    	myRobot.tankDrive(leftStick, rightStick); 
 	    }
+	    
 	}
-
-	
 }
