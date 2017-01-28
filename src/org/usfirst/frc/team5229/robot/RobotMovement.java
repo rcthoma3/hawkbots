@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 
 public class RobotMovement {
 
-	RobotDrive myRobot = new RobotDrive(0 , 1, 2, 3);
+	RobotDrive myRobot = new RobotDrive(0 , 1, 2, 4);
 	Joystick leftStick;
 	Joystick rightStick;
 	
