@@ -10,6 +10,7 @@ public class RobotMovement {
 	private boolean modeFine = true; 
     private boolean squaredInputs = true; 
     private static double wheelBase = 24.0;
+    public float outputMagnitude;
     
     private Sensors sensors = new Sensors();
    
@@ -54,14 +55,15 @@ public class RobotMovement {
     //set drive forward and backward//
     //in: nothing
     //out: nothing
-    public void DrivefowardBackward(int speed){
-    	float distance = sensors.FrontSensors();
-    	if (speed>0 && distance < 1) {
-    		return;   		
+    public void DrivefowardBackward(double speed){
+    	if(speed>1.0){
+    		speed=1;
     	}
-    	//It's ok to move forward.
+    	if(speed<-1.0){
+    		speed=-1;
+    	}
+    	myRobot.drive(speed,0);
     	
-    	//code to move forward here.
     }
     
     private double rToCurve(double r){
@@ -88,13 +90,13 @@ public class RobotMovement {
     }
     
     //tell what the is speed//
-    public void whatisSpeed(){
-    	
+    public int whatisSpeed(int speed){
+    	return speed;
     }
     
     //tell how many degrees did the robot turn//
-    public void whatisDegree(){
-    	
+    public double whatisDegree(double r){
+    	return rToCurve(r);
     }
     
     //set mode to arcadeDrive//
@@ -152,4 +154,14 @@ public class RobotMovement {
 	    }
 	    
 	}
+	public void stopatfrontobstacle(){
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 }
