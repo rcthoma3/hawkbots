@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 
 public class RobotMovement {
 
-	RobotDrive myRobot = new RobotDrive(0 , 1, 2, 3);
+	RobotDrive myRobot = new RobotDrive(0 , 1, 2, 3); // why is there 0, 1, 2, 3? What are those?
 	Joystick leftStick;
 	Joystick rightStick;
 	
@@ -18,6 +18,8 @@ public class RobotMovement {
 	private boolean modeFine = true; 
 
     private boolean squaredInputs = true; 
+    
+    private static double wheelBase = 24.0;
     
     //set left stick//
     public void SetLeftJoystick(Joystick lJoystick){
@@ -36,11 +38,27 @@ public class RobotMovement {
     	
     }
     
-    //set turn left and right//
-    //in:nothing
+    private double rToCurve(double r){
+    	return Math.exp(-r/wheelBase);
+    }
+    
+  //how far the outside wheel(right wheel) is going
+    public double angleToTurnDistance(double r, double angdeg){
+	   return (r+wheelBase/2)*Math.toRadians(angdeg);
+    }
+    
+    //turn left
+    //in: speed, radius(r)
     //out: nothing
-    public void Turnleftright(){
-    	
+    public void turnLeft(double speed, double r){
+    	myRobot.drive(speed, -rToCurve(r));
+    }
+    
+  //turn right
+    //in: speed, radius(r)
+    //out: nothing
+    public void turnRight(double speed, double r){
+    	myRobot.drive(speed, rToCurve(r));
     }
     
     //tell what the is speed//
