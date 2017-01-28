@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 
 public class RobotMovement {
 
+<<<<<<< HEAD
 	RobotDrive myRobot = new RobotDrive(0 , 1, 2, 3); // why is there 0, 1, 2, 3? What are those?
 	Joystick leftStick;
 	Joystick rightStick;
@@ -94,48 +95,15 @@ public class RobotMovement {
 	//tell that mode is arcadeDrive//
 	public boolean ismodeArcade(){
 		return modeArcade;
+=======
+//create speed//
+	public void createspeed(){
+>>>>>>> branch 'master' of https://github.com/xlilcasper/hawkbots.git
 		
 	}
+// create degree//
+	public void createdegree(){
 	
-	//tell that mode is tankDrive//
-	public boolean ismodeTank(){
-		return ! modeArcade; 
-	}
-	
-	//tell that mode is Fine//
-	public boolean ismodeFine(){
-		return modeFine;
-		
-	}
-	
-	//tell that mode is Coarse//
-	public boolean ismodeCoarse(){
-		return !modeFine; 
-	}
-	
-	//change the mode of drive and speed//
-	public void modeChange(){
-	
-	if(modeArcade == true && modeFine == true){
-    	myRobot.arcadeDrive(leftStick, squaredInputs);
-    }else if(modeArcade == false && modeFine == true){
-    	myRobot.tankDrive(leftStick, rightStick, squaredInputs);
-    }else if(modeArcade == true && modeFine == false){
-    	myRobot.arcadeDrive(leftStick);
-    }else{
-    	myRobot.tankDrive(leftStick, rightStick); 
-    }
-    
 }
-	
-   	//tell when to stop at a front obstacle//
-	public void stopatfrontobstacle(){
-		
-	}
-	
-	//tell when to stop at a backward obstacle//
-	public void stopatbackwardobstacle(){
-		
-	}
 	
 }
