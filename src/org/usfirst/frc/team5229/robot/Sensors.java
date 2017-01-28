@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5229.robot;
 
 public class Sensors {
+public Sensors() {}
 	//Provides the distance between the robot and
 	//a wall in front of it in inches
 	//In: nothing
@@ -35,6 +36,7 @@ public class Sensors {
 	//Out: angle 
 	public float angle() {
 		float angle = 0;
+		
 		return angle;
 		
 	}
