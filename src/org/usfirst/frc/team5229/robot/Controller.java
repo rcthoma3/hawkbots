@@ -1,6 +1,9 @@
 package org.usfirst.frc.team5229.robot;
 
 public class Controller {
+	public Controller() {
+		
+	}
 
 	//Is the A button pressed or not
 	//in: nothing
