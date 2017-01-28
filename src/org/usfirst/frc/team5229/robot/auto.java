@@ -1,7 +1,10 @@
 package org.usfirst.frc.team5229.robot;
 
-public class auto {
+public class auto {	
 	
+	public auto() {
+	
+	}
 	//Ideally shoots ball
 	//in: nothing
 	//out: nothing
