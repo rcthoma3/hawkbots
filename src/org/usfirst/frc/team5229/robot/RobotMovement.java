@@ -152,7 +152,7 @@ public class RobotMovement {
 		return !modeFine; 
 	}
 	
-	//do the type of drive and how the drive works//
+	//do the type of drive and how the drive work//
 	public void doDriveType(){
 	
 		if(modeArcade == true && modeFine == true){
