@@ -14,12 +14,14 @@ public class RobotMovement {
     
     private Sensors sensors = new Sensors();
    
+	//a constructor that doesn't take an input
 	public RobotMovement(){
 	}
 	
 	
 	public RobotMovement(double newWheelBase){
 		wheelBase = newWheelBase;
+		//wheelBase is the distance from the middle of the right wheel to the middle of the left wheel
 	}
 	
 	public RobotMovement(Joystick Left, Joystick Right){
@@ -46,13 +48,18 @@ public class RobotMovement {
     //set left stick//
     public void SetLeftJoystick(Joystick lJoystick){
     	leftStick = lJoystick;
+
     }
     
     //set right stick//
     public void SetRightJoystick(Joystick rJoystick) {
     	rightStick = rJoystick;
     }
-    
+	
+   public void RobotMovement(double newWheelBase){
+	wheelBase = newWheelBase;
+		//wheelBase is the distance from the middle of the right wheel to the middle of the left wheel
+	} 
     //set drive forward and backward//
     //in: nothing
     //out: nothing
@@ -71,6 +78,8 @@ public class RobotMovement {
     
     private double rToCurve(double r){
     	return Math.exp(-r/wheelBase);
+	//takes the the wheelBase of a robot and the radius of the circle that the curve would be part of and imputs
+	//it into a function that outputs the the curve 
     }
     
   //how far the outside wheel(right wheel) is going
@@ -143,8 +152,8 @@ public class RobotMovement {
 		return !modeFine; 
 	}
 	
-	//order the type of drive and how speed of the drive work//
-	public void doDriveType(){
+	//change the mode of drive and speed//
+	public void modeChange(){
 	
 		if(modeArcade == true && modeFine == true){
 	    	myRobot.arcadeDrive(leftStick, squaredInputs);
