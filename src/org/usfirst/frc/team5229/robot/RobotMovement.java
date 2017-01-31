@@ -10,14 +10,18 @@ public class RobotMovement {
 	private boolean modeFine = true; 
     private boolean squaredInputs = true; 
     private static double wheelBase = 24.0;
+    public float outputMagnitude;
     
     private Sensors sensors = new Sensors();
    
+	//a constructor that doesn't take an input
 	public RobotMovement(){
 	}
 	
+	
 	public RobotMovement(double newWheelBase){
 		wheelBase = newWheelBase;
+		//wheelBase is the distance from the middle of the right wheel to the middle of the left wheel
 	}
 	
 	public RobotMovement(Joystick Left, Joystick Right){
@@ -44,28 +48,38 @@ public class RobotMovement {
     //set left stick//
     public void SetLeftJoystick(Joystick lJoystick){
     	leftStick = lJoystick;
+
     }
     
     //set right stick//
     public void SetRightJoystick(Joystick rJoystick) {
     	rightStick = rJoystick;
     }
-    
+	
+   public void createWheelBase(double newWheelBase){
+	wheelBase = newWheelBase;
+		//wheelBase is the distance from the middle of the right wheel to the middle of the left wheel
+	} 
     //set drive forward and backward//
     //in: nothing
     //out: nothing
-    public void DrivefowardBackward(int speed){
-    	float distance = sensors.FrontSensors();
-    	if (speed>0 && distance < 1) {
-    		return;   		
+    //speed>0, moves forward
+    //speed<0, moves backward
+    public void DrivefowardBackward(double speed){
+    	if(speed>1.0){
+    		speed=1;
     	}
-    	//It's ok to move forward.
+    	if(speed<-1.0){
+    		speed=-1;
+    	}
+    	myRobot.drive(speed,0);
     	
-    	//code to move forward here.
     }
     
     private double rToCurve(double r){
     	return Math.exp(-r/wheelBase);
+	//takes the the wheelBase of a robot and the radius of the circle that the curve would be part of and imputs
+	//it into a function that outputs the the curve 
     }
     
   //how far the outside wheel(right wheel) is going
@@ -88,13 +102,13 @@ public class RobotMovement {
     }
     
     //tell what the is speed//
-    public void whatisSpeed(){
-    	
+    public int whatisSpeed(int speed){
+    	return speed;
     }
     
     //tell how many degrees did the robot turn//
-    public void whatisDegree(){
-    	
+    public double whatisDegree(double r){
+    	return rToCurve(r);
     }
     
     //set mode to arcadeDrive//
@@ -138,8 +152,8 @@ public class RobotMovement {
 		return !modeFine; 
 	}
 	
-	//change the mode of drive and speed//
-	public void modeChange(){
+	//do the type of drive and how the drive work//
+	public void doDriveType(){
 	
 		if(modeArcade == true && modeFine == true){
 	    	myRobot.arcadeDrive(leftStick, squaredInputs);
@@ -152,4 +166,12 @@ public class RobotMovement {
 	    }
 	    
 	}
-}
+	
+	//Stop when there is something forward//
+	public void drivefowardunsafe(double speed){
+		float distance = sensors.FrontSensors();
+		if(distance==1 && speed>0){
+				myRobot.drive(0,0);
+			}
+		}
+	}
