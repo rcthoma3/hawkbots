@@ -29,9 +29,10 @@ public class auto {
 	//in: nothing
 	//out: nothing
 	public void shootball() {
-		//Step 1:Line up to shoot using sensors
-		//Step 2:Fire
-		//Step 3:Back up
+		//Step 1:Use sensor to line up robot straight towards burner
+		//STep 2:Aim towards top goal
+		//Step 3:Fire
+		//Step 4:Back up
 		
 	}
 	//drives forward
