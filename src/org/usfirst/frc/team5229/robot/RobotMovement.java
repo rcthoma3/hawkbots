@@ -143,8 +143,8 @@ public class RobotMovement {
 		return !modeFine; 
 	}
 	
-	//change the mode of drive and speed//
-	public void modeChange(){
+	//order the type of drive and how the drive works//
+	public void doDriveType(){
 	
 		if(modeArcade == true && modeFine == true){
 	    	myRobot.arcadeDrive(leftStick, squaredInputs);
