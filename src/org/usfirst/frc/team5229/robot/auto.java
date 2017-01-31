@@ -52,7 +52,7 @@ public class auto {
 	//out: nothing 
 	public void turnleft() {
 		//Turns Left
-		robot.turnLeft(50,90 r);
+		robot.turnLeft(50,90);
 		
 	}
     //the robot drives distance them turns right
@@ -60,7 +60,7 @@ public class auto {
 	//out: nothing
 	public void turnright() {
 		//Turns right 
-		robot.turnRight(50,90 r);
+		robot.turnRight(50,90);
 		
 	}
 	//the robot gets the distance using the sensor then drops the gear once it gets to the gear pully
@@ -88,7 +88,9 @@ public class auto {
 	public void findhopperfromburner() {
 		if (mySide==RED) {
 			robot.turnRight(50,90);
-			else robot.turnLeft(50,90 r);
+		}
+		else { 
+				robot.turnLeft(50,90);
 		}
 				
 	}
