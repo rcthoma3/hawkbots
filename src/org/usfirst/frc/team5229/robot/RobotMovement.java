@@ -56,7 +56,7 @@ public class RobotMovement {
     	rightStick = rJoystick;
     }
 	
-   public void RobotMovement(double newWheelBase){
+   public void createWheelBase(double newWheelBase){
 	wheelBase = newWheelBase;
 		//wheelBase is the distance from the middle of the right wheel to the middle of the left wheel
 	} 
