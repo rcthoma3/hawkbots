@@ -29,12 +29,16 @@ public class auto {
 	//in: nothing
 	//out: nothing
 	public void shootball() {
+		//Step 1:Line up to shoot using sensors
+		//Step 2:Fire
+		//Step 3:Back up
 		
 	}
 	//drives forward
 	//in: nothing
 	//out: nothing
 	public void moveforward() {
+		robot.DrivefowardBackward(50);
 		
 	}
 	// the robot lines up to shoot the ball at the top of boiler
@@ -47,18 +51,26 @@ public class auto {
 	//in: nothing
 	//out: nothing 
 	public void turnleft() {
+		//Turns Left
+		robot.turnLeft(50,90 r);
 		
 	}
     //the robot drives distance them turns right
 	//in: nothing
 	//out: nothing
 	public void turnright() {
+		//Turns right 
+		robot.turnRight(50,90 r);
 		
 	}
 	//the robot gets the distance using the sensor then drops the gear once it gets to the gear pully
 	//in: distance
 	//out: gear drop
 	public void dropgear() {
+		//Step 1: Have front sensors get distance from wall
+		//Step 2: Line up by making distances equal
+		//Step 3: Move forward certain distance from gear drop location
+		//STep 4: Drop fear onto peg
 		
 	}
 
@@ -66,11 +78,17 @@ public class auto {
 	//in: nothing
 	//out: gear
 	public void pickupgear() {
+		//Step 1: Drive forward till sensor picks up distance
+		//Step 2: use sensor to reposition so that robot is straight 
+		//Step 3: Drive forward until a certain distance from rop off is reached
+		//Step 4: Wait for drop off then back up
+		
 		
 	}
 	public void findhopperfromburner() {
 		if (mySide==RED) {
 			robot.turnRight(50,90);
+			else robot.turnLeft(50,90 r);
 		}
 				
 	}
