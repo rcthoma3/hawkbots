@@ -219,8 +219,5 @@ public class RobotMovement {
 		if(distance==1 && speed>0){
 				myRobot.drive(0,0);
 			}
-		}
-
-
-
-}
+	   } 
+    }
