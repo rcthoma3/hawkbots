@@ -3,24 +3,13 @@ package org.usfirst.frc.team5229.robot;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Controller {
-	public static float kButtonA = 0;
-	public static float kButtonB = 1;
-	public static float kButtonX = 2;
-	public static float kButtonY = 3;
+	public static int kButtonA = 0;
+	public static int kButtonB = 1;
+	public static int kButtonX = 2;
+	public static int kButtonY = 3;
 	public Joystick stick = new Joystick(0);
 	
-	public boolean getRawButton(float kButtonA2){
-		return false;
-	}
-	public boolean getRawButton1(float kButtonB2){
-		return false;
-	}
-	public boolean getRawButton2(float kButtonX2){
-		return false;
-	}
-	public boolean getRawButton3(float kButtonY2){
-		return false;
-	}
+	
 
 	
 	
@@ -55,7 +44,7 @@ public class Controller {
 	//in: nothing
 	//out: is A button pressed, boolean
 	public boolean getButtonA() {
-		return getRawButton(kButtonA);
+		return stick.getRawButton(kButtonA);
 	}
 	
 	
@@ -81,7 +70,7 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonB() {
-	return getRawButton1(kButtonB);
+	return stick.getRawButton(kButtonB);
 		
 	}
 	
@@ -89,7 +78,7 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonX() {
-		return getRawButton2(kButtonX);
+		return stick.getRawButton(kButtonX);
 		
 	}
 	
@@ -97,7 +86,7 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonY() {
-		return getRawButton3(kButtonY);
+		return stick.getRawButton(kButtonY);
 		
 	}
 	
