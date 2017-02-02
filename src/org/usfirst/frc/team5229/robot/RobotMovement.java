@@ -90,13 +90,8 @@ public class RobotMovement {
     	if(speed<-1.0){
     		speed=-1;
     	}
-    	if(speed>0){
-    		myRobot.drive(speed, 0);
-    	}
+    	myRobot.drive(-speed,0);
     	
-    	if(speed<0){
-    		myRobot.drive(speed, 0);
-    	}
     }
     
     //in:r
