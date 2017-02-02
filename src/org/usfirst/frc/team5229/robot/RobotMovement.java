@@ -48,7 +48,7 @@ public class RobotMovement {
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
-	}
+	} 
 	RobotDrive myRobot = new RobotDrive(2, 3, 0, 1); // why is there 0, 1, 2, 3? What are those?
 	Joystick leftStick;
 	Joystick rightStick;
@@ -90,8 +90,13 @@ public class RobotMovement {
     	if(speed<-1.0){
     		speed=-1;
     	}
-    	myRobot.drive(speed,0);
+    	if(speed>0){
+    		myRobot.drive(speed, 0);
+    	}
     	
+    	if(speed<0){
+    		myRobot.drive(speed, 0);
+    	}
     }
     
     //in:r
