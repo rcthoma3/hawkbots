@@ -5,6 +5,7 @@ import java.util.Scanner;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 
+
 public class RobotMovement {
 	private boolean modeArcade = true; 
 	private boolean modeFine = true; 
@@ -42,9 +43,16 @@ public class RobotMovement {
 		wheelBase = newWheelBase;
 	}
 
-	RobotDrive myRobot = new RobotDrive(0 , 1, 2, 3); // why is there 0, 1, 2, 3? What are those?
+	public void init(){
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
+	}
+	RobotDrive myRobot = new RobotDrive(2, 3, 0, 1); // why is there 0, 1, 2, 3? What are those?
 	Joystick leftStick;
 	Joystick rightStick;
+	
 	
     Scanner in = new Scanner(System.in);
 	
@@ -211,5 +219,5 @@ public class RobotMovement {
 		if(distance==1 && speed>0){
 				myRobot.drive(0,0);
 			}
-		}
-	}
+	   } 
+    }
