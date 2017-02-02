@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Talon;
+
 
 public class RobotMovement {
 	private boolean modeArcade = true; 
@@ -220,7 +220,6 @@ public class RobotMovement {
 				myRobot.drive(0,0);
 			}
 		}
-	
 
 
 
