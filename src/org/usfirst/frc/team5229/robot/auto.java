@@ -113,6 +113,8 @@ public class auto {
 		robot.DrivefowardBackward(50);
 		robot.turnRight(50,90);
 		robot.DrivefowardBackward(50);
+	
+		
 		
 	}
 		
