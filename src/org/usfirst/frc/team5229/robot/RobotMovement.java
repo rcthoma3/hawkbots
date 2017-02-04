@@ -14,7 +14,14 @@ public class RobotMovement {
     
     
     private Sensors sensors = new Sensors();
-   
+    private Motor conveyer = new Motor(4);
+    private boolean conveyerIsOn = false;
+    public void setConveyorOn(boolean on){
+    	conveyerIsOn = on;
+    }
+    public boolean conveyorRunIfOn(){
+    	
+    }
 	//a constructor that doesn't take an input
 	public RobotMovement(){
 	}
