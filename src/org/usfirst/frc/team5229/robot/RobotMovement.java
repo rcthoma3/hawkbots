@@ -4,6 +4,9 @@ import java.util.Scanner;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Talon;
+
 
 
 public class RobotMovement {
@@ -220,4 +223,25 @@ public class RobotMovement {
 				myRobot.drive(0,0);
 			}
 	   } 
-    }
+	
+		
+	protected SpeedController m_ballmoter;
+	protected SpeedController m_convayeromoter;
+    public static final double kDefaultSensitivity = 0.5;
+    
+    public void setballmoter(){
+		m_ballmoter = new Talon(4);
+		m_convayeromoter = null;
+	
+	}
+
+	public void ballmotorfowardbackward(double speed){
+		if(speed>1.0){
+			speed=1.0;
+		}
+		if(speed<-1.0){
+			speed=-1.0;
+		}
+		m_ballmoter.set(-speed);
+	}
+}
