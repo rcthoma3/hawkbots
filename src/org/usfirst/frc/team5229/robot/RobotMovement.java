@@ -226,6 +226,8 @@ public class RobotMovement {
 		
 	protected SpeedController m_ballmoter;
 	protected SpeedController m_convayeromoter;
+	protected SpeedController m_climbmoter;
+	protected SpeedController m_shootmoter;
    
     //ball motor is set//
     public void setballmoter(){
@@ -244,15 +246,18 @@ public class RobotMovement {
 		if(speed<-1.0){
 			speed=-1.0;
 		}
-		m_ballmoter.set(-speed);
+		m_ballmoter.set(speed);
 	}
-		
+	
+	//set conveyer motor
 	public void setcaonvayeromotor(){
 		m_convayeromoter = new Talon(5);
 	}
 			
 	
-	
+	//set speed for conveyer motor
+	//in:speed
+	//out:nonthing
 	public void convayermotorforwardbackward(double speed){
 		if(speed>1.0){
 			speed=1.0;
@@ -260,11 +265,42 @@ public class RobotMovement {
 		if(speed<-1.0){
 			speed=-1.0;
 		}
-		m_convayeromoter.set(-speed);
+		m_convayeromoter.set(speed);
 	}
 	
+	//set climber motor
+	public void setclimbmoter(){
+		m_climbmoter = new Talon(6);
+	}
 	
+	//set speed for climb motor
+	//in:speed
+	//out:nothing
+	public void climbmotermovement(double speed){
+		if(speed>1.0){
+			speed=1.0;
+		}else if(speed<-1.0){
+			speed=-1.0;
+		}
+		m_climbmoter.set(speed);
+	}
 	
+	//set shoot motor
+	public void setshootmoter(){
+		m_shootmoter = new Talon(7);
+	}
+	
+	//set shoot motor speed
+	//in:speed
+	//out:nothing
+	public void shootmotorspeed(double speed){
+		if(speed>1.0){
+			speed=1.0;
+		}else if(speed<0){
+			speed=0;
+		}
+		m_shootmoter.set(speed);
+	}
 	
 	
 }
