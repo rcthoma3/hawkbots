@@ -227,11 +227,11 @@ public class RobotMovement {
 		
 	protected SpeedController m_ballmoter;
 	protected SpeedController m_convayeromoter;
-    public static final double kDefaultSensitivity = 0.5;
+   
     
     public void setballmoter(){
 		m_ballmoter = new Talon(4);
-		m_convayeromoter = null;
+		
 	
 	}
 
