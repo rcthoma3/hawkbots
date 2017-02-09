@@ -245,10 +245,23 @@ public class RobotMovement {
 			speed=-1.0;
 		}
 		m_ballmoter.set(-speed);
-			
 	}
+		
+	public void setcaonvayeromotor(){
+		m_convayeromoter = new Talon(5);
+	}
+			
 	
 	
+	public void convayermotorforwardbackward(double speed){
+		if(speed>1.0){
+			speed=1.0;
+		}
+		if(speed<-1.0){
+			speed=-1.0;
+		}
+		m_convayeromoter.set(-speed);
+	}
 	
 	
 	
