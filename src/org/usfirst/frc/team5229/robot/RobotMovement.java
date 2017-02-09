@@ -15,14 +15,8 @@ public class RobotMovement {
     private boolean squaredInputs = true; 
     private static double wheelBase = 24.0;
     private Sensors sensors = new Sensors();
-    //private Motor conveyer = new Motor(4);//
-    private boolean conveyerIsOn = false;
-    public void setConveyorOn(boolean on){
-    	conveyerIsOn = on;
-    }
-    public boolean conveyorRunIfOn(){
-    	
-    } 
+   
+
 	//a constructor that doesn't take an input
 	public RobotMovement(){
 	}
@@ -233,13 +227,16 @@ public class RobotMovement {
 	protected SpeedController m_ballmoter;
 	protected SpeedController m_convayeromoter;
    
-    
+    //ball motor is set//
     public void setballmoter(){
 		m_ballmoter = new Talon(4);
 		
 	
 	}
-
+    
+    //speed of ball motor is set//
+    //in:speed
+    //out:nonthing
 	public void ballmotorfowardbackward(double speed){
 		if(speed>1.0){
 			speed=1.0;
@@ -249,7 +246,15 @@ public class RobotMovement {
 		}
 		m_ballmoter.set(-speed);
 			
-		}
+	}
+	
+	
+	
+	
+	
+	
+	
+}
 	
 
 	 
