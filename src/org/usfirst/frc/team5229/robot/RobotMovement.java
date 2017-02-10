@@ -45,6 +45,7 @@ public class RobotMovement {
 		wheelBase = newWheelBase;
 	}
 
+	//should all of the motors be inverted?
 	public void init(){
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
@@ -86,15 +87,24 @@ public class RobotMovement {
     //speed>0, moves forward
     //speed<0, moves backward
     public void DrivefowardBackward(double speed){
-    	if(speed>1.0){
+    	speed = speedLimit(speed);
+    	myRobot.drive(-speed,0);
+    	
+    }
+
+	/**
+	 * @param speed
+	 * @return
+	 */
+	private double speedLimit(double speed) {
+		if(speed>1.0){
     		speed=1;
     	}
     	if(speed<-1.0){
     		speed=-1;
     	}
-    	myRobot.drive(-speed,0);
-    	
-    }
+		return speed;
+	}
     
     //in:r
     //out:Math.exp(-r/wheelBase)
@@ -240,12 +250,7 @@ public class RobotMovement {
     //in:speed
     //out:nonthing
 	public void ballmotorfowardbackward(double speed){
-		if(speed>1.0){
-			speed=1.0;
-		}
-		if(speed<-1.0){
-			speed=-1.0;
-		}
+		speed = speedLimit(speed);
 		m_ballmoter.set(speed);
 	}
 	
@@ -259,12 +264,7 @@ public class RobotMovement {
 	//in:speed
 	//out:nonthing
 	public void convayermotorforwardbackward(double speed){
-		if(speed>1.0){
-			speed=1.0;
-		}
-		if(speed<-1.0){
-			speed=-1.0;
-		}
+		speed = speedLimit(speed);
 		m_convayeromoter.set(speed);
 	}
 	
@@ -277,11 +277,7 @@ public class RobotMovement {
 	//in:speed
 	//out:nothing
 	public void climbmotermovement(double speed){
-		if(speed>1.0){
-			speed=1.0;
-		}else if(speed<-1.0){
-			speed=-1.0;
-		}
+		speed = speedLimit(speed);
 		m_climbmoter.set(speed);
 	}
 	
@@ -294,11 +290,7 @@ public class RobotMovement {
 	//in:speed
 	//out:nothing
 	public void shootmotorspeed(double speed){
-		if(speed>1.0){
-			speed=1.0;
-		}else if(speed<0){
-			speed=0;
-		}
+		speed = speedLimit(speed);
 		m_shootmoter.set(speed);
 	}
 	
