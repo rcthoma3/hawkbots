@@ -225,11 +225,15 @@ public class RobotMovement {
 	
 	//Stop when there is something forward//
 	//in:speed
-	//out:nothing
-	public void drivefowardunsafe(double speed){
+	//out:true if robot does not stop and false if the robot does stop
+	public boolean drivefowardunsafe(double speed){
 		float distance = sensors.FrontSensors();
-		if(distance==1 && speed>0){
+		if(distance<=1 && speed>0){
 				myRobot.drive(0,0);
+				return false;
+		}
+		else{myRobot.drive(speed,0);
+		return true;
 			}
 	   } 
 	
