@@ -1,13 +1,9 @@
 package org.usfirst.frc.team5229.robot;
 
-import java.util.Scanner;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
-
-
 
 public class RobotMovement {
 	private boolean modeArcade = true; 
@@ -16,7 +12,6 @@ public class RobotMovement {
     private static double wheelBase = 24.0;
     private Sensors sensors = new Sensors();
    
-
 	//a constructor that doesn't take an input
 	public RobotMovement(){
 	}
@@ -57,15 +52,11 @@ public class RobotMovement {
 	Joystick rightStick;
 	
 	
-    Scanner in = new Scanner(System.in);
-	
-	
     //set left stick//
     //in:Joystick lJoystick
     //out:nothing
     public void SetLeftJoystick(Joystick lJoystick){
     	leftStick = lJoystick;
-
     }
     
     //set right stick//
@@ -81,6 +72,7 @@ public class RobotMovement {
 	wheelBase = newWheelBase;
 		//wheelBase is the distance from the middle of the right wheel to the middle of the left wheel
 	} 
+   
     //set drive forward and backward//
     //in: speed
     //out: nothing
@@ -88,13 +80,12 @@ public class RobotMovement {
     //speed<0, moves backward
     public void DrivefowardBackward(double speed){
     	speed = speedLimit(speed);
-    	myRobot.drive(-speed,0);
-    	
+    	myRobot.drive(-speed,0);   	// WHY is there a -? Should motors be reversed?
     }
 
 	/**
 	 * @param speed
-	 * @return
+	 * @return speed such that -1<=speed<=1
 	 */
 	private double speedLimit(double speed) {
 		if(speed>1.0){
@@ -125,17 +116,19 @@ public class RobotMovement {
     //in: speed, radius(r)
     //out: nothing
     public void turnLeft(double speed, double r){
+    	speed = speedLimit(speed);
     	myRobot.drive(speed, -rToCurve(r));
     }
     
-  //turn right
+    //turn right
     //in: speed, radius(r)
     //out: nothing
     public void turnRight(double speed, double r){
+    	speed = speedLimit(speed);
     	myRobot.drive(speed, rToCurve(r));
     }
     
-    //tell what the is speed//
+    //tell what the is speed// //this is an identity function!
     //in:speed
     //out:speed
     public int whatisSpeed(int speed){
@@ -195,8 +188,7 @@ public class RobotMovement {
 	//in:nothing
 	//out:modeFine
 	public boolean ismodeFine(){
-		return modeFine;
-		
+		return modeFine;	
 	}
 	
 	//tell that mode is Coarse//
@@ -210,7 +202,6 @@ public class RobotMovement {
 	//in:nothing
 	//out:nothing
 	public void doDriveType(){
-	
 		if(modeArcade == true && modeFine == true){
 	    	myRobot.arcadeDrive(leftStick, squaredInputs);
 	    }else if(modeArcade == false && modeFine == true){
@@ -219,24 +210,23 @@ public class RobotMovement {
 	    	myRobot.arcadeDrive(leftStick);
 	    }else{
 	    	myRobot.tankDrive(leftStick, rightStick); 
-	    }
-	    
+	    }	    
 	}
 	
 	//Stop when there is something forward//
 	//in:speed
 	//out:true if robot does not stop and false if the robot does stop
 	public boolean drivefowardunsafe(double speed){
+		speed = speedLimit(speed);
 		float distance = sensors.FrontSensors();
 		if(distance<=1 && speed>0){
 				myRobot.drive(0,0);
 				return false;
+		} else {
+			myRobot.drive(speed,0);
+			return true;
 		}
-		else{myRobot.drive(speed,0);
-		return true;
-			}
-	   } 
-	
+	} 
 		
 	protected SpeedController m_ballmoter;
 	protected SpeedController m_convayeromoter;
@@ -246,8 +236,6 @@ public class RobotMovement {
     //ball motor is set//
     public void setballmoter(){
 		m_ballmoter = new Talon(4);
-		
-	
 	}
     
     //speed of ball motor is set//
@@ -262,8 +250,7 @@ public class RobotMovement {
 	public void setcaonvayeromotor(){
 		m_convayeromoter = new Talon(5);
 	}
-			
-	
+				
 	//set speed for conveyer motor
 	//in:speed
 	//out:nonthing
@@ -297,8 +284,7 @@ public class RobotMovement {
 		speed = speedLimit(speed);
 		m_shootmoter.set(speed);
 	}
-	
-	
+		
 }
 	
 
