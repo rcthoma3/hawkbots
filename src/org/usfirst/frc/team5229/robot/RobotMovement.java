@@ -55,6 +55,30 @@ public class RobotMovement {
 			break;
 		}
 	}
+	
+    //tell what the is state//
+    //in:nothing
+    //out:state
+    public State whatisState(){
+    	return state;
+    }
+    
+    //sets the state//
+    //in: new state
+    //out:boolean if true, switch was succesful
+    public boolean setState(State newState){
+    	if(newState == state){
+    		return true;
+    	}
+    	if(state == State.STOPPED){
+    		state = newState;
+    		return true;
+    	}
+    	if(newState == State.STOPPED){
+    		state = newState;
+    		return true;
+    	}
+    }
    
 	//a constructor that doesn't take an input
 	public RobotMovement(){
