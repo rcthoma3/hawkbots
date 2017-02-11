@@ -26,9 +26,9 @@ public class RobotMovement {
 			break;
 		case FORWARD:
 			DrivefowardBackward(1);
-			break;
+			break; 
 		case BACKWARD:
-			DriveforwardBackward(-1);
+			DrivefowardBackward(-1);
 			break;
 		case LEFT:
 			turnLeft(1,0);
