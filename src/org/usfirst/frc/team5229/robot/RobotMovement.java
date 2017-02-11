@@ -29,6 +29,7 @@ public class RobotMovement {
 			DrivefowardBackward(0.0);
 			break;
 		case FORWARD:
+<<<<<<< HEAD
 			DrivefowardBackward(1);
 			break; 
 		//case BACKWARD://
@@ -37,6 +38,13 @@ public class RobotMovement {
 			//break;//
 		case BACKWARD:
 			DrivefowardBackward(-speed);
+=======
+
+			DrivefowardBackward(1);
+			break; 
+		case BACKWARD:
+			DrivefowardBackward(-1);
+>>>>>>> origin/master
 			break;
 		case LEFT:
 			turnLeft(speed,radius);
@@ -52,6 +60,48 @@ public class RobotMovement {
 			break;
 		}
 	}
+	
+    //tell what the is state//
+    //in:nothing
+    //out:state
+    public State whatisState(){
+    	return state;
+    }
+    
+    //sets the state//
+    //in: new state
+    //out:boolean if true, switch was succesful
+    public boolean setState(State newState){
+    	if(newState == state){
+    		return true;
+    	}
+    	if(state == State.STOPPED){
+    		state = newState;
+    		return true;
+    	}
+    	if(newState == State.STOPPED){
+    		state = newState;
+    		return true;
+    	}
+	   if(state == State.RIGHT && newState == State.FORWARD){
+		   state = newState;
+		   return true;
+	   }
+	   if(state == State.LEFT && newState == State.FORWARD){
+		   state = newState;
+		   return true;
+	   }
+	   if(state == State.FORWARD && newState == State.RIGHT){
+		   state = newState;
+		   return true;
+	   }
+	   if(state == State.FORWARD && newState == State.LEFT){
+		   state = newState;
+		   return true;
+	   }
+	   return false;
+		
+    }
    
 	//a constructor that doesn't take an input
 	public RobotMovement(){
