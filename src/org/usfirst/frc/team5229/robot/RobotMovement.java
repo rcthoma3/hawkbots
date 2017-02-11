@@ -13,13 +13,30 @@ public class RobotMovement {
     private Sensors sensors = new Sensors();
     
     //state machine
-    public enum State {
+    private enum State {
 		STOPPED, FORWARD, BACKWARD, LEFT, RIGHT, CLIMBING, DESCENDING
 	}
  
 	State state = STOPPED;
 	
-	
+	public void tick(){
+		switch (state){
+		case STOPPED:
+			break;
+		case FORWARD:
+			break;
+		case BACKWARD:
+			break;
+		case LEFT:
+			break;
+		case RIGHT:
+			break;
+		case CLIMBING:
+			break;
+		case DESCENDING:
+			break;
+		}
+	}
    
 	//a constructor that doesn't take an input
 	public RobotMovement(){
