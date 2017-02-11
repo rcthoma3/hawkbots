@@ -13,6 +13,10 @@ public class RobotMovement {
     private Sensors sensors = new Sensors();
     
     //state machine
+    
+    private double radius = 0;
+    private double speed = 1.0;
+    
     private enum State {
 		STOPPED, FORWARD, BACKWARD, LEFT, RIGHT, CLIMBING, DESCENDING
 	}
@@ -22,19 +26,19 @@ public class RobotMovement {
 	public void tick(){
 		switch (state){
 		case STOPPED:
-			DrivefowardBackward(0);
+			DrivefowardBackward(0.0);
 			break;
 		case FORWARD:
-			DrivefowardBackward(1);
+			DrivefowardBackward(speed);
 			break;
 		case BACKWARD:
-			DriveforwardBackward(-1);
+			DrivefowardBackward(-speed);
 			break;
 		case LEFT:
-			turnLeft(1,0);
+			turnLeft(speed,radius);
 			break;
 		case RIGHT:
-			turnRight(1,0);
+			turnRight(speed,radius);
 			break;
 		case CLIMBING:
 			climbmotermovement(1);
@@ -161,11 +165,40 @@ public class RobotMovement {
     	myRobot.drive(speed, rToCurve(r));
     }
     
-    //tell what the is speed// //this is an identity function!
-    //in:speed
+    //tell what the is speed//
+    //in:nothing
     //out:speed
-    public int whatisSpeed(int speed){
+    public double whatisSpeed(){
     	return speed;
+    }
+    
+    //sets the speed//
+    //in: new speed
+    //out:nothing
+    public void setSpeed(double newSpeed){
+    	if(newSpeed<0){
+    		speed = -newSpeed;
+    	}else{
+    		speed = newSpeed;
+    	}
+    }
+
+    //tell what the is radius
+    //in:nothing
+    //out:radius
+    public double whatisRadius(){
+    	return radius;
+    }
+    
+    //sets the radius//
+    //in: new radius
+    //out:nothing
+    public void setRadius(double newRadius){
+    	if(newRadius<0){
+    		radius = -newRadius;
+    	}else{
+    		radius = newRadius;
+    	}
     }
     
     //tell how many degrees did the robot turn//
