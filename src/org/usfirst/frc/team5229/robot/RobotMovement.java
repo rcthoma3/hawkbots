@@ -11,6 +11,15 @@ public class RobotMovement {
     private boolean squaredInputs = true; 
     private static double wheelBase = 24.0;
     private Sensors sensors = new Sensors();
+    
+    //state machine
+    public enum State {
+		STOPPED, FORWARD, BACKWARD, LEFT, RIGHT, CLIMBING, DESCENDING
+	}
+ 
+	State state = STOPPED;
+	
+	
    
 	//a constructor that doesn't take an input
 	public RobotMovement(){
