@@ -29,27 +29,11 @@ public class RobotMovement {
 			DrivefowardBackward(0.0);
 			break;
 		case FORWARD:
-<<<<<<< HEAD
 			DrivefowardBackward(speed);
 			break;
 		case BACKWARD:
 			DrivefowardBackward(-speed);
 			break;
-=======
-
-			DrivefowardBackward(1);
-			break; 
-		//case BACKWARD://
-			//DrivefowardBackward(-1);//
-			//DrivefowardBackward(speed);//
-			//break;//
-		case BACKWARD:
-
-
-			DrivefowardBackward(1);
-			break; 
-
->>>>>>> origin/master
 		case LEFT:
 			turnLeft(speed,radius);
 			break;
