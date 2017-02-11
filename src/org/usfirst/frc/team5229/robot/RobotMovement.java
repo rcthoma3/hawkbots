@@ -17,7 +17,7 @@ public class RobotMovement {
 		STOPPED, FORWARD, BACKWARD, LEFT, RIGHT, CLIMBING, DESCENDING
 	}
  
-	State state = STOPPED;
+	State state = State.STOPPED;
 	
 	public void tick(){
 		switch (state){
