@@ -22,18 +22,25 @@ public class RobotMovement {
 	public void tick(){
 		switch (state){
 		case STOPPED:
+			DrivefowardBackward(0);
 			break;
 		case FORWARD:
+			DrivefowardBackward(1);
 			break;
 		case BACKWARD:
+			DriveforwardBackward(-1);
 			break;
 		case LEFT:
+			turnLeft(1,0);
 			break;
 		case RIGHT:
+			turnRight(1,0);
 			break;
 		case CLIMBING:
+			climbmotermovement(1);
 			break;
 		case DESCENDING:
+			climbmotermovement(-1);
 			break;
 		}
 	}
