@@ -72,6 +72,24 @@ public class RobotMovement {
     		state = newState;
     		return true;
     	}
+	   if(state == State.RIGHT && newState == State.FORWARD){
+		   state = newState;
+		   return true;
+	   }
+	   if(state == State.LEFT && newState == State.FORWARD){
+		   state = newState;
+		   return true;
+	   }
+	   if(state == State.FORWARD && newState == State.RIGHT){
+		   state = newState;
+		   return true;
+	   }
+	   if(state == State.FORWARD && newState == State.LEFT){
+		   state = newState;
+		   return true;
+	   }
+	   return false;
+		
     }
    
 	//a constructor that doesn't take an input
