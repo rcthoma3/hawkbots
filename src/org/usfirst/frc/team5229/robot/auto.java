@@ -8,6 +8,25 @@ public class auto {
 	private final int BLUE=1;
 	private int mySide=-1;
 	
+	public enum STATES {
+		STOP,
+		PICKUP_GEAR,
+		DROP_GEAR,
+		SHOOT_BALL,
+		FIELD_READ,
+		HOPPER,
+		PICK_UP_BALLS,
+		Exit,
+		
+	}
+	
+	STATES state = STATES.STOP;
+	boolean hasGear = false;
+	boolean hasBalls = false;
+	boolean noBalls = false;
+	boolean Robot = false; 
+	boolean noGear = false;
+	
 	
 	public auto() {
 	
@@ -113,11 +132,40 @@ public class auto {
 		robot.DrivefowardBackward(50);
 		robot.turnRight(50,90);
 		robot.DrivefowardBackward(50);
-	
-		
-		
 	}
 		
-				
+		
+		
+	
+	
+	public void run() {
+		if (state==STATES.STOP) {
+			if (hasBalls) {
+				state = STATES.PICKUP_GEAR;
+			}
+		} //End stop state		
+		else if (state==STATES.PICKUP_GEAR) {
+			if (hasGear) {
+				state = STATES.DROP_GEAR;
+			}
+		}//End pickup gear state
+		else if (state==STATES.DROP_GEAR) {
+			if (noGear) {
+				state = STATES.FIELD_READ;
+			}
+		} //End drop gear
+	
+		else if (state==STATES.HOPPER) {
+			if (hasBalls){
+				state = STATES.SHOOT_BALL;
+			}
+		}//End hopper state
+		else if (state==STATES.SHOOT_BALL) {
+			if (noBalls) {
+				state = STATES.Exit;
+			}
+		}//End shoot ball
+	}
+	
 	
 }
