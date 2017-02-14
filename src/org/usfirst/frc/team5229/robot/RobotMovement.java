@@ -26,11 +26,11 @@ public class RobotMovement {
 	public void tick(){
 		switch (state){
 		case STOPPED:
-			DrivefowardBackward(0.0);
+			DrivefowardBackward(0);
 			break;
 		case FORWARD:
 
-			DrivefowardBackward(1);
+			DrivefowardBackward(speed);
 			break; 
 		//case BACKWARD://
 			//DrivefowardBackward(-1);//
@@ -39,7 +39,7 @@ public class RobotMovement {
 		case BACKWARD:
 
 
-			DrivefowardBackward(1);
+			DrivefowardBackward(speed);
 			break; 
 
 		case LEFT:
@@ -49,10 +49,10 @@ public class RobotMovement {
 			turnRight(speed,radius);
 			break;
 		case CLIMBING:
-			climbmotermovement(1);
+			climbmotermovement(speed);
 			break;
 		case DESCENDING:
-			climbmotermovement(-1);
+			climbmotermovement(speed);
 			break;
 		}
 	}
@@ -175,13 +175,57 @@ public class RobotMovement {
 	 * @return speed such that -1<=speed<=1
 	 */
 	private double speedLimit(double speed) {
+		if(state == State.FORWARD){
 		if(speed>1.0){
-    		speed=1;
+    		speed=1.0;
     	}
-    	if(speed<-1.0){
-    		speed=-1;
+    	if(speed<0){
+    		speed=0;
     	}
-		return speed;
+		}
+    	if(state == State.BACKWARD){
+    		if(speed>0){
+    			speed=0;
+    		}
+    		if(speed<-1.0){
+    			speed=-1.0;
+    		}
+    	}
+    	if(state == State.CLIMBING){
+    		if(speed>1.0){
+    			speed=1.0;
+    		}
+    		if(speed<0){
+    			speed=0;
+    		}
+    	}
+    	if(state == State.DESCENDING){
+    		if(speed>0){
+    			speed=0;
+    		}
+    		if(speed<-1.0){
+    			speed=-1.0;
+    		}
+    	}
+    	if(state == State.LEFT){
+    		if(speed<0){
+    			speed=0;
+    		}
+    		if(speed>1.0){
+    			speed=1.0;
+    		}
+    	}
+    	if(state == State.RIGHT){
+    		if(speed<0){
+    			speed=0;
+    		}
+    		if(speed>1.0){
+    			speed=1.0;
+    		}
+    	}
+    	
+    	
+	    return speed;
 	}
     
     //in:r
@@ -204,7 +248,13 @@ public class RobotMovement {
     //out: nothing
     public void turnLeft(double speed, double r){
     	speed = speedLimit(speed);
-    	myRobot.drive(speed, -rToCurve(r));
+    	if (r>0){
+    		r=0;
+    	}
+    	if(r<-180){
+    		r=-180;
+    	}
+    	myRobot.drive(speed, rToCurve(r));
     }
     
     //turn right
@@ -212,13 +262,19 @@ public class RobotMovement {
     //out: nothing
     public void turnRight(double speed, double r){
     	speed = speedLimit(speed);
+    	if(r<0){
+    		r=0;
+    	}
+    	if(r>180){
+    		r=180;
+    	}
     	myRobot.drive(speed, rToCurve(r));
     }
     
     //tell what the is speed//
     //in:nothing
     //out:speed
-    public double whatisSpeed(){
+    public double whatisSpeed(double speed){
     	return speed;
     }
     
@@ -226,29 +282,17 @@ public class RobotMovement {
     //in: new speed
     //out:nothing
     public void setSpeed(double newSpeed){
-    	if(newSpeed<0){
-    		speed = -newSpeed;
-    	}else{
-    		speed = newSpeed;
-    	}
+    	speed = newSpeed;
+    	
     }
 
-    //tell what the is radius
-    //in:nothing
-    //out:radius
-    public double whatisRadius(){
-    	return radius;
-    }
     
     //sets the radius//
     //in: new radius
     //out:nothing
     public void setRadius(double newRadius){
-    	if(newRadius<0){
-    		radius = -newRadius;
-    	}else{
-    		radius = newRadius;
-    	}
+    	radius = newRadius;
+    	
     }
     
     //tell how many degrees did the robot turn//
@@ -355,10 +399,15 @@ public class RobotMovement {
 	}
     
     //speed of ball motor is set//
-    //in:speed
+    //in:ballspeed
     //out:nonthing
 	public void ballmotorfowardbackward(double speed){
-		speed = speedLimit(speed);
+		if(speed>1.0){
+			speed=1.0;
+		}
+		if(speed<-1.0){
+			speed=-1.0;
+		}
 		m_ballmoter.set(speed);
 	}
 	
@@ -371,7 +420,12 @@ public class RobotMovement {
 	//in:speed
 	//out:nonthing
 	public void convayermotorforwardbackward(double speed){
-		speed = speedLimit(speed);
+		if(speed>1.0){
+			speed=1.0;
+		}
+		if(speed<-1.0){
+			speed=-1.0;
+		}
 		m_convayeromoter.set(speed);
 	}
 	
@@ -397,7 +451,12 @@ public class RobotMovement {
 	//in:speed
 	//out:nothing
 	public void shootmotorspeed(double speed){
-		speed = speedLimit(speed);
+		if(speed>1.0){
+			speed=1.0;
+		}
+		if(speed<-1.0){
+			speed=-1.0;
+		}
 		m_shootmoter.set(speed);
 	}
 		
