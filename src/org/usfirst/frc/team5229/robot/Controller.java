@@ -28,16 +28,16 @@ public class Controller extends Joystick {
 	
 	public void XboxController(int port) {
 		
-		a = new JoystickButton(this, 1);
-		b = new JoystickButton(this, 2);
-		x = new JoystickButton(this, 3);
-		y = new JoystickButton(this, 4);
-		start = new JoystickButton(this, 8);
-		select = new JoystickButton(this, 7);
-		leftBumper = new JoystickButton(this, 5);
-		rightBumper = new JoystickButton(this, 6);
-		leftJoyButton = new JoystickButton(this, 9);
-		rightJoyButton = new JoystickButton(this, 10);
+	System.out.print(	 (a = new JoystickButton(this, 1)) + "Button A Pressed");
+	System.out.print(	 (b = new JoystickButton(this, 2)) + "Button B Pressed");
+	System.out.print(  (x = new JoystickButton(this, 3)) + "Button X Pressed");
+	System.out.print(  (y = new JoystickButton(this, 4)) + "Button Y Pressed");
+	System.out.println(  (start = new JoystickButton(this, 8)) + "Start Button Pressed");
+	System.out.println(	 (select = new JoystickButton(this, 7)) + "Select Button Pressed");
+	System.out.println(  (leftBumper = new JoystickButton(this, 5)) + "Left Bumber Pressed");
+	System.out.println(  (rightBumper = new JoystickButton(this, 6)) + "Right Bumber Pressed");
+	System.out.println(	 (leftJoyButton = new JoystickButton(this, 9)) + "Left joy button");
+	System.out.println(	(rightJoyButton = new JoystickButton(this, 10)) + "Right joy button");
 	}
 	
 	/**
@@ -107,6 +107,11 @@ public class Controller extends Joystick {
 			}
 		}).start();		
 	}
+	
+	public void test() {
+		System.out.print("Axis 2:"+ this.getX2());
+		System.out.print(this.getX2());
+	}
 
 	public enum Direction {
 		UP(0),
@@ -151,6 +156,7 @@ public class Controller extends Joystick {
 			}
 			return null;
 		}
+	
 	}
 }
 		
