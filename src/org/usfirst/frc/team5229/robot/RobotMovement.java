@@ -14,7 +14,7 @@ public class RobotMovement {
     
     //state machine
     
-    private double radius = 0;
+    private double r = 0;
     private double speed = 1.0;
     
     private enum State {
@@ -44,10 +44,10 @@ public class RobotMovement {
             DrivefowardBackward(speed);
 			break; 
         case LEFT:
-			turnLeft(speed,radius);
+			turnLeft(speed,r);
 			break;
 		case RIGHT:
-			turnRight(speed,radius);
+			turnRight(speed,r);
 			break;
 		case CLIMBING:
 			climbmotermovement(speed);
@@ -292,7 +292,7 @@ public class RobotMovement {
     //in: new radius
     //out:nothing
     public void setRadius(double newRadius){
-    	radius = newRadius;
+    	r = newRadius;
     	
     }
     
@@ -380,7 +380,7 @@ public class RobotMovement {
 	public boolean drivefowardunsafe(double speed){
 		speed = speedLimit(speed);
 		float distance = sensors.FrontSensors();
-		if(distance<=1 && speed>0){
+		if(distance==1 && speed>0){
 				myRobot.drive(0,0);
 				return false;
 		} else {
@@ -455,8 +455,8 @@ public class RobotMovement {
 		if(speed>1.0){
 			speed=1.0;
 		}
-		if(speed<-1.0){
-			speed=-1.0;
+		if(speed<0){
+			speed=0;
 		}
 		m_shootmoter.set(speed);
 	}
