@@ -3,193 +3,6 @@ package org.usfirst.frc.team5229.robot;
 
 
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-
-public class Controller extends Joystick {
-
-	public Controller(int port) {
-		super(port);
-		// TODO Auto-generated constructor stub
-	}
-
-	public Button a;
-	public Button b;
-	public Button x; 
-	public Button y;
-	public Button start;
-	public Button select;
-	public Button leftBumper;
-	public Button rightBumper;
-	public Button leftJoyButton;
-	public Button rightJoyButton;
-	public Timer rumbleTimer;
-	
-	public void XboxController(int port) {
-		
-	System.out.print(	 (a = new JoystickButton(this, 1)) + "Button A Pressed");
-	System.out.print(	 (b = new JoystickButton(this, 2)) + "Button B Pressed");
-	System.out.print(  (x = new JoystickButton(this, 3)) + "Button X Pressed");
-	System.out.print(  (y = new JoystickButton(this, 4)) + "Button Y Pressed");
-	System.out.println(  (start = new JoystickButton(this, 8)) + "Start Button Pressed");
-	System.out.println(	 (select = new JoystickButton(this, 7)) + "Select Button Pressed");
-	System.out.println(  (leftBumper = new JoystickButton(this, 5)) + "Left Bumber Pressed");
-	System.out.println(  (rightBumper = new JoystickButton(this, 6)) + "Right Bumber Pressed");
-	System.out.println(	 (leftJoyButton = new JoystickButton(this, 9)) + "Left joy button");
-	System.out.println(	(rightJoyButton = new JoystickButton(this, 10)) + "Right joy button");
-	}
-	
-	/**
-	 * Gets the X axis of the right Xbox joystick.
-	 * @return The X axis of the right Xbox joystick.
-	 */
-	public double getX2() {
-		return getRawAxis(4);
-	}
-	
-	/**
-	 * Gets the Y axis of the right Xbox joystick.
-	 * @return The Y axis of the right Xbox joystick.
-	 */
-	public double getY2() {
-		return getRawAxis(5);
-	}
-	
-	/**
-	 * Gives the current Direction of the DPad.
-	 * @return The Direction of the DPad. Returns null if the DPad is not pressed.
-	 */
-	public Direction getDPad() {
-		return Direction.toDirection(getPOV(0));
-	}
-	
-	/**
-	 * Gets the value of the left trigger.
-	 * @return The value of the left trigger.
-	 */
-	public double getLeftTrigger() {
-		return getRawAxis(2);
-	}
-	
-	/**
-	 * Gets the value of the right trigger.
-	 * @return The value of the right trigger.
-	 */
-	public double getRightTrigger() {
-		return getRawAxis(3);
-	}
-	
-	/**
-	 * Makes the controller rumble.
-	 * @param l The left rumble value.
-	 * @param r The right rumble value.
-	 */
-	public void rumble(float l, float r) {
-		setRumble(RumbleType.kLeftRumble, l);
-		setRumble(RumbleType.kRightRumble, r);
-	}
-	
-	/**
-	 * Makes the controller rumble for X seconds.
-	 * @param l The left rumble value.
-	 * @param r The right rumble value.
-	 * @param seconds How long the controller should rumble.
-	 */
-	public void rumble(float l, float r, double seconds) {
-		rumble(l, r);
-		rumbleTimer = new Timer(seconds, false, new TimerUser() {
-			public void timer() {
-				rumble(0, 0);
-			}
-			public void timerStop() {
-				rumbleTimer = null;
-			}
-		}).start();		
-	}
-	
-	public void test() {
-		System.out.print("Axis 2:"+ this.getX2());
-		System.out.print(this.getX2());
-	}
-
-	public enum Direction {
-		UP(0),
-		UP_RIGHT(45),
-		RIGHT(90),
-		DOWN_RIGHT(135),
-		DOWN(180),
-		DOWN_LEFT(225),
-		LEFT(270),
-		UP_LEFT(315),
-		
-		NONE(-1);
-		
-		public static Direction[] allDirections = new Direction[]{Direction.UP, Direction.UP_RIGHT, Direction.RIGHT, Direction.DOWN_RIGHT, Direction.DOWN, Direction.DOWN_LEFT, Direction.LEFT, Direction.UP_LEFT, Direction.NONE};
-		public int angle;
-		
-		Direction(int angle) {
-			this.angle = angle;
-		}			
-		
-		public boolean isUp() {
-			return (this == Direction.UP_LEFT || this == Direction.UP || this == Direction.UP_RIGHT);
-		}
-		
-		public boolean isRight() {
-			return (this == Direction.UP_RIGHT || this == Direction.RIGHT || this == Direction.DOWN_RIGHT);
-		}
-		
-		public boolean isDown() {
-			return (this == Direction.DOWN_LEFT || this == Direction.DOWN || this == Direction.DOWN_RIGHT);
-		}
-		
-		public boolean isLeft() {
-			return (this == Direction.UP_LEFT || this == Direction.LEFT || this == Direction.DOWN_LEFT);
-		}
-		
-		public static Direction toDirection(int angle) {
-			for (Direction d : allDirections) {
-				if (d.angle == angle) {
-					return d;
-				}
-			}
-			return null;
-		}
-	
-	}
-}
-		
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -203,16 +16,6 @@ public class Controller {
 	public static int kButtonY = 3;
 	public Joystick stick = new Joystick(0);
 	public Timer rumbleTimer;
-	
-	
-
-
-	
-	
-
-	
-	
-	
 	
 	//Controls the X axis of the right joystick
 	public double getRightJoyX() {
@@ -294,7 +97,7 @@ public class Controller {
 	//Is Up D pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean isUpDPressed() {
+	public boolean getButtonUpD() {
 		boolean isPressed = false;
 		
 		return isPressed;
@@ -304,7 +107,7 @@ public class Controller {
 	//Is Down D button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean isDownDPressed() {
+	public boolean getButtonDownD() {
 		boolean isPressed = false;
 		
 		return isPressed;
@@ -314,7 +117,7 @@ public class Controller {
 	//Is Right D pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean isRightDPressed() {
+	public boolean getButtonRightD() {
 		boolean isPressed = false;
 		
 		return isPressed;
@@ -324,7 +127,7 @@ public class Controller {
 	//Is Left D pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean isLeftDPressed() {
+	public boolean getButtonLeftD() {
 		boolean isPressed = false;
 		
 		
@@ -333,11 +136,22 @@ public class Controller {
 		
 	}
 	
+	//Is the Right Trigger button pressed or not
+	//in:nothing
+	//out: is a button pressed, float
+	public int getRightTrigger() {
+		int rt=0;
+		return rt;
+	}
+	
+	
+	
+	
 	//Is the Left Trigger button pressed or not
 	//in: nothing
 	//out: is a button pressed, float
-	public float leftTrigger() {
-		float rt=0;
+	public int getLeftTrigger() {
+		int rt=0;
 		return rt;
 		
 	}
@@ -345,7 +159,7 @@ public class Controller {
 	//Is the Right Joy button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean isRJoyPressed() {
+	public boolean getButtonRightJoy() {
 		boolean isPressed = false;
 		
 		return isPressed;
@@ -355,7 +169,7 @@ public class Controller {
 	//Is the Left Joy button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean isLJoyPressed() {
+	public boolean getButtonLeftJoy() {
 		boolean isPressed = false;
 		
 		return isPressed;
@@ -365,7 +179,7 @@ public class Controller {
 	//Is LB button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean isLBPressed() {
+	public boolean getButtonLeftBump() {
 		boolean isPressed = false;
 		
 		return isPressed;
@@ -375,25 +189,51 @@ public class Controller {
 	//Is RB button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean isRBPressed() {
+	public boolean getButtonRightBump() {
 		boolean isPressed = false;
 		
 		return isPressed;
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		rumbleb
-		
 	}
-	
+	//This tells whether or not everything on the controller works or not
+	public void test() {
+		boolean buttonA = getButtonA();
+		boolean buttonB = getButtonB();
+		boolean buttonX = getButtonX();
+		boolean buttonY = getButtonY();
+		boolean buttonUpD = getButtonUpD();
+		boolean buttonDownD = getButtonDownD();
+		boolean buttonRightD = getButtonRightD();
+		boolean buttonLeftD = getButtonLeftD();
+		boolean buttonRightJoy = getButtonRightJoy();
+		boolean buttonLeftJoy = getButtonLeftJoy();
+		boolean buttonLeftBump = getButtonLeftBump();
+		boolean buttonRightBump = getButtonRightBump();
+		int buttonLeftTrigger = getLeftTrigger();
+		int buttonRightTrigger = getRightTrigger();
+		double axisRightJoyX = getRightJoyX();
+		double axisRightJoyY = getRightJoyY();
+		double axisLeftJoyX = getLeftJoyX();
+		double axisLeftJoyY = getLeftJoyY();
+		System.out.print("A="+buttonA);
+		System.out.print("B="+buttonB);
+		System.out.print("X="+buttonX);
+		System.out.print("Y="+buttonY);
+		System.out.print("UpD="+buttonUpD);
+		System.out.print("DownD="+buttonDownD);
+		System.out.print("RightD="+buttonRightD);
+		System.out.print("LeftD="+buttonLeftD);
+		System.out.print("RightJoy="+buttonRightJoy);
+		System.out.print("LeftJoy="+buttonLeftJoy);
+		System.out.print("LeftBump="+buttonLeftBump);
+		System.out.print("RightBump="+buttonRightBump);
+		System.out.print("LeftTrigger="+buttonLeftTrigger);
+		System.out.print("RightTrigger="+buttonRightTrigger);
+		System.out.print("RightX="+axisRightJoyX);
+		System.out.print("RightY="+axisRightJoyY);
+		System.out.print("LeftX="+axisLeftJoyX);
+		System.out.print("LeftY="+axisLeftJoyY);
+	}
 }
-*/	
 	
 
