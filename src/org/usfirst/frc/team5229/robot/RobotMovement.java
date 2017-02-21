@@ -388,7 +388,9 @@ public class RobotMovement {
 	//out:true if robot does not stop and false if the robot does stop
 	public boolean drivefowardunsafe(double speed){
 		speed = speedLimit(speed);
-		float distance = sensors.FrontSensors();
+		//Need to take the distance from the right center and 
+		//average them.
+		double distance = sensors.SonicLeftCenter();
 		if(distance==1 && speed>0){
 				myRobot.drive(0,0);
 				return false;
