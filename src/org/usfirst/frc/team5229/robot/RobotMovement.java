@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Timer;
 
 public class RobotMovement {
 	private boolean modeArcade = true; 
@@ -17,12 +18,14 @@ public class RobotMovement {
     private double r = 0;
     private double speed = 1.0;
     
+    //intialize states
     private enum State {
 		STOPPED, FORWARD, BACKWARD, LEFT, RIGHT, CLIMBING, DESCENDING
 	}
  
 	State state = State.STOPPED;
 	
+	//create states
 	public void tick(){
 		switch (state){
 		case STOPPED:
@@ -37,7 +40,6 @@ public class RobotMovement {
 			//DrivefowardBackward(-1);//
 			//DrivefowardBackward(speed);//
 			//break;//
-
 			
 
 		case BACKWARD:
@@ -55,6 +57,9 @@ public class RobotMovement {
 		case DESCENDING:
 			climbmotermovement(speed);
 			break;
+		}
+		if (Testing){
+			Test();
 		}
 	}
 	
@@ -129,6 +134,7 @@ public class RobotMovement {
 	}
 
 	//should all of the motors be inverted?
+	//make moters inverted
 	public void init(){
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
@@ -175,6 +181,9 @@ public class RobotMovement {
 	 * @param speed
 	 * @return speed such that -1<=speed<=1
 	 */
+    //set speed of stages
+    //in:speed
+    //out:nothing
 	private double speedLimit(double speed) {
 		if(state == State.FORWARD){
 		if(speed>1.0){
@@ -460,6 +469,44 @@ public class RobotMovement {
 		}
 		m_shootmoter.set(speed);
 	}
+	
+	public boolean Testing;
+	Timer timer = new Timer();
+	
+	//Start the Timer
+	//in:nothing
+	//out:nothing
+	public boolean StartTimer(){
+		Testing = true;
+		timer.reset();
+		return true;
+		
+	}
+	//Test the functions
+	//in:Testing
+	//out:Testing
+	
+	public void Test(){
+		if(Testing == true){
+			timer.start();
+		}
+		if(timer.get() < 1.0){
+			DrivefowardBackward(0.5);
+		}else if(timer.get() <2.0){
+			DrivefowardBackward(-0.5);
+		}else if(timer.get() <3.0){
+			turnRight(0.5,90);
+		}else if(timer.get()<4.0){
+			turnLeft(0.5,-90);
+		}else if(timer.get()>=4.0){
+			Testing = false;
+			
+		}
+		 
+		
+	}
+	
+	
 		
 }
 	
