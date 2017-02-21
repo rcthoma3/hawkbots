@@ -16,6 +16,11 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
 public class Sensors extends IterativeRobot {
+	private AnalogInput SonicSideLeft = new AnalogInput(0);
+	private AnalogInput SonicCenterLeft = new AnalogInput(1);
+	private AnalogInput SonicCenterRight = new AnalogInput(2);
+	private AnalogInput SonicSideRight = new AnalogInput(3);
+
 	//Distance in inches the robot wants to stay from object,
 	private static final double kHoldDistance = 12.0;
 	//Max distance in inches we expect the robot to see
@@ -36,6 +41,11 @@ public class Sensors extends IterativeRobot {
 	private AnalogInput ultrasonic = new AnalogInput(kUltrasonicPort);
 	private RobotDrive myRobot = new RobotDrive(kLeftMotorPort, kRightMotorPort);
 	private PIDController pidController = new PIDController(kP, kI, kD, ultrasonic, new MyPidOutput());
+	
+	public Sensors() {
+		
+	}
+	
 	@Override
 	public void teleopInit() {
 		//Set expected range to 0-24 inches; e.g. at from object go
@@ -45,12 +55,14 @@ public class Sensors extends IterativeRobot {
 		pidController.setSetpoint(kHoldDistance * kValueToInches);
 		pidController.enable(); //Begin PID control
 	}
+	
 	private class MyPidOutput implements PIDOutput {
 		@Override
 		public void pidWrite(double output) {
 			myRobot.drive(output, 0);
 		}
 	}
+	
 	public void teleopPeriodic() {
 		//Sensor returns a value from 0-4095 that is scaled to inches
 		double currentDistance = ultrasonic.getValue() * kValueToInches;
@@ -59,63 +71,44 @@ public class Sensors extends IterativeRobot {
 		myRobot.drive(currentSpeed, 0);
 	}
 	
-	Thread visionThread;
-	@Override
-	public void robotInit() {
-		visionThread = new Thread(() -> {
-			// Get UsbCamera from camera server
-			UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-			//Set up resolution
-			camera.setResolution(640, 480);
-			//Get a CvSink. This will capture Mats from camera
-		CvSink cvSink = CameraServer.getInstance().getVideo();
-		//Setup a CvSource. This will send images back to the dashboard
-		CvSource outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
-		//Mats are very memory expensive. Let's reuse this Mat.
-		Mat mat = new Mat();
-		// This cannot be 'true'. The program will never exit if it is. This
-					// lets the robot stop this thread when restarting robot code or
-					// deploying.
-		while (!Thread.interrupted()) {
-			// Tell the CvSink to grab a frame from the camera and put it
-			// in the source mat.  If there is an error notify the output.
-			if (cvSink.grabFrame(mat) == 0) {
-				//Send the output the error
-			outputStream.notifyError(cvSink.getError());
-			//Skip the rest of the current iteration
-			continue;
-			}
-			//Put a rectangle on the image
-			Imgproc.rectangle(mat, new Point(100,100), new Point(400, 400), new Scalar(255, 255, 255), 5);
-			//Give out[ut stream a new image to display
-			outputStream.putFrame(mat);
-		}
-	});
-		visionThread.setDaemon(true);
-		visionThread.start();
-	}
-public Sensors() {}
-	//Provides the distance between the robot and
-	//a wall in front of it in inches
-	//In: nothing
-	//Out: distance as float
-	public float FrontSensors() {
-		float distance = 0;
-		//Code to find distance goes here
-		
-		return distance;
+	//Description: Read the sensor and returns the distance in mm to a wall
+	//in: Nothing
+	//Out: double distance in mm
+	public double SonicRightSide(){
+		return SonicSideRight.getValue()*.125;
 		
 	}
-	//Provides distance between the robot and the wall from the side
-	//in inches
+	//Description: Read the sensor and returns the distance in mm to a wall
+	//in: Nothing
+	//Out: double distance in mm
+	public double SonicLeftSide(){
+		return SonicSideLeft.getValue()*.125;
+		
+	}
+	//Description: Read the sensor and returns the distance in mm to a wall
+	//in: Nothing
+	//Out: double distance in mm
+	public double SonicRightCenter(){
+		return SonicCenterRight.getValue()*.125;
+		
+	}
+	//Description: Read the sensor and returns the distance in mm to a wall
+	//in: Nothing
+	//Out: double distance in mm
+	public double SonicLeftCenter(){
+		return SonicCenterLeft.getValue()*.125;
+		
+	}
+	//Description: Post the distance that the sensor is close to the wall in mm
 	//In: nothing
-	//Out: distance as float.
+	//Out: distance in mm
+	public void test(){
+		System.out.print(SonicRightSide());
+		System.out.print(" "+SonicLeftCenter());
+		System.out.print(" "+SonicRightCenter());
+		System.out.println(" "+SonicLeftSide());		
+	}
 	
-	public float SideSensors() {
-		float distance = 0;
-		//Distance goes here
-		return distance;
-	}
 	//Color helps tell the robot what team it is on
 	//In: nothing
 	//Out: Color as int
@@ -132,12 +125,5 @@ public Sensors() {}
 		
 		return angle;
 		
-	}
-	//Lets sensors be able to tell if a wall is too close on one side
-	//In: nothing
-	//Out: distance/angle to wall
-	public float sensors() {
-		float distance = 0;
-		return distance;
 	}
 }

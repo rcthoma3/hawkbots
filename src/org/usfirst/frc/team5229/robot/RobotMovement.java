@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Timer;
 
 public class RobotMovement {
 	private boolean modeArcade = true; 
@@ -14,40 +15,95 @@ public class RobotMovement {
     
     //state machine
     
-    private double radius = 0;
+    private double r = 0;
     private double speed = 1.0;
     
+    //intialize states
     private enum State {
 		STOPPED, FORWARD, BACKWARD, LEFT, RIGHT, CLIMBING, DESCENDING
 	}
  
 	State state = State.STOPPED;
 	
+	//create states
 	public void tick(){
 		switch (state){
 		case STOPPED:
-			DrivefowardBackward(0.0);
+			DrivefowardBackward(0);
 			break;
 		case FORWARD:
+
+
 			DrivefowardBackward(speed);
-			break;
+			break; 
+		//case BACKWARD://
+			//DrivefowardBackward(-1);//
+			//DrivefowardBackward(speed);//
+			//break;//
+			
+
 		case BACKWARD:
-			DrivefowardBackward(-speed);
-			break;
-		case LEFT:
-			turnLeft(speed,radius);
+            DrivefowardBackward(speed);
+			break; 
+        case LEFT:
+			turnLeft(speed,r);
 			break;
 		case RIGHT:
-			turnRight(speed,radius);
+			turnRight(speed,r);
 			break;
 		case CLIMBING:
-			climbmotermovement(1);
+			climbmotermovement(speed);
 			break;
 		case DESCENDING:
-			climbmotermovement(-1);
+			climbmotermovement(speed);
 			break;
 		}
+		if (Testing){
+			Test();
+		}
 	}
+	
+    //tell what the is state//
+    //in:nothing
+    //out:state
+    public State whatisState(){
+    	return state;
+    }
+    
+    //sets the state//
+    //in: new state
+    //out:boolean if true, switch was succesful
+    public boolean setState(State newState){
+    	if(newState == state){
+    		return true;
+    	}
+    	if(state == State.STOPPED){
+    		state = newState;
+    		return true;
+    	}
+    	if(newState == State.STOPPED){
+    		state = newState;
+    		return true;
+    	}
+	   if(state == State.RIGHT && newState == State.FORWARD){
+		   state = newState;
+		   return true;
+	   }
+	   if(state == State.LEFT && newState == State.FORWARD){
+		   state = newState;
+		   return true;
+	   }
+	   if(state == State.FORWARD && newState == State.RIGHT){
+		   state = newState;
+		   return true;
+	   }
+	   if(state == State.FORWARD && newState == State.LEFT){
+		   state = newState;
+		   return true;
+	   }
+	   return false;
+		
+    }
    
 	//a constructor that doesn't take an input
 	public RobotMovement(){
@@ -78,6 +134,7 @@ public class RobotMovement {
 	}
 
 	//should all of the motors be inverted?
+	//make moters inverted
 	public void init(){
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
@@ -124,14 +181,61 @@ public class RobotMovement {
 	 * @param speed
 	 * @return speed such that -1<=speed<=1
 	 */
+    //set speed of stages
+    //in:speed
+    //out:nothing
 	private double speedLimit(double speed) {
+		if(state == State.FORWARD){
 		if(speed>1.0){
-    		speed=1;
+    		speed=1.0;
     	}
-    	if(speed<-1.0){
-    		speed=-1;
+    	if(speed<0){
+    		speed=0;
     	}
-		return speed;
+		}
+    	if(state == State.BACKWARD){
+    		if(speed>0){
+    			speed=0;
+    		}
+    		if(speed<-1.0){
+    			speed=-1.0;
+    		}
+    	}
+    	if(state == State.CLIMBING){
+    		if(speed>1.0){
+    			speed=1.0;
+    		}
+    		if(speed<0){
+    			speed=0;
+    		}
+    	}
+    	if(state == State.DESCENDING){
+    		if(speed>0){
+    			speed=0;
+    		}
+    		if(speed<-1.0){
+    			speed=-1.0;
+    		}
+    	}
+    	if(state == State.LEFT){
+    		if(speed<0){
+    			speed=0;
+    		}
+    		if(speed>1.0){
+    			speed=1.0;
+    		}
+    	}
+    	if(state == State.RIGHT){
+    		if(speed<0){
+    			speed=0;
+    		}
+    		if(speed>1.0){
+    			speed=1.0;
+    		}
+    	}
+    	
+    	
+	    return speed;
 	}
     
     //in:r
@@ -154,7 +258,13 @@ public class RobotMovement {
     //out: nothing
     public void turnLeft(double speed, double r){
     	speed = speedLimit(speed);
-    	myRobot.drive(speed, -rToCurve(r));
+    	if (r>0){
+    		r=0;
+    	}
+    	if(r<-180){
+    		r=-180;
+    	}
+    	myRobot.drive(speed, rToCurve(r));
     }
     
     //turn right
@@ -162,13 +272,19 @@ public class RobotMovement {
     //out: nothing
     public void turnRight(double speed, double r){
     	speed = speedLimit(speed);
+    	if(r<0){
+    		r=0;
+    	}
+    	if(r>180){
+    		r=180;
+    	}
     	myRobot.drive(speed, rToCurve(r));
     }
     
     //tell what the is speed//
     //in:nothing
     //out:speed
-    public double whatisSpeed(){
+    public double whatisSpeed(double speed){
     	return speed;
     }
     
@@ -176,29 +292,17 @@ public class RobotMovement {
     //in: new speed
     //out:nothing
     public void setSpeed(double newSpeed){
-    	if(newSpeed<0){
-    		speed = -newSpeed;
-    	}else{
-    		speed = newSpeed;
-    	}
+    	speed = newSpeed;
+    	
     }
 
-    //tell what the is radius
-    //in:nothing
-    //out:radius
-    public double whatisRadius(){
-    	return radius;
-    }
     
     //sets the radius//
     //in: new radius
     //out:nothing
     public void setRadius(double newRadius){
-    	if(newRadius<0){
-    		radius = -newRadius;
-    	}else{
-    		radius = newRadius;
-    	}
+    	r = newRadius;
+    	
     }
     
     //tell how many degrees did the robot turn//
@@ -285,7 +389,7 @@ public class RobotMovement {
 	public boolean drivefowardunsafe(double speed){
 		speed = speedLimit(speed);
 		float distance = sensors.FrontSensors();
-		if(distance<=1 && speed>0){
+		if(distance==1 && speed>0){
 				myRobot.drive(0,0);
 				return false;
 		} else {
@@ -305,10 +409,15 @@ public class RobotMovement {
 	}
     
     //speed of ball motor is set//
-    //in:speed
+    //in:ballspeed
     //out:nonthing
 	public void ballmotorfowardbackward(double speed){
-		speed = speedLimit(speed);
+		if(speed>1.0){
+			speed=1.0;
+		}
+		if(speed<-1.0){
+			speed=-1.0;
+		}
 		m_ballmoter.set(speed);
 	}
 	
@@ -321,7 +430,12 @@ public class RobotMovement {
 	//in:speed
 	//out:nonthing
 	public void convayermotorforwardbackward(double speed){
-		speed = speedLimit(speed);
+		if(speed>1.0){
+			speed=1.0;
+		}
+		if(speed<-1.0){
+			speed=-1.0;
+		}
 		m_convayeromoter.set(speed);
 	}
 	
@@ -347,9 +461,52 @@ public class RobotMovement {
 	//in:speed
 	//out:nothing
 	public void shootmotorspeed(double speed){
-		speed = speedLimit(speed);
+		if(speed>1.0){
+			speed=1.0;
+		}
+		if(speed<0){
+			speed=0;
+		}
 		m_shootmoter.set(speed);
 	}
+	
+	public boolean Testing;
+	Timer timer = new Timer();
+	
+	//Start the Timer
+	//in:nothing
+	//out:nothing
+	public boolean StartTimer(){
+		Testing = true;
+		timer.reset();
+		return true;
+		
+	}
+	//Test the functions
+	//in:Testing
+	//out:Testing
+	
+	public void Test(){
+		if(Testing == true){
+			timer.start();
+		}
+		if(timer.get() < 1.0){
+			DrivefowardBackward(0.5);
+		}else if(timer.get() <2.0){
+			DrivefowardBackward(-0.5);
+		}else if(timer.get() <3.0){
+			turnRight(0.5,90);
+		}else if(timer.get()<4.0){
+			turnLeft(0.5,-90);
+		}else if(timer.get()>=4.0){
+			Testing = false;
+			
+		}
+		 
+		
+	}
+	
+	
 		
 }
 	
