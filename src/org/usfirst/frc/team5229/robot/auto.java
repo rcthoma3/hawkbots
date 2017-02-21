@@ -19,9 +19,9 @@ public class auto {
 		while(color != RED && color != BLUE) {
 			robot.DrivefowardBackward(100);
 			color = sensors.ColorSensors();
-			if (sensors.FrontSensors()<1) {
-				robot.turnLeft(50, 180);
-			}			
+			//if (sensors.FrontSensors()<1) {
+			//	robot.turnLeft(50, 180);
+			//}			
 		}
 		mySide=color;
 	}
