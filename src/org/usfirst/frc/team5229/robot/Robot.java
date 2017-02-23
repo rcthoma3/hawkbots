@@ -14,8 +14,12 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	RobotDrive myRobot = new RobotDrive(0, 1);
-	Joystick stick = new Joystick(0);
+	//RobotDrive myRobot = new RobotDrive(0, 1);
+	//Joystick stick = new Joystick(0);
+	Controller myController = new Controller();
+	RobotMovement myRobot = new RobotMovement();
+	Sensors mySensors = new Sensors();
+	
 	Timer timer = new Timer();
 
 	/**
@@ -24,6 +28,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		myRobot.init();
 	}
 
 	/**
@@ -41,11 +46,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		// Drive for 2 seconds
-		if (timer.get() < 2.0) {
-			myRobot.drive(-0.5, 0.0); // drive forwards half speed
-		} else {
-			myRobot.drive(0.0, 0.0); // stop robot
-		}
+		//if (timer.get() < 2.0) {
+		//	myRobot.drive(-0.5, 0.0); // drive forwards half speed
+		//} else {
+		//	myRobot.drive(0.0, 0.0); // stop robot
+		//}
 	}
 
 	/**
@@ -61,7 +66,14 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		myRobot.arcadeDrive(stick);
+		//myRobot.arcadeDrive(stick);
+		myController.test();
+		if (myController.getButtonX())
+			mySensors.test();
+		myRobot.tick();
+		if (myController.getButtonB())
+			myRobot.StartTimer();
+		
 	}
 
 	/**
