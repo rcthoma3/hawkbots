@@ -18,7 +18,7 @@ public class Robot extends IterativeRobot {
 	//Joystick stick = new Joystick(0);
 	Controller myController = new Controller();
 	RobotMovement myRobot = new RobotMovement();
-	Sensors mySensors = new Sensors();
+	//Sensors mySensors = new Sensors();
 	
 	Timer timer = new Timer();
 
@@ -68,11 +68,11 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		//myRobot.arcadeDrive(stick);
 		myController.test();
-		if (myController.getButtonX())
-			mySensors.test();
+		//if (myController.getButtonX())
+		//	mySensors.test();
 		myRobot.tick();
-		if (myController.getButtonB())
-			myRobot.StartTimer();
+		//if (myController.getButtonB())
+		//	myRobot.StartTimer();
 		
 	}
 
