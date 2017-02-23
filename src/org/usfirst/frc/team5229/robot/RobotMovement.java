@@ -11,7 +11,8 @@ public class RobotMovement {
 	private boolean modeFine = true; 
     private boolean squaredInputs = true; 
     private static double wheelBase = 24.0;
-    private Sensors sensors = new Sensors();
+    //Line below removed, causing errors.
+    //private Sensors sensors = new Sensors();
     
     //state machine
     
@@ -390,6 +391,8 @@ public class RobotMovement {
 		speed = speedLimit(speed);
 		//Need to take the distance from the right center and 
 		//average them.
+		
+		/* Removed to fix errors
 		double distance = sensors.SonicLeftCenter();
 		if(distance==1 && speed>0){
 				myRobot.drive(0,0);
@@ -398,6 +401,9 @@ public class RobotMovement {
 			myRobot.drive(speed,0);
 			return true;
 		}
+		*/
+		//Added to fix errors
+		return true;
 	} 
 		
 	protected SpeedController m_ballmoter;
@@ -480,7 +486,7 @@ public class RobotMovement {
 	//out:nothing
 	public boolean StartTimer(){
 		Testing = true;
-		timer.reset();
+		timer.reset();		
 		return true;
 		
 	}
