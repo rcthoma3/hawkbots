@@ -429,7 +429,7 @@ public class RobotMovement {
 	}
 				
 	//set speed for conveyer motor
-	//in:speed
+	//in:speedF
 	//out:nonthing
 	public void convayermotorforwardbackward(double speed){
 		if(speed>1.0){

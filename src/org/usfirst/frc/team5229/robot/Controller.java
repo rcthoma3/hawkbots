@@ -215,24 +215,36 @@ public class Controller {
 		double axisRightJoyY = getRightJoyY();
 		double axisLeftJoyX = getLeftJoyX();
 		double axisLeftJoyY = getLeftJoyY();
-		System.out.print("A="+buttonA);
-		System.out.print("B="+buttonB);
-		System.out.print("X="+buttonX);
-		System.out.print("Y="+buttonY);
-		System.out.print("UpD="+buttonUpD);
-		System.out.print("DownD="+buttonDownD);
-		System.out.print("RightD="+buttonRightD);
-		System.out.print("LeftD="+buttonLeftD);
-		System.out.print("RightJoy="+buttonRightJoy);
-		System.out.print("LeftJoy="+buttonLeftJoy);
-		System.out.print("LeftBump="+buttonLeftBump);
-		System.out.print("RightBump="+buttonRightBump);
-		System.out.print("LeftTrigger="+buttonLeftTrigger);
-		System.out.print("RightTrigger="+buttonRightTrigger);
-		System.out.print("RightX="+axisRightJoyX);
-		System.out.print("RightY="+axisRightJoyY);
-		System.out.print("LeftX="+axisLeftJoyX);
-		System.out.print("LeftY="+axisLeftJoyY);
+		if (buttonA)
+			System.out.println("A="+buttonA);
+		if (buttonB)
+			System.out.println(" B="+buttonB);
+		if (buttonX)
+			System.out.println(" X="+buttonX);
+		if (buttonY)
+			System.out.println(" Y="+buttonY);
+		if (buttonUpD)
+			System.out.println("UD="+buttonUpD);
+		if (buttonDownD)
+			System.out.println(" DD="+buttonDownD);
+		if (buttonDownD)
+			System.out.println(" RD="+buttonRightD);
+		if (buttonLeftD)
+			System.out.println(" LD="+buttonLeftD);
+		if (buttonLeftBump) {
+			System.out.print(" LT="+buttonLeftTrigger);	
+			System.out.print(" LJ="+buttonLeftJoy);
+			System.out.print(" LX="+axisLeftJoyX);
+			System.out.print(" LY="+axisLeftJoyY);		
+			System.out.println(" LB="+buttonLeftBump);
+		}
+		if(buttonRightBump) {							
+			System.out.print(" RJ="+buttonRightJoy);
+			System.out.print(" RT="+buttonRightTrigger);
+			System.out.print(" RX="+axisRightJoyX);
+			System.out.println(" RY="+axisRightJoyY);
+		}
+		
 	}
 }
 	
