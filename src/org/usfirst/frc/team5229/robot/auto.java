@@ -8,6 +8,7 @@ public class auto {
 	private final int BLUE=1;
 	private int mySide=-1;
 	
+	//States
 	public enum STATES {
 		STOP,
 		PICKUP_GEAR,
