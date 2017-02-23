@@ -484,31 +484,35 @@ public class RobotMovement {
 	//Start the Timer
 	//in:nothing
 	//out:nothing
-	public boolean StartTimer(){
-		Testing = true;
-		timer.reset();		
+	public boolean StartTest(){
+		if(Testing = true){
+		timer.reset();
+		timer.start();
+		}
 		return true;
-		
 	}
 	//Test the functions
 	//in:Testing
 	//out:Testing
 	
 	public void Test(){
-		if(Testing == true){
-			timer.start();
-		}
 		if(timer.get() < 1.0){
 			DrivefowardBackward(0.5);
 		}else if(timer.get() <2.0){
+			DrivefowardBackward(0);
+		}else if(timer.get() < 3.0){
 			DrivefowardBackward(-0.5);
-		}else if(timer.get() <3.0){
+		}else if(timer.get() < 4.0){
+			DrivefowardBackward(0);
+		}else if(timer.get() <5.0){
 			turnRight(0.5,90);
-		}else if(timer.get()<4.0){
+		}else if(timer.get() <6.0){
+			DrivefowardBackward(0);
+		}else if(timer.get() <7.0){
 			turnLeft(0.5,-90);
-		}else if(timer.get()>=4.0){
-			Testing = false;
-			
+		}else if(timer.get()==7.0){
+			Testing=false;
+			timer.reset();
 		}
 		 
 		
