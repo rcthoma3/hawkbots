@@ -135,12 +135,12 @@ public class RobotMovement {
 	}
 
 	//should all of the motors be inverted?
-	//make moters inverted
+	//make motors inverted
 	public void init(){
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,false);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,false);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,false);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,false);
 	} 
 	RobotDrive myRobot = new RobotDrive(2, 3, 0, 1); // why is there 0, 1, 2, 3? What are those?
 	Joystick leftStick;
@@ -175,7 +175,7 @@ public class RobotMovement {
     //speed<0, moves backward
     public void DrivefowardBackward(double speed){
     	speed = speedLimit(speed);
-    	myRobot.drive(-speed,0);   	// WHY is there a -? Should motors be reversed?
+    	myRobot.drive(speed,0);   	// WHY is there a -? Should motors be reversed?
     }
 
 	/**
@@ -242,7 +242,7 @@ public class RobotMovement {
     //in:r
     //out:Math.exp(-r/wheelBase)
     private double rToCurve(double r){
-    	return Math.exp(r/wheelBase);
+    	return Math.exp(-r/wheelBase);
 	//takes the the wheelBase of a robot and the radius of the circle that the curve would be part of and imputs
 	//it into a function that outputs the the curve 
     }
@@ -265,7 +265,8 @@ public class RobotMovement {
     	if(r<-180){
     		r=-180;
     	}
-    	myRobot.drive(speed, -rToCurve(r));
+    	//myRobot.drive(speed, rToCurve(r));
+    	myRobot.drive(.5,.5);
     }
     
     //turn right
@@ -279,7 +280,8 @@ public class RobotMovement {
     	if(r>180){
     		r=180;
     	}
-    	myRobot.drive(speed, -rToCurve(r));
+    	//myRobot.drive(speed, rToCurve(r));
+    	myRobot.drive(.5, -.5);
     }
     
     //tell what the is speed//
@@ -497,19 +499,19 @@ public class RobotMovement {
 	
 	public void Test(){
 		if(timer.get() < 1.0){
-			DrivefowardBackward(0.5);
+			DrivefowardBackward(0.5); //Forward .5
 		}else if(timer.get() <2.0){
-			DrivefowardBackward(0);
+			DrivefowardBackward(0); //Stop
 		}else if(timer.get() < 3.0){
-			DrivefowardBackward(-0.5);
+			DrivefowardBackward(-0.5); //Back .5
 		}else if(timer.get() < 4.0){
-			DrivefowardBackward(0);
+			DrivefowardBackward(0); //Stop
 		}else if(timer.get() <5.0){
-			turnRight(0,90);
+			turnRight(0.5,90);		//Turn Right .5, 90 degrees
 		}else if(timer.get() <6.0){
-			DrivefowardBackward(0);
+			DrivefowardBackward(0); //Stop
 		}else if(timer.get() <7.0){
-			turnLeft(0,-90);
+			turnLeft(0.5,-90);		//Turn Left .5, 90 degrees
 		}else if(timer.get()==7.0){
 			Testing=false;
 			timer.reset();
