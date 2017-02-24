@@ -8,6 +8,26 @@ public class auto {
 	private final int BLUE=1;
 	private int mySide=-1;
 	
+	//States
+	public enum STATES {
+		STOP,
+		PICKUP_GEAR,
+		DROP_GEAR,
+		SHOOT_BALL,
+		FIELD_READ,
+		HOPPER,
+		PICK_UP_BALLS,
+		Exit,
+		
+	}
+	
+	STATES state = STATES.STOP;
+	boolean hasGear = false;
+	boolean hasBalls = false;
+	boolean noBalls = false;
+	boolean Robot = false; 
+	boolean noGear = false;
+	
 	
 	public auto() {
 	
@@ -55,6 +75,7 @@ public class auto {
 		//Turns Left
 		robot.turnLeft(50,90);
 		
+		
 	}
     //the robot drives distance them turns right
 	//in: nothing
@@ -62,6 +83,7 @@ public class auto {
 	public void turnright() {
 		//Turns right 
 		robot.turnRight(50,90);
+		
 		
 	}
 	//the robot gets the distance using the sensor then drops the gear once it gets to the gear pully
@@ -71,7 +93,7 @@ public class auto {
 		//Step 1: Have front sensors get distance from wall
 		//Step 2: Line up by making distances equal
 		//Step 3: Move forward certain distance from gear drop location
-		//STep 4: Drop fear onto peg
+		//Step 4: Drop fear onto peg
 		
 	}
 
@@ -81,18 +103,70 @@ public class auto {
 	public void pickupgear() {
 		//Step 1: Drive forward till sensor picks up distance
 		//Step 2: use sensor to reposition so that robot is straight 
-		//Step 3: Drive forward until a certain distance from rop off is reached
+		//Step 3: Drive forward until a certain distance from drop off is reached
 		//Step 4: Wait for drop off then back up
 		
 		
 	}
 	public void findhopperfromburner() {
-		if (mySide==RED) {
+		if (mySide==RED) 
+		{
 			robot.turnRight(50,90);
+			robot.DrivefowardBackward(50);
 		}
-		else { 
+		else 
+		{ 
 				robot.turnLeft(50,90);
-		}
+				robot.DrivefowardBackward(50);
 				
+		}
 	}
+	//the robot follows a pick up pattern for fuel
+	//in: pattern
+	//out: balls
+	public void followpickuppattern() {
+		robot.turnLeft(50,90);
+		robot.DrivefowardBackward(50);
+		robot.turnRight(50,90);
+		robot.DrivefowardBackward(50);
+		robot.turnRight(50,90);
+		robot.DrivefowardBackward(50);
+		robot.turnRight(50,90);
+		robot.DrivefowardBackward(50);
+	}
+		
+		
+		
+	
+	
+	public void run() {
+		if (state==STATES.STOP) {
+			if (hasBalls) {
+				state = STATES.PICKUP_GEAR;
+			}
+		} //End stop state		
+		else if (state==STATES.PICKUP_GEAR) {
+			if (hasGear) {
+				state = STATES.DROP_GEAR;
+			}
+		}//End pickup gear state
+		else if (state==STATES.DROP_GEAR) {
+			if (noGear) {
+				state = STATES.FIELD_READ;
+			}
+		} //End drop gear
+	
+		else if (state==STATES.HOPPER) {
+			if (hasBalls){
+				state = STATES.SHOOT_BALL;
+			}
+		}//End hopper state
+		else if (state==STATES.SHOOT_BALL) {
+			if (noBalls) {
+				state = STATES.Exit;
+			}
+		}//End shoot ball
+	}
+	
+	
 }
