@@ -242,7 +242,7 @@ public class RobotMovement {
     //in:r
     //out:Math.exp(-r/wheelBase)
     private double rToCurve(double r){
-    	return Math.exp(-r/wheelBase);
+    	return Math.exp(r/wheelBase);
 	//takes the the wheelBase of a robot and the radius of the circle that the curve would be part of and imputs
 	//it into a function that outputs the the curve 
     }
@@ -265,7 +265,7 @@ public class RobotMovement {
     	if(r<-180){
     		r=-180;
     	}
-    	myRobot.drive(speed, rToCurve(-r));
+    	myRobot.drive(speed, -rToCurve(r));
     }
     
     //turn right
@@ -279,7 +279,7 @@ public class RobotMovement {
     	if(r>180){
     		r=180;
     	}
-    	myRobot.drive(speed, rToCurve(-r));
+    	myRobot.drive(speed, -rToCurve(r));
     }
     
     //tell what the is speed//
@@ -505,11 +505,11 @@ public class RobotMovement {
 		}else if(timer.get() < 4.0){
 			DrivefowardBackward(0);
 		}else if(timer.get() <5.0){
-			turnRight(0.1,90);
+			turnRight(0,90);
 		}else if(timer.get() <6.0){
 			DrivefowardBackward(0);
 		}else if(timer.get() <7.0){
-			turnLeft(0.1,-90);
+			turnLeft(0,-90);
 		}else if(timer.get()==7.0){
 			Testing=false;
 			timer.reset();
