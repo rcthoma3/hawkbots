@@ -10,13 +10,10 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class Controller {
-	public static int kButtonA = 1;
-	public static int kButtonB = 2;
-	public static int kButtonX = 3;
-	public static int kButtonY = 4;
-	public static int kButtonRightBumper = 5;
-	public static int kButtonLeftBumper = 6;
-
+	public static int kButtonA = 0;
+	public static int kButtonB = 1;
+	public static int kButtonX = 2;
+	public static int kButtonY = 3;
 	public Joystick stick = new Joystick(0);
 	public Timer rumbleTimer;
 	
@@ -174,24 +171,29 @@ public class Controller {
 	//out: is a button pressed, boolean
 	public boolean getButtonLeftJoy() {
 		boolean isPressed = false;
-		return isPressed; 		
+		
+		return isPressed;
 		
 	}
 	
 	//Is LB button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean getButtonLeftBump() {		
-		return stick.getRawButton(kButtonLeftBumper);		
+	public boolean getButtonLeftBump() {
+		boolean isPressed = false;
+		
+		return isPressed;
+		
 	}
 	
 	//Is RB button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonRightBump() {
-		//boolean isPressed = false;
-		//return isPressed; //removed because always returning false
-		return stick.getRawButton(kButtonRightBumper);
+		boolean isPressed = false;
+		
+		return isPressed;
+		
 	}
 	//This tells whether or not everything on the controller works or not
 	public void test() {
@@ -241,7 +243,6 @@ public class Controller {
 			System.out.print(" RT="+buttonRightTrigger);
 			System.out.print(" RX="+axisRightJoyX);
 			System.out.println(" RY="+axisRightJoyY);
-			System.out.println(" RB="+buttonRightBump);
 		}
 		if (axisLeftJoyY > .2 || axisLeftJoyX > .2 ){
 			System.out.println(" Left Joystick = "+ axisLeftJoyY + "   " + axisLeftJoyX);

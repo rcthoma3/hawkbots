@@ -259,11 +259,11 @@ public class RobotMovement {
     //out: nothing
     public void turnLeft(double speed, double r){
     	speed = speedLimit(speed);
-    	if (r>0){
+    	if (r<0){
     		r=0;
     	}
-    	if(r<-180){
-    		r=-180;
+    	if(r>180){
+    		r=180;
     	}
     	//myRobot.drive(speed, rToCurve(r));
     	myRobot.drive(speed, -rToCurve(Math.toRadians(r)));
@@ -312,7 +312,7 @@ public class RobotMovement {
     //in:r
     //out:rToCurve(r)
     public double whatisDegree(double r){
-    	return rToCurve(r);
+    	return rToCurve(Math.toRadians(r));
     }
     
     //set mode to arcadeDrive//
@@ -412,43 +412,74 @@ public class RobotMovement {
 	protected SpeedController m_convayeromoter;
 	protected SpeedController m_climbmoter;
 	protected SpeedController m_shootmoter;
+	public boolean ConvayerSwitch;
+	public boolean BallSwitch;
    
-    //ball motor is set//
+    //ball motor is set
     public void setballmoter(){
 		m_ballmoter = new Talon(4);
 	}
     
+    //turn on ball motor
+    //in:nothing
+    //out:nothing
+    public void BallOn(){
+    	BallSwitch=true;
+    }
+    //turn off ball motor
+    //in:nothing
+    //out:nothing
+    public void BallOff(){
+    	BallSwitch=false;
+    }
     //speed of ball motor is set//
     //in:ballspeed
     //out:nonthing
-	public void ballmotorfowardbackward(double speed){
-		if(speed>1.0){
-			speed=1.0;
+	public void ballmotorwork(){
+		if(BallSwitch==true){
+			m_ballmoter.set(1.0);
 		}
-		if(speed<-1.0){
-			speed=-1.0;
-		}
-		m_ballmoter.set(speed);
 	}
 	
 	//set conveyer motor
 	public void setcaonvayeromotor(){
 		m_convayeromoter = new Talon(5);
 	}
-				
-	//set speed for conveyer motor
-	//in:speedF
-	//out:nonthing
-	public void convayermotorforwardbackward(double speed){
-		if(speed>1.0){
-			speed=1.0;
-		}
-		if(speed<-1.0){
-			speed=-1.0;
-		}
-		m_convayeromoter.set(speed);
+	
+	//turn on conveyer motor
+	//in:nothing
+	//out:nothing
+	public void ConveyerOn(){
+		ConvayerSwitch = true;
 	}
 	
+	//turn off conveyer motor
+	//in:nothing
+	//out:nothing
+	public void ConveyerOff(){
+		ConvayerSwitch = false;
+	}
+				
+	//set speed for conveyer motor
+	//in:speed
+	//out:nonthing
+    public void coveyormoterwork(){
+    	if(ConvayerSwitch == true){
+    		m_convayeromoter.set(1.0);
+    	}
+    }
+	
+    public boolean ballon(){
+    	return BallSwitch;
+    }
+    
+    public boolean balloff(){
+    	return BallSwitch;
+    }
+    
+    public boolean Convayer(){
+    	return ConvayerSwitch;
+    }
 	//set climber motor
 	public void setclimbmoter(){
 		m_climbmoter = new Talon(6);
@@ -483,6 +514,7 @@ public class RobotMovement {
 	public boolean Testing;
 	Timer timer = new Timer();
 	
+	
 	//Start the Timer
 	//in:nothing
 	//out:nothing
@@ -511,15 +543,24 @@ public class RobotMovement {
 		}else if(timer.get() <6.0){
 			DrivefowardBackward(0); //Stop
 		}else if(timer.get() <7.0){
-			turnLeft(0.5,90);		//Turn Left .5, 90 degrees
-		}else if(timer.get()==7.0){
-			Testing=false;
-			timer.reset();
+			turnLeft(0,90);
+		}else if(timer.get() < 8.0){
+			DrivefowardBackward(0);
+		}else if(timer.get() < 9.0){
+			ConveyerOn();
+			coveyormoterwork();
+		}else if(timer.get() < 10.0){
+			ConveyerOff();
+		}else if(timer.get() < 11.0){
+			BallOn();
+			ballmotorwork();
+		}else if(timer.get() == 12.0){
+			BallOff();
+			Testing = false;
+            timer.reset();
 		}
-		 
-		
-	}
 	
+	}
 	
 		
 }
