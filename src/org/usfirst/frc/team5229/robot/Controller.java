@@ -22,26 +22,26 @@ public class Controller {
 	
 	//Controls the X axis of the right joystick
 	public double getRightJoyX() {
-		return stick.getRawAxis(4);
+		return stick.getRawAxis(0);
 	}
 	
 	
 	//Controls the Y axis of the right joystick
 	public double getRightJoyY() {
-		return stick.getRawAxis(5);
+		return stick.getRawAxis(1);
 	}
 	
 	
 	//Controls the X axis of the left joystick
 	public double getLeftJoyX() {
-		return stick.getRawAxis(0);
+		return stick.getRawAxis(2);
 	}
 	
 	
 	
 	//Controls the Y axis of the left joystick
 	public double getLeftJoyY() {
-		return stick.getRawAxis(1);
+		return stick.getRawAxis(3);
 	}
 	
 	
