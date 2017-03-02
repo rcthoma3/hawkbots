@@ -312,7 +312,7 @@ public class RobotMovement {
     //in:r
     //out:rToCurve(r)
     public double whatisDegree(double r){
-    	return rToCurve(r);
+    	return rToCurve(Math.toRadians(r));
     }
     
     //set mode to arcadeDrive//
