@@ -19,26 +19,26 @@ public class Controller {
 	
 	//Controls the X axis of the right joystick
 	public double getRightJoyX() {
-		return stick.getRawAxis(4);
+		return stick.getRawAxis(0);
 	}
 	
 	
 	//Controls the Y axis of the right joystick
 	public double getRightJoyY() {
-		return stick.getRawAxis(5);
+		return stick.getRawAxis(1);
 	}
 	
 	
 	//Controls the X axis of the left joystick
 	public double getLeftJoyX() {
-		return stick.getRawAxis(0);
+		return stick.getRawAxis(2);
 	}
 	
 	
 	
 	//Controls the Y axis of the left joystick
 	public double getLeftJoyY() {
-		return stick.getRawAxis(1);
+		return stick.getRawAxis(3);
 	}
 	
 	
@@ -243,6 +243,12 @@ public class Controller {
 			System.out.print(" RT="+buttonRightTrigger);
 			System.out.print(" RX="+axisRightJoyX);
 			System.out.println(" RY="+axisRightJoyY);
+		}
+		if (axisLeftJoyY > .2 || axisLeftJoyX > .2 ){
+			System.out.println(" Left Joystick = "+ axisLeftJoyY + "   " + axisLeftJoyX);
+		}
+		if (axisRightJoyY > .2 || axisRightJoyX > .2 ){
+			System.out.println(" Right Joystick = "+ axisRightJoyY + "   " + axisRightJoyX);
 		}
 		
 	}
