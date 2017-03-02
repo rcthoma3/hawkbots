@@ -259,11 +259,11 @@ public class RobotMovement {
     //out: nothing
     public void turnLeft(double speed, double r){
     	speed = speedLimit(speed);
-    	if (r>0){
+    	if (r<0){
     		r=0;
     	}
-    	if(r<-180){
-    		r=-180;
+    	if(r>180){
+    		r=180;
     	}
     	//myRobot.drive(speed, rToCurve(r));
     	myRobot.drive(speed, -rToCurve(Math.toRadians(r)));
