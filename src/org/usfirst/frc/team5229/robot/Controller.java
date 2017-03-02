@@ -14,6 +14,8 @@ public class Controller {
 	public static int kButtonB = 2;
 	public static int kButtonX = 3;
 	public static int kButtonY = 4;
+	public static int kButtonRightBumper = 5;
+	public static int kButtonLeftBumper = 6;
 	public Joystick stick = new Joystick(0);
 	public Timer rumbleTimer;
 	
@@ -171,8 +173,7 @@ public class Controller {
 	//out: is a button pressed, boolean
 	public boolean getButtonLeftJoy() {
 		boolean isPressed = false;
-		
-		return isPressed;
+		return isPressed; 		
 		
 	}
 	
@@ -180,9 +181,10 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonLeftBump() {
-		boolean isPressed = false;
+		//boolean isPressed = false;
+		//return isPressed; //removed because always returning false
 		
-		return isPressed;
+		return stick.getRawButton(kButtonLeftBumper);
 		
 	}
 	
@@ -190,10 +192,9 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonRightBump() {
-		boolean isPressed = false;
-		
-		return isPressed;
-		
+		//boolean isPressed = false;
+		//return isPressed; //removed because always returning false
+		return stick.getRawButton(kButtonRightBumper);
 	}
 	//This tells whether or not everything on the controller works or not
 	public void test() {
@@ -243,6 +244,7 @@ public class Controller {
 			System.out.print(" RT="+buttonRightTrigger);
 			System.out.print(" RX="+axisRightJoyX);
 			System.out.println(" RY="+axisRightJoyY);
+			System.out.println(" RB="+buttonRightBump);
 		}
 		
 	}
