@@ -16,6 +16,7 @@ public class Controller {
 	public static int kButtonY = 4;
 	public static int kButtonRightBumper = 5;
 	public static int kButtonLeftBumper = 6;
+
 	public Joystick stick = new Joystick(0);
 	public Timer rumbleTimer;
 	
@@ -180,12 +181,8 @@ public class Controller {
 	//Is LB button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
-	public boolean getButtonLeftBump() {
-		//boolean isPressed = false;
-		//return isPressed; //removed because always returning false
-		
-		return stick.getRawButton(kButtonLeftBumper);
-		
+	public boolean getButtonLeftBump() {		
+		return stick.getRawButton(kButtonLeftBumper);		
 	}
 	
 	//Is RB button pressed or not

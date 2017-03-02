@@ -67,7 +67,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		//myRobot.arcadeDrive(stick);
-		
+
 		myRobot.tick();
 		myController.test();
 		
