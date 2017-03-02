@@ -72,7 +72,7 @@ public class Robot extends IterativeRobot {
 			mySensors.test();
 		myRobot.tick();
 		if (myController.getButtonB())
-			myRobot.StartTest();
+			myRobot.StartTimer();
 		
 	}
 

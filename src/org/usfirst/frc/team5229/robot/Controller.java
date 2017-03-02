@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class Controller {
-	public static int kButtonA = 1;
-	public static int kButtonB = 2;
-	public static int kButtonX = 3;
-	public static int kButtonY = 4;
+	public static int kButtonA = 0;
+	public static int kButtonB = 1;
+	public static int kButtonX = 2;
+	public static int kButtonY = 3;
 	public Joystick stick = new Joystick(0);
 	public Timer rumbleTimer;
 	
@@ -180,7 +180,7 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonLeftBump() {
-		boolean isPressed = true;
+		boolean isPressed = false;
 		
 		return isPressed;
 		
@@ -190,7 +190,7 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonRightBump() {
-		boolean isPressed = true;
+		boolean isPressed = false;
 		
 		return isPressed;
 		

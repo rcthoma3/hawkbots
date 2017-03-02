@@ -10,7 +10,7 @@ public class RobotMovement {
 	private boolean modeArcade = true; 
 	private boolean modeFine = true; 
     private boolean squaredInputs = true; 
-    private static double wheelBase = 24.0;
+    private static double wheelBase = 15.0;
     //Line below removed, causing errors.
     //private Sensors sensors = new Sensors();
     
@@ -135,12 +135,12 @@ public class RobotMovement {
 	}
 
 	//should all of the motors be inverted?
-	//make moters inverted
+	//make motors inverted
 	public void init(){
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,false);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,false);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,false);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,false);
 	} 
 	RobotDrive myRobot = new RobotDrive(2, 3, 0, 1); // why is there 0, 1, 2, 3? What are those?
 	Joystick leftStick;
@@ -175,7 +175,7 @@ public class RobotMovement {
     //speed<0, moves backward
     public void DrivefowardBackward(double speed){
     	speed = speedLimit(speed);
-    	myRobot.drive(-speed,0);   	// WHY is there a -? Should motors be reversed?
+    	myRobot.drive(speed,0);   	// WHY is there a -? Should motors be reversed?
     }
 
 	/**
@@ -242,7 +242,7 @@ public class RobotMovement {
     //in:r
     //out:Math.exp(-r/wheelBase)
     private double rToCurve(double r){
-    	return Math.exp(r/wheelBase);
+    	return Math.exp(-r/wheelBase);
 	//takes the the wheelBase of a robot and the radius of the circle that the curve would be part of and imputs
 	//it into a function that outputs the the curve 
     }
@@ -259,13 +259,14 @@ public class RobotMovement {
     //out: nothing
     public void turnLeft(double speed, double r){
     	speed = speedLimit(speed);
-    	if (r>0){
+    	if (r<0){
     		r=0;
     	}
-    	if(r<-180){
-    		r=-180;
+    	if(r>180){
+    		r=180;
     	}
-    	myRobot.drive(speed, -rToCurve(r));
+    	//myRobot.drive(speed, rToCurve(r));
+    	myRobot.drive(speed, -rToCurve(Math.toRadians(r)));
     }
     
     //turn right
@@ -279,7 +280,8 @@ public class RobotMovement {
     	if(r>180){
     		r=180;
     	}
-    	myRobot.drive(speed, -rToCurve(r));
+    	//myRobot.drive(speed, rToCurve(r));
+    	myRobot.drive(speed, rToCurve(Math.toRadians(r)));
     }
     
     //tell what the is speed//
@@ -310,7 +312,7 @@ public class RobotMovement {
     //in:r
     //out:rToCurve(r)
     public double whatisDegree(double r){
-    	return rToCurve(r);
+    	return rToCurve(Math.toRadians(r));
     }
     
     //set mode to arcadeDrive//
@@ -410,43 +412,74 @@ public class RobotMovement {
 	protected SpeedController m_convayeromoter;
 	protected SpeedController m_climbmoter;
 	protected SpeedController m_shootmoter;
+	public boolean ConvayerSwitch;
+	public boolean BallSwitch;
    
-    //ball motor is set//
+    //ball motor is set
     public void setballmoter(){
 		m_ballmoter = new Talon(4);
 	}
     
+    //turn on ball motor
+    //in:nothing
+    //out:nothing
+    public void BallOn(){
+    	BallSwitch=true;
+    }
+    //turn off ball motor
+    //in:nothing
+    //out:nothing
+    public void BallOff(){
+    	BallSwitch=false;
+    }
     //speed of ball motor is set//
     //in:ballspeed
     //out:nonthing
-	public void ballmotorfowardbackward(double speed){
-		if(speed>1.0){
-			speed=1.0;
+	public void ballmotorwork(){
+		if(BallSwitch==true){
+			m_ballmoter.set(1.0);
 		}
-		if(speed<-1.0){
-			speed=-1.0;
-		}
-		m_ballmoter.set(speed);
 	}
 	
 	//set conveyer motor
 	public void setcaonvayeromotor(){
 		m_convayeromoter = new Talon(5);
 	}
-				
-	//set speed for conveyer motor
-	//in:speedF
-	//out:nonthing
-	public void convayermotorforwardbackward(double speed){
-		if(speed>1.0){
-			speed=1.0;
-		}
-		if(speed<-1.0){
-			speed=-1.0;
-		}
-		m_convayeromoter.set(speed);
+	
+	//turn on conveyer motor
+	//in:nothing
+	//out:nothing
+	public void ConveyerOn(){
+		ConvayerSwitch = true;
 	}
 	
+	//turn off conveyer motor
+	//in:nothing
+	//out:nothing
+	public void ConveyerOff(){
+		ConvayerSwitch = false;
+	}
+				
+	//set speed for conveyer motor
+	//in:speed
+	//out:nonthing
+    public void coveyormoterwork(){
+    	if(ConvayerSwitch == true){
+    		m_convayeromoter.set(1.0);
+    	}
+    }
+	
+    public boolean ballon(){
+    	return BallSwitch;
+    }
+    
+    public boolean balloff(){
+    	return BallSwitch;
+    }
+    
+    public boolean Convayer(){
+    	return ConvayerSwitch;
+    }
 	//set climber motor
 	public void setclimbmoter(){
 		m_climbmoter = new Talon(6);
@@ -481,6 +514,7 @@ public class RobotMovement {
 	public boolean Testing;
 	Timer timer = new Timer();
 	
+	
 	//Start the Timer
 	//in:nothing
 	//out:nothing
@@ -497,27 +531,36 @@ public class RobotMovement {
 	
 	public void Test(){
 		if(timer.get() < 1.0){
-			DrivefowardBackward(0.5);
+			DrivefowardBackward(0.5); //Forward .5
 		}else if(timer.get() <2.0){
-			DrivefowardBackward(0);
+			DrivefowardBackward(0); //Stop
 		}else if(timer.get() < 3.0){
-			DrivefowardBackward(-0.5);
+			DrivefowardBackward(-0.5); //Back .5
 		}else if(timer.get() < 4.0){
-			DrivefowardBackward(0);
+			DrivefowardBackward(0); //Stop
 		}else if(timer.get() <5.0){
-			turnRight(0,90);
+			turnRight(0.5,90);		//Turn Right .5, 90 degrees
 		}else if(timer.get() <6.0){
-			DrivefowardBackward(0);
+			DrivefowardBackward(0); //Stop
 		}else if(timer.get() <7.0){
-			turnLeft(0,-90);
-		}else if(timer.get()==7.0){
-			Testing=false;
-			timer.reset();
+			turnLeft(0,90);
+		}else if(timer.get() < 8.0){
+			DrivefowardBackward(0);
+		}else if(timer.get() < 9.0){
+			ConveyerOn();
+			coveyormoterwork();
+		}else if(timer.get() < 10.0){
+			ConveyerOff();
+		}else if(timer.get() < 11.0){
+			BallOn();
+			ballmotorwork();
+		}else if(timer.get() == 12.0){
+			BallOff();
+			Testing = false;
+            timer.reset();
 		}
-		 
-		
-	}
 	
+	}
 	
 		
 }
