@@ -67,13 +67,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		//myRobot.arcadeDrive(stick);
+		
+		myRobot.tick();
 		myController.test();
+		
 		//if (myController.getButtonX())
 		//	mySensors.test();
-		myRobot.tick();
-		//if (myController.getButtonB())
-		//	myRobot.StartTimer();
+		//myRobot.Test();
 		
+		
+		
+		if (myController.getButtonB())
+			myRobot.StartTest();
 	}
 
 	/**

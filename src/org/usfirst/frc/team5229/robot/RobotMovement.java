@@ -10,7 +10,7 @@ public class RobotMovement {
 	private boolean modeArcade = true; 
 	private boolean modeFine = true; 
     private boolean squaredInputs = true; 
-    private static double wheelBase = 24.0;
+    private static double wheelBase = 15.0;
     //Line below removed, causing errors.
     //private Sensors sensors = new Sensors();
     
@@ -266,7 +266,7 @@ public class RobotMovement {
     		r=-180;
     	}
     	//myRobot.drive(speed, rToCurve(r));
-    	myRobot.drive(.5,.5);
+    	myRobot.drive(speed, -rToCurve(Math.toRadians(r)));
     }
     
     //turn right
@@ -281,7 +281,7 @@ public class RobotMovement {
     		r=180;
     	}
     	//myRobot.drive(speed, rToCurve(r));
-    	myRobot.drive(.5, -.5);
+    	myRobot.drive(speed, rToCurve(Math.toRadians(r)));
     }
     
     //tell what the is speed//
@@ -511,7 +511,7 @@ public class RobotMovement {
 		}else if(timer.get() <6.0){
 			DrivefowardBackward(0); //Stop
 		}else if(timer.get() <7.0){
-			turnLeft(0.5,-90);		//Turn Left .5, 90 degrees
+			turnLeft(0.5,90);		//Turn Left .5, 90 degrees
 		}else if(timer.get()==7.0){
 			Testing=false;
 			timer.reset();
