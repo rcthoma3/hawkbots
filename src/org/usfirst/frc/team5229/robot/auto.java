@@ -50,50 +50,55 @@ public class auto {
 	//out: nothing
 	public void shootball() {
 		//Step 1:Use sensor to line up robot straight towards burner
-		//STep 2:Aim towards top goal
-		//Step 3:Fire
-		//Step 4:Back up
-		
-	}
-	//drives forward
-	//in: nothing
-	//out: nothing
-	public void moveforward() {
-		robot.DrivefowardBackward(50);
-		
+		//sensors.lineUp();
+		 double distanceToGoal = 0;
+		 distanceToGoal = (sensors.SonicLeftCenter() + sensors.SonicRightCenter())/2;
+		 while (distanceToGoal>80) {
+			 robot.DrivefowardBackward(50);
+			 distanceToGoal = (sensors.SonicLeftCenter() + sensors.SonicRightCenter())/2;
+		 }
+		 //robot.dumpBalls();
+		 robot.DrivefowardBackward(-50);
 	}
 	// the robot lines up to shoot the ball at the top of boiler
 	//in: nothing
 	//out: nothing
 	public void lineupwithburner() {
-		
-	}
-	// the robot drives distance then turns left
-	//in: nothing
-	//out: nothing 
-	public void turnleft() {
-		//Turns Left
-		robot.turnLeft(50,90);
-		
-		
-	}
-    //the robot drives distance them turns right
-	//in: nothing
-	//out: nothing
-	public void turnright() {
-		//Turns right 
-		robot.turnRight(50,90);
-		
-		
+		double left = sensors.SonicLeftCenter();
+		double right = sensors.SonicRightCenter();
+		while (Math.abs(left - right) > 20 ) {
+			if (left > right)
+				robot.turnRight(50, 10);
+			else
+				robot.turnLeft(50, 10);
+			left = sensors.SonicLeftCenter();
+			right = sensors.SonicRightCenter();
+		}		
 	}
 	//the robot gets the distance using the sensor then drops the gear once it gets to the gear pully
 	//in: distance
 	//out: gear drop
 	public void dropgear() {
 		//Step 1: Have front sensors get distance from wall
+		double left = sensors.SonicLeftCenter();
+		double right = sensors.SonicRightCenter();
 		//Step 2: Line up by making distances equal
+		while (Math.abs(left - right) > 20) {
+			if (left > right)
+				robot.turnRight(50, 10);
+			else 
+				robot.turnLeft(50, 10);
+			left = sensors.SonicLeftCenter();
+			right = sensors.SonicRightCenter();
+		}
 		//Step 3: Move forward certain distance from gear drop location
-		//Step 4: Drop fear onto peg
+		double distanceToWall = 0;
+		distanceToWall = (sensors.SonicLeftCenter() + sensors.SonicRightCenter())/2;
+		while(distanceToWall>80) {
+			robot.DrivefowardBackward(50);
+			distanceToWall = (sensors.SonicLeftCenter() + sensors.SonicRightCenter())/2;
+		}
+		//Step 4: Drop gear onto peg
 		
 	}
 
