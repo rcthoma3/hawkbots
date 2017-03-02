@@ -469,6 +469,17 @@ public class RobotMovement {
     	}
     }
 	
+    public boolean ballon(){
+    	return BallSwitch;
+    }
+    
+    public boolean balloff(){
+    	return BallSwitch;
+    }
+    
+    public boolean Convayer(){
+    	return ConvayerSwitch;
+    }
 	//set climber motor
 	public void setclimbmoter(){
 		m_climbmoter = new Talon(6);
