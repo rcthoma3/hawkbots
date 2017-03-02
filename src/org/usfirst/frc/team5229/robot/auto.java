@@ -74,7 +74,7 @@ public class auto {
 			left = sensors.SonicLeftCenter();
 			right = sensors.SonicRightCenter();
 		}		
-	}
+	}//
 	//the robot gets the distance using the sensor then drops the gear once it gets to the gear pully
 	//in: distance
 	//out: gear drop
