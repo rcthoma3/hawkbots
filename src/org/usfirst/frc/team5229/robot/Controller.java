@@ -243,6 +243,12 @@ public class Controller {
 			System.out.println(" RY="+axisRightJoyY);
 			System.out.println(" RB="+buttonRightBump);
 		}
+		if (axisLeftJoyY > .2 || axisLeftJoyX > .2 ){
+			System.out.println(" Left Joystick = "+ axisLeftJoyY + "   " + axisLeftJoyX);
+		}
+		if (axisRightJoyY > .2 || axisRightJoyX > .2 ){
+			System.out.println(" Right Joystick = "+ axisRightJoyY + "   " + axisRightJoyX);
+		}
 		
 	}
 }
