@@ -543,7 +543,7 @@ public class RobotMovement {
 		}else if(timer.get() <6.0){
 			DrivefowardBackward(0); //Stop
 		}else if(timer.get() <7.0){
-			turnLeft(0,-90);
+			turnLeft(0,90);
 		}else if(timer.get() < 8.0){
 			DrivefowardBackward(0);
 		}else if(timer.get() < 9.0){
