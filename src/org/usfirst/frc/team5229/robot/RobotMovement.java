@@ -248,11 +248,13 @@ public class RobotMovement {
     }
     
   //how far the outside wheel(right wheel) is going
-    //in:r,angdeg
-    //out:(r+Track/2)*Math.toradians(angdeg)
+    //in: r - turn radius, angdeg - degree in angles 
+    //out: the distance the "outside" wheel must travel to turn angdeg degrees
     public double angleToTurnDistance(double r, double angdeg){
 	   return (r+Track/2)*Math.toRadians(angdeg);
     }
+    
+    
     
     //turn left
     //in: speed, radius(r)
