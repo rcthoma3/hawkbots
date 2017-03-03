@@ -11,6 +11,7 @@ public class RobotMovement {
 	private boolean modeFine = true; 
     private boolean squaredInputs = true; 
     private static double Track = 24.0;
+    private static double wheelDiameter = 6.0;
     //Line below removed, causing errors.
     //private Sensors sensors = new Sensors();
     
@@ -254,7 +255,11 @@ public class RobotMovement {
 	   return (r+Track/2)*Math.toRadians(angdeg);
     }
     
-    
+    //in:distance that the robot needs to move
+    //out:number of rotations of the wheel needed to travel that distance
+    public double distanceToRot(double dist){
+    	return dist/(wheelDiameter*Math.PI);
+    }
     
     //turn left
     //in: speed, radius(r)
