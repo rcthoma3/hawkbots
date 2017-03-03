@@ -10,7 +10,7 @@ public class RobotMovement {
 	private boolean modeArcade = true; 
 	private boolean modeFine = true; 
     private boolean squaredInputs = true; 
-    private static double wheelBase = 15.0;
+    private static double Track = 24.0;
     //Line below removed, causing errors.
     //private Sensors sensors = new Sensors();
     
@@ -110,11 +110,11 @@ public class RobotMovement {
 	public RobotMovement(){
 	}
 	
-	//in: newWheelBase
+	//in: newTrack
 	//out:nothing
-	public RobotMovement(double newWheelBase){
-		wheelBase = newWheelBase;
-		//wheelBase is the distance from the middle of the right wheel to the middle of the left wheel
+	public RobotMovement(double newTrack){
+		Track = newTrack;
+		//Track is the distance from the middle of the right wheel to the middle of the left wheel
 	}
 	
 	//in:Joystick Left, Joystick Right
@@ -125,13 +125,13 @@ public class RobotMovement {
 		SetRightJoystick(Right);
 	}
 	
-    //in:Joystick Left, Joystick Right, newWheelBase
+    //in:Joystick Left, Joystick Right, newTrack
 	//out:nothing
-	public RobotMovement(Joystick Left, Joystick Right, double newWheelBase){
+	public RobotMovement(Joystick Left, Joystick Right, double newTrack){
 		//set left joystick set right joystick
 		SetLeftJoystick(Left);
 		SetRightJoystick(Right);
-		wheelBase = newWheelBase;
+		Track = newTrack;
 	}
 
 	//should all of the motors be inverted?
@@ -161,11 +161,11 @@ public class RobotMovement {
     	rightStick = rJoystick;
     }
 	
-    //in:newWheelBase
+    //in:newTrack
     //out:nothing
-   public void createWheelBase(double newWheelBase){
-	wheelBase = newWheelBase;
-		//wheelBase is the distance from the middle of the right wheel to the middle of the left wheel
+   public void createTrack(double newTrack){
+	Track = newTrack;
+		//Track is the distance from the middle of the right wheel to the middle of the left wheel
 	} 
    
     //set drive forward and backward//
@@ -240,18 +240,18 @@ public class RobotMovement {
 	}
     
     //in:r
-    //out:Math.exp(-r/wheelBase)
+    //out:Math.exp(-r/Track)
     private double rToCurve(double r){
-    	return Math.exp(-r/wheelBase);
-	//takes the the wheelBase of a robot and the radius of the circle that the curve would be part of and imputs
+    	return Math.exp(-r/Track);
+	//takes the the Track of a robot and the radius of the circle that the curve would be part of and imputs
 	//it into a function that outputs the the curve 
     }
     
   //how far the outside wheel(right wheel) is going
     //in:r,angdeg
-    //out:(r+wheelBase/2)*Math.toradians(angdeg)
+    //out:(r+Track/2)*Math.toradians(angdeg)
     public double angleToTurnDistance(double r, double angdeg){
-	   return (r+wheelBase/2)*Math.toRadians(angdeg);
+	   return (r+Track/2)*Math.toRadians(angdeg);
     }
     
     //turn left
