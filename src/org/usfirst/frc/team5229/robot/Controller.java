@@ -16,6 +16,55 @@ public class Controller {
 	public static int kButtonY = 3;
 	public Joystick stick = new Joystick(0);
 	public Timer rumbleTimer;
+	boolean aWasPressed=false;
+	boolean aLast=false;
+	boolean bWasPressed=false;
+	boolean bLast=false;
+	boolean xWasPressed=false;
+	boolean xLast=false;
+	boolean yWasPressed=false;
+	boolean yLast=false;
+	
+	public void updateController() {
+		if (!aLast && getButtonA())
+			aWasPressed=true;		
+		else 
+			aWasPressed=false;
+		
+		if (!bLast && getButtonB())
+			bWasPressed=true;		
+		else 
+			bWasPressed=false;
+		
+		if (!xLast && getButtonB())
+			xWasPressed=true;		
+		else 
+			xWasPressed=false;
+		
+		if (!yLast && getButtonB())
+			yWasPressed=true;		
+		else 
+			yWasPressed=false;
+		
+		aLast = getButtonA();
+		bLast = getButtonB();
+		xLast = getButtonB();
+		yLast = getButtonB();
+	}
+	
+	public boolean aWasPressed() {
+		return aWasPressed;
+	}
+	
+	public boolean bWasPressed() {
+		return bWasPressed;
+	}
+	public boolean xWasPressed() {
+		return xWasPressed;
+	}
+	public boolean yWasPressed() {
+		return yWasPressed;
+	}
 	
 	//Controls the X axis of the right joystick
 	public double getRightJoyX() {
