@@ -1,26 +1,44 @@
 package org.usfirst.frc.team5229.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
+
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 
 public class RobotMovement {
+<<<<<<< HEAD
+	private boolean modeArcade = true; //change modes Arcade and Tank
+	private boolean modeFine = true;  //change modes fine and coarse
+    private boolean squaredInputs = true; //make mode fine
+    private static double wheelBase = 15.0;//distance between center of wheels of each side or robot
+    public boolean Testing;// start test function
+	Timer timer = new Timer();//timer for testing
+	protected SpeedController m_ballmoter;//motor for opening ball entrance
+	protected SpeedController m_convayeromoter;//motor for moving balls
+	protected SpeedController m_climbmoter;//motor for climbing rope
+	protected SpeedController m_shootmoter;//motor for shooting balls
+	public boolean ConvayerSwitch;//Turn on or off conveyer
+	public boolean BallSwitch;//Open or close ball entrance
+	RobotDrive myRobot = new RobotDrive(2, 3, 0, 1); // why is there 0, 1, 2, 3? What are those?
+    Controller myController;//set controller
+	
+
+=======
 	private boolean modeArcade = true; 
 	private boolean modeFine = true; 
     private boolean squaredInputs = true; 
     private static double Track = 24.0;
     private static double wheelDiameter = 6.0;
+>>>>>>> branch 'master' of https://github.com/xlilcasper/hawkbots.git
     //Line below removed, causing errors.
     //private Sensors sensors = new Sensors();
-    
     //state machine
     
     private double r = 0;
     private double speed = 1.0;
     
-    //intialize states
+    //Initialize states
     private enum State {
 		STOPPED, FORWARD, BACKWARD, LEFT, RIGHT, CLIMBING, DESCENDING
 	}
@@ -118,21 +136,29 @@ public class RobotMovement {
 		//Track is the distance from the middle of the right wheel to the middle of the left wheel
 	}
 	
-	//in:Joystick Left, Joystick Right
+	//in:Controller myController, wheelbase
 	//out: nothing
-	public RobotMovement(Joystick Left, Joystick Right){
-		//set left joystick set right joystick
-		SetLeftJoystick(Left);
-		SetRightJoystick(Right);
+	public RobotMovement(Controller myController){
+		myController = new Controller();
 	}
 	
+<<<<<<< HEAD
+    //in:Controller myController, wheelbase
+=======
     //in:Joystick Left, Joystick Right, newTrack
+>>>>>>> branch 'master' of https://github.com/xlilcasper/hawkbots.git
 	//out:nothing
+<<<<<<< HEAD
+	public RobotMovement(Controller myController, double newWheelBase){
+		myController = new Controller();
+		wheelBase = newWheelBase;
+=======
 	public RobotMovement(Joystick Left, Joystick Right, double newTrack){
 		//set left joystick set right joystick
 		SetLeftJoystick(Left);
 		SetRightJoystick(Right);
 		Track = newTrack;
+>>>>>>> branch 'master' of https://github.com/xlilcasper/hawkbots.git
 	}
 
 	//should all of the motors be inverted?
@@ -143,18 +169,11 @@ public class RobotMovement {
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,false);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,false);
 	} 
-	RobotDrive myRobot = new RobotDrive(2, 3, 0, 1); // why is there 0, 1, 2, 3? What are those?
-	Joystick leftStick;
-	Joystick rightStick;
-	
-	
-    //set left stick//
-    //in:Joystick lJoystick
-    //out:nothing
-    public void SetLeftJoystick(Joystick lJoystick){
-    	leftStick = lJoystick;
-    }
+
     
+<<<<<<< HEAD
+    //in:newWheelBase
+=======
     //set right stick//
     //in:Joystick rJoystick
     //out:nothing
@@ -163,6 +182,7 @@ public class RobotMovement {
     }
 	
     //in:newTrack
+>>>>>>> branch 'master' of https://github.com/xlilcasper/hawkbots.git
     //out:nothing
    public void createTrack(double newTrack){
 	Track = newTrack;
@@ -383,13 +403,13 @@ public class RobotMovement {
 	//out:nothing
 	public void doDriveType(){
 		if(modeArcade == true && modeFine == true){
-	    	myRobot.arcadeDrive(leftStick, squaredInputs);
+	    	myRobot.arcadeDrive(myController.getLeftJoyX(), myController.getLeftJoyY(), squaredInputs);
 	    }else if(modeArcade == false && modeFine == true){
-	    	myRobot.tankDrive(leftStick, rightStick, squaredInputs);
+	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY(), squaredInputs);
 	    }else if(modeArcade == true && modeFine == false){
-	    	myRobot.arcadeDrive(leftStick);
+	    	myRobot.arcadeDrive(myController.getLeftJoyX(), myController.getLeftJoyY());
 	    }else{
-	    	myRobot.tankDrive(leftStick, rightStick); 
+	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY()); 
 	    }	    
 	}
 	
@@ -415,12 +435,7 @@ public class RobotMovement {
 		return true;
 	} 
 		
-	protected SpeedController m_ballmoter;
-	protected SpeedController m_convayeromoter;
-	protected SpeedController m_climbmoter;
-	protected SpeedController m_shootmoter;
-	public boolean ConvayerSwitch;
-	public boolean BallSwitch;
+
    
     //ball motor is set
     public void setballmoter(){
@@ -518,8 +533,7 @@ public class RobotMovement {
 		m_shootmoter.set(speed);
 	}
 	
-	public boolean Testing;
-	Timer timer = new Timer();
+	
 	
 	
 	//Start the Timer
@@ -551,9 +565,11 @@ public class RobotMovement {
 			DrivefowardBackward(0); //Stop
 		}else if(timer.get() <7.0){
 			turnLeft(0,90);
-		}else if(timer.get() < 8.0){
+		}else if(timer.get() == 8.0){
 			DrivefowardBackward(0);
-		}else if(timer.get() < 9.0){
+			Testing = false;
+			timer.reset();
+		}/*else if(timer.get() < 9.0){
 			ConveyerOn();
 			coveyormoterwork();
 		}else if(timer.get() < 10.0){
@@ -565,16 +581,9 @@ public class RobotMovement {
 			BallOff();
 			Testing = false;
             timer.reset();
-		}
+		}*/
 	
 	}
 	
 		
 }
-	
-
-	 
- 
-	
-
-
