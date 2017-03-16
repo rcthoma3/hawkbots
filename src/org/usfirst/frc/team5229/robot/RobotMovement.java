@@ -7,11 +7,10 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 
 public class RobotMovement {
-<<<<<<< HEAD
 	private boolean modeArcade = true; //change modes Arcade and Tank
 	private boolean modeFine = true;  //change modes fine and coarse
     private boolean squaredInputs = true; //make mode fine
-    private static double wheelBase = 15.0;//distance between center of wheels of each side or robot
+    private static double Track = 24.0;//distance between center of wheels of each side or robot
     public boolean Testing;// start test function
 	Timer timer = new Timer();//timer for testing
 	protected SpeedController m_ballmoter;//motor for opening ball entrance
@@ -23,18 +22,6 @@ public class RobotMovement {
 	RobotDrive myRobot = new RobotDrive(2, 3, 0, 1); // why is there 0, 1, 2, 3? What are those?
     Controller myController;//set controller
 	
-
-=======
-	private boolean modeArcade = true; 
-	private boolean modeFine = true; 
-    private boolean squaredInputs = true; 
-    private static double Track = 24.0;
-    private static double wheelDiameter = 6.0;
->>>>>>> branch 'master' of https://github.com/xlilcasper/hawkbots.git
-    //Line below removed, causing errors.
-    //private Sensors sensors = new Sensors();
-    //state machine
-    
     private double r = 0;
     private double speed = 1.0;
     
@@ -129,36 +116,19 @@ public class RobotMovement {
 	public RobotMovement(){
 	}
 	
-	//in: newTrack
-	//out:nothing
-	public RobotMovement(double newTrack){
-		Track = newTrack;
-		//Track is the distance from the middle of the right wheel to the middle of the left wheel
-	}
-	
 	//in:Controller myController, wheelbase
 	//out: nothing
 	public RobotMovement(Controller myController){
 		myController = new Controller();
 	}
-	
-<<<<<<< HEAD
-    //in:Controller myController, wheelbase
-=======
-    //in:Joystick Left, Joystick Right, newTrack
->>>>>>> branch 'master' of https://github.com/xlilcasper/hawkbots.git
-	//out:nothing
-<<<<<<< HEAD
-	public RobotMovement(Controller myController, double newWheelBase){
+
+    //in:Controller myController, Track
+    //out:nothing
+
+	public RobotMovement(Controller myController, double newTrack){
 		myController = new Controller();
-		wheelBase = newWheelBase;
-=======
-	public RobotMovement(Joystick Left, Joystick Right, double newTrack){
-		//set left joystick set right joystick
-		SetLeftJoystick(Left);
-		SetRightJoystick(Right);
 		Track = newTrack;
->>>>>>> branch 'master' of https://github.com/xlilcasper/hawkbots.git
+
 	}
 
 	//should all of the motors be inverted?
@@ -171,18 +141,10 @@ public class RobotMovement {
 	} 
 
     
-<<<<<<< HEAD
-    //in:newWheelBase
-=======
-    //set right stick//
-    //in:Joystick rJoystick
-    //out:nothing
-    public void SetRightJoystick(Joystick rJoystick) {
-    	rightStick = rJoystick;
-    }
+
 	
     //in:newTrack
->>>>>>> branch 'master' of https://github.com/xlilcasper/hawkbots.git
+
     //out:nothing
    public void createTrack(double newTrack){
 	Track = newTrack;
@@ -277,9 +239,9 @@ public class RobotMovement {
     
     //in:distance that the robot needs to move
     //out:number of rotations of the wheel needed to travel that distance
-    public double distanceToRot(double dist){
-    	return dist/(wheelDiameter*Math.PI);
-    }
+//    public double distanceToRot(double dist){
+//    	return dist/(wheelDiameter*Math.PI);
+//    }
     
     //turn left
     //in: speed, radius(r)
