@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  */
 public class Robot extends IterativeRobot {
 	Controller myController = new Controller();
-	RobotMovement myRobot = new RobotMovement();
+	RobotMovement myRobot = new RobotMovement(myController);
 	//Sensors mySensors = new Sensors();
 	
 	boolean aLast = false;
@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		CameraServer.getInstance().startAutomaticCapture("cam0", 1);
-		myRobot.init();		
+		myRobot.init();			
 	}
 
 	/**
@@ -73,7 +73,14 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {		
-			
+		myController.updateController();
+		myRobot.doDriveType();
+		if (myController.aWasPressed()) {
+			if (myRobot.ismodeArcade())
+				myRobot.setmodeTank();
+			else
+				myRobot.setmodeArcade();
+		}
 	}
 
 	/**
