@@ -1,5 +1,6 @@
 package org.usfirst.frc.team5229.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -14,11 +15,18 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	//RobotDrive myRobot = new RobotDrive(0, 1);
-	//Joystick stick = new Joystick(0);
 	Controller myController = new Controller();
 	RobotMovement myRobot = new RobotMovement();
-	Sensors mySensors = new Sensors();
+	//Sensors mySensors = new Sensors();
+	
+	boolean aLast = false;
+	boolean aWasPressed = false;
+	boolean bLast = false;
+	boolean xLast = false;
+	boolean yLast = false;
+	
+	//Test Movement
+	//RobotDrive drive = new RobotDrive(0,1,2,3); //4 motor drive
 	
 	Timer timer = new Timer();
 
@@ -26,9 +34,11 @@ public class Robot extends IterativeRobot {
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
+	
 	@Override
 	public void robotInit() {
-		myRobot.init();
+		CameraServer.getInstance().startAutomaticCapture("cam0", 1);
+		myRobot.init();		
 	}
 
 	/**
@@ -45,12 +55,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		// Drive for 2 seconds
-		//if (timer.get() < 2.0) {
-		//	myRobot.drive(-0.5, 0.0); // drive forwards half speed
-		//} else {
-		//	myRobot.drive(0.0, 0.0); // stop robot
-		//}
+		
 	}
 
 	/**
@@ -58,22 +63,17 @@ public class Robot extends IterativeRobot {
 	 * mode
 	 */
 	@Override
-	public void teleopInit() {
+	public void teleopInit() {	
+	
 	}
+
 
 	/**
 	 * This function is called periodically during operator control
 	 */
 	@Override
-	public void teleopPeriodic() {
-		//myRobot.arcadeDrive(stick);
-		myController.test();
-		if (myController.getButtonX())
-			mySensors.test();
-		myRobot.tick();
-		if (myController.getButtonB())
-			myRobot.StartTimer();
-		
+	public void teleopPeriodic() {		
+			
 	}
 
 	/**
