@@ -365,11 +365,11 @@ public class RobotMovement {
 	//out:nothing
 	public void doDriveType(){
 		if(modeArcade == true && modeFine == true){
-	    	myRobot.arcadeDrive(myController.getLeftJoyX(), myController.getLeftJoyY(), squaredInputs);
+	    	myRobot.arcadeDrive(myController.stick, squaredInputs);
 	    }else if(modeArcade == false && modeFine == true){
 	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY(), squaredInputs);
 	    }else if(modeArcade == true && modeFine == false){
-	    	myRobot.arcadeDrive(myController.getLeftJoyX(), myController.getLeftJoyY());
+	    	myRobot.arcadeDrive(myController.stick);
 	    }else{
 	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY()); 
 	    }	    
