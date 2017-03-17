@@ -19,7 +19,7 @@ public class RobotMovement {
 	protected SpeedController m_shootmoter;//motor for shooting balls
 	public boolean ConvayerSwitch;//Turn on or off conveyer
 	public boolean BallSwitch;//Open or close ball entrance
-	RobotDrive myRobot = new RobotDrive(2, 3, 0, 1); // why is there 0, 1, 2, 3? What are those?
+	RobotDrive myRobot = new RobotDrive(0, 1, 2, 3); // why is there 0, 1, 2, 3? What are those?
     Controller myController;//set controller
 	
     private double r = 0;
@@ -134,10 +134,10 @@ public class RobotMovement {
 	//should all of the motors be inverted?
 	//make motors inverted
 	public void init(){
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,false);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,false);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,false);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,false);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
 	} 
 
     
