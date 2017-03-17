@@ -12,9 +12,7 @@ public class RobotMovement {
     private boolean squaredInputs = true; //make mode fine
     private static double Track = 24.0;//distance between center of wheels of each side or robot
     public boolean Testing;// start test function
-    public boolean AutoTesting;//start auto test funtcion
 	Timer timer = new Timer();//timer for testing
-	Timer AutoTimer = new Timer();//timer for automonous 
 	protected SpeedController m_ballmoter;//motor for opening ball entrance
 	protected SpeedController m_convayeromoter;//motor for moving balls
 	protected SpeedController m_climbmoter;//motor for climbing rope
@@ -550,19 +548,9 @@ public class RobotMovement {
 	
 	}
 	
-	public boolean StartAutoTimer(){
-		if(AutoTesting = true){
-			AutoTimer.reset();
-			AutoTimer.start();
-		}
-		return true;
-	}
+
 	
-	public void AutoTesting(){
-		if(AutoTimer.get() < 1.0){
-			
-		}
-	}
+
 	
 		
 }

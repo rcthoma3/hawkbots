@@ -1,8 +1,12 @@
 package org.usfirst.frc.team5229.robot;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class auto {	
 	RobotMovement robot = new RobotMovement();
 	Sensors sensors = new Sensors();
+	Timer AutoTimer = new Timer();//timer for automonous 
+	public boolean AutoTesting;//start auto test funtcion
 	
 	private final int RED=0;
 	private final int BLUE=1;
@@ -171,6 +175,60 @@ public class auto {
 				state = STATES.Exit;
 			}
 		}//End shoot ball
+	}
+	
+	public boolean StartAutoTimer(){
+		if(AutoTesting = true){
+			AutoTimer.reset();
+			AutoTimer.start();
+		}
+		return true;
+	}
+	
+	public void AutoTesting(){
+		if(AutoTimer.get() < 1.0){
+			
+		}else if(AutoTimer.get() <2.0){
+			robot.DrivefowardBackward(0);
+			
+		}else if(AutoTimer.get() <3.0){
+			
+		}else if(AutoTimer.get() < 4.0){
+			robot.DrivefowardBackward(0);
+			
+		}else if(AutoTimer.get() < 5.0){
+			
+		}else if(AutoTimer.get() < 6.0){
+			robot.DrivefowardBackward(0);
+			
+		}else if(AutoTimer.get() < 7.0){
+			
+		}else if(AutoTimer.get() < 8.0){
+			robot.DrivefowardBackward(0);
+			
+		}else if(AutoTimer.get() < 9.0){
+			
+		}else if(AutoTimer.get() < 10.0){
+			robot.DrivefowardBackward(0);
+			
+		}else if(AutoTimer.get() < 11.0){
+			
+		}else if(AutoTimer.get() < 12.0){
+			robot.DrivefowardBackward(0);
+			
+		}else if(AutoTimer.get() < 13.0){
+			
+		}else if(AutoTimer.get() < 14.0){
+			robot.DrivefowardBackward(0);
+			
+		}else if(AutoTimer.get() < 15.0){
+			
+		}else if(AutoTimer.get() == 15.0){
+			robot.DrivefowardBackward(0);
+			
+			AutoTesting = false;
+			AutoTimer.reset();
+		}
 	}
 	
 	
