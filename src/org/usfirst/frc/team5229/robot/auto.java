@@ -42,7 +42,7 @@ public class auto {
 			
 		}else if(AutoTimer.get() <4.0 && Sensordetecting == true){
 			//robot.DrivefowardBackward(0);
-			//Align
+			straightenOut();
 				
 		}else if(AutoTimer.get() <6.0 && Sensordetecting == true){
 			if (sensors.SonicRightCenter() > value2)
