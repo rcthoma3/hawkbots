@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 public class Robot extends IterativeRobot {
 	Controller myController = new Controller();
 	RobotMovement myRobot = new RobotMovement(myController);
+	
 	//Sensors mySensors = new Sensors();
 	
 	boolean aLast = false;
