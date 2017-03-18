@@ -147,29 +147,21 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonUpD() {
-		boolean isPressed = false;
-		
-		return isPressed;
-		
+		return stick.getPOV()==0;
 	}
 	
 	//Is Down D button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonDownD() {
-		boolean isPressed = false;
-		
-		return isPressed;
-		
+		return stick.getPOV()==180;		
 	}
 	
 	//Is Right D pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonRightD() {
-		boolean isPressed = false;
-		
-		return isPressed;
+		return stick.getPOV()==90;
 		
 	}
 	
@@ -177,12 +169,7 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonLeftD() {
-		boolean isPressed = false;
-		
-		
-		return isPressed;
-		
-		
+		return stick.getPOV()==270;
 	}
 	
 	//Is the Right Trigger button pressed or not
