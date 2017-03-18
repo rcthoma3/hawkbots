@@ -17,8 +17,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 public class Robot extends IterativeRobot {
 	Controller myController = new Controller();
 	RobotMovement myRobot = new RobotMovement(myController);
-	
-	//Sensors mySensors = new Sensors();
+	Sensors mySensors = new Sensors();
 	
 	boolean aLast = false;
 	boolean aWasPressed = false;
@@ -38,7 +37,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		CameraServer.getInstance().startAutomaticCapture("cam0", 1);
+		//CameraServer.getInstance().startAutomaticCapture("cam0", 1);
 		myRobot.init();			
 	}
 
@@ -49,6 +48,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		timer.reset();
 		timer.start();
+		myRobot.ConveyerOn();
 	}
 
 	/**
@@ -73,15 +73,50 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control
 	 */
 	@Override
-	public void teleopPeriodic() {		
+	public void teleopPeriodic() {	
 		myController.updateController();
+		myRobot.tick();
 		myRobot.doDriveType();
+		
+		//When ever the A button is pressed the mode is
+		//set to either arcade or tank (depending on current mode)
 		if (myController.aWasPressed()) {
+			System.out.println("AAAAAAA");
 			if (myRobot.ismodeArcade())
 				myRobot.setmodeTank();
 			else
 				myRobot.setmodeArcade();
 		}
+		
+		//If right trigger is fully depressed, the
+		//mode is set to fine. Otherwise the mode is
+		//being set to coarse.
+		if (myController.stick.getRawAxis(3) >= .5){
+			myRobot.setmodeFine();
+		}else{
+			myRobot.setmodeCoarse();
+		}
+		
+		if (myController.getButtonUpD()) {
+			myRobot.climbmotormovement(1);		
+			System.out.println("D UP");
+		} else if (myController.getButtonDownD()) {
+			System.out.println("D DOWN");
+			myRobot.climbmotormovement(-1);
+		} else {			
+			myRobot.climbmotormovement(0);			
+		};	
+		
+		if (myController.getButtonRightD()) {
+			myRobot.setDoorMotorSpeed(1);
+		} else if (myController.getButtonLeftD()) {
+			myRobot.setDoorMotorSpeed(-1);
+		} else {
+			myRobot.setDoorMotorSpeed(0);
+		}
+		
+		myController.test();
+		
 	}
 
 	/**

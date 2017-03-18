@@ -4,12 +4,21 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class auto {
 	RobotMovement robot = new RobotMovement();
-	Sensors sensors = new Sensors();
+	Sensors sensors;
 	Timer AutoTimer = new Timer();//timer for automonous 
 	public boolean AutoTesting;//start auto test funtcion
 	public boolean Sensordetecting = false; //boolean for autotesting statement
 	double value;
 	double value2;
+	
+	public auto() {
+		
+	}
+	
+	public auto(Sensors sensors) {
+		this();
+		this.sensors=sensors;
+	}
 	
 	public void straightenOut() {
 		

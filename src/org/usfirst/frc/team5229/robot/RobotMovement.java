@@ -1,29 +1,39 @@
 package org.usfirst.frc.team5229.robot;
 
 
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.VictorSP;
 
 public class RobotMovement {
 	private boolean modeArcade = true; //change modes Arcade and Tank
 	private boolean modeFine = true;  //change modes fine and coarse
     private boolean squaredInputs = true; //make mode fine
-    private static double Track = 24.0;//distance between center of wheels of each side or robot
+    //private static double Track = 24.0;//distance between center of wheels of each side or robot
     public boolean Testing;// start test function
 	Timer timer = new Timer();//timer for testing
 	protected SpeedController m_ballmoter;//motor for opening ball entrance
 	protected SpeedController m_convayeromoter;//motor for moving balls
 	protected SpeedController m_climbmoter;//motor for climbing rope
 	protected SpeedController m_shootmoter;//motor for shooting balls
-	public boolean ConvayerSwitch;//Turn on or off conveyer
-	public boolean BallSwitch;//Open or close ball entrance
+	public boolean ConvayerSwitch=true;//Turn on or off conveyer
+	public boolean BallSwitch = false;//Open or close ball entrance
+	public boolean climbing = false; //turns on and off the climbing motor
 	RobotDrive myRobot = new RobotDrive(0, 1, 2, 3); // why is there 0, 1, 2, 3? What are those?
     Controller myController;//set controller
 	
     private double r = 0;
     private double speed = 1.0;
+    
+    private static final int DOOR_MOTOR = 4;
+    private static final int CLIMB_MOTOR = 5;
+    private static final int CONVAYER_MOTOR = 6;
+    private static final int BALL_MOTOR = 7;
+    
+    
     
     //Initialize states
     private enum State {
@@ -31,6 +41,26 @@ public class RobotMovement {
 	}
  
 	State state = State.STOPPED;
+	private VictorSP m_ballmotor;
+	private VictorSP m_conveyormotor;
+	private boolean conveyorSwitch;
+	private PWM m_climbmotor;
+	private VictorSP m_doormotor;
+	
+	//a constructor that doesn't take an input
+	public RobotMovement(){
+		m_climbmotor = new VictorSP(CLIMB_MOTOR);
+		m_ballmotor = new VictorSP(BALL_MOTOR);		
+		m_doormotor = new VictorSP(DOOR_MOTOR);
+		m_conveyormotor = new VictorSP(CONVAYER_MOTOR);		
+	}
+	
+	//in:Controller myController, wheelbase
+	//out: nothing
+	public RobotMovement(Controller myController){
+		this();
+		this.myController = myController;		
+	}
 	
 	//create states
 	public void tick(){
@@ -39,16 +69,12 @@ public class RobotMovement {
 			DrivefowardBackward(0);
 			break;
 		case FORWARD:
-
-
 			DrivefowardBackward(speed);
 			break; 
 		//case BACKWARD://
 			//DrivefowardBackward(-1);//
 			//DrivefowardBackward(speed);//
 			//break;//
-			
-
 		case BACKWARD:
             DrivefowardBackward(speed);
 			break; 
@@ -59,10 +85,10 @@ public class RobotMovement {
 			turnRight(speed,r);
 			break;
 		case CLIMBING:
-			climbmotermovement(speed);
+			climbmotormovement(speed);
 			break;
 		case DESCENDING:
-			climbmotermovement(speed);
+			climbmotormovement(speed);
 			break;
 		}
 		if (Testing){
@@ -111,25 +137,7 @@ public class RobotMovement {
 	   return false;
 		
     }
-   
-	//a constructor that doesn't take an input
-	public RobotMovement(){
-	}
 	
-	//in:Controller myController, wheelbase
-	//out: nothing
-	public RobotMovement(Controller myController){
-		myController = new Controller();
-	}
-
-    //in:Controller myController, Track
-    //out:nothing
-
-	public RobotMovement(Controller myController, double newTrack){
-		myController = new Controller();
-		Track = newTrack;
-
-	}
 
 	//should all of the motors be inverted?
 	//make motors inverted
@@ -138,17 +146,6 @@ public class RobotMovement {
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
-	} 
-
-    
-
-	
-    //in:newTrack
-
-    //out:nothing
-   public void createTrack(double newTrack){
-	Track = newTrack;
-		//Track is the distance from the middle of the right wheel to the middle of the left wheel
 	} 
    
     //set drive forward and backward//
@@ -220,22 +217,7 @@ public class RobotMovement {
     	
     	
 	    return speed;
-	}
-    
-    //in:r
-    //out:Math.exp(-r/Track)
-    private double rToCurve(double r){
-    	return Math.exp(-r/Track);
-	//takes the the Track of a robot and the radius of the circle that the curve would be part of and imputs
-	//it into a function that outputs the the curve 
-    }
-    
-  //how far the outside wheel(right wheel) is going
-    //in: r - turn radius, angdeg - degree in angles 
-    //out: the distance the "outside" wheel must travel to turn angdeg degrees
-    public double angleToTurnDistance(double r, double angdeg){
-	   return (r+Track/2)*Math.toRadians(angdeg);
-    }
+	}  
     
     //in:distance that the robot needs to move
     //out:number of rotations of the wheel needed to travel that distance
@@ -255,7 +237,7 @@ public class RobotMovement {
     		r=180;
     	}
     	//myRobot.drive(speed, rToCurve(r));
-    	myRobot.drive(speed, rToCurve(Math.toRadians(r)));
+    	myRobot.drive(speed,1);
     }
     
     //turn right
@@ -270,7 +252,7 @@ public class RobotMovement {
     		r=180;
     	}
     	//myRobot.drive(speed, rToCurve(r));
-    	myRobot.drive(speed, -rToCurve(Math.toRadians(r)));
+    	myRobot.drive(speed, -1);
     }
     
     //tell what the is speed//
@@ -296,13 +278,7 @@ public class RobotMovement {
     	r = newRadius;
     	
     }
-    
-    //tell how many degrees did the robot turn//
-    //in:r
-    //out:rToCurve(r)
-    public double whatisDegree(double r){
-    	return rToCurve(Math.toRadians(r));
-    }
+      
     
     //set mode to arcadeDrive//
     //in:nothing
@@ -366,13 +342,21 @@ public class RobotMovement {
 	public void doDriveType(){
 		if(modeArcade == true && modeFine == true){
 	    	myRobot.arcadeDrive(myController.stick, squaredInputs);
+	    	myRobot.setMaxOutput(.5);
+	    	myRobot.setSensitivity(.5);
 	    }else if(modeArcade == false && modeFine == true){
 	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY(), squaredInputs);
+	    	myRobot.setMaxOutput(.5);
+	    	myRobot.setSensitivity(.5);
 	    }else if(modeArcade == true && modeFine == false){
 	    	myRobot.arcadeDrive(myController.stick);
+	    	myRobot.setMaxOutput(1);
+	    	myRobot.setSensitivity(1);
 	    }else{
 	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY()); 
-	    }	    
+	    	myRobot.setMaxOutput(1);
+	    	myRobot.setSensitivity(1);
+	    }	
 	}
 	
 	//Stop when there is something forward//
@@ -398,11 +382,7 @@ public class RobotMovement {
 	} 
 		
 
-   
-    //ball motor is set
-    public void setballmoter(){
-		m_ballmoter = new Talon(4);
-	}
+  
     
     //turn on ball motor
     //in:nothing
@@ -421,35 +401,30 @@ public class RobotMovement {
     //out:nonthing
 	public void ballmotorwork(){
 		if(BallSwitch==true){
-			m_ballmoter.set(1.0);
+			m_ballmotor.set(1.0);
 		}
-	}
-	
-	//set conveyer motor
-	public void setcaonvayeromotor(){
-		m_convayeromoter = new Talon(5);
 	}
 	
 	//turn on conveyer motor
 	//in:nothing
 	//out:nothing
 	public void ConveyerOn(){
-		ConvayerSwitch = true;
+		conveyorSwitch = true;
 	}
 	
 	//turn off conveyer motor
 	//in:nothing
 	//out:nothing
 	public void ConveyerOff(){
-		ConvayerSwitch = false;
+		conveyorSwitch = false;
 	}
 				
 	//set speed for conveyer motor
 	//in:speed
 	//out:nonthing
-    public void coveyormoterwork(){
-    	if(ConvayerSwitch == true){
-    		m_convayeromoter.set(1.0);
+    public void coveyormotorwork(){
+    	if(conveyorSwitch == true){
+    		m_conveyormotor.set(1.0);
     	}
     }
 	
@@ -461,38 +436,30 @@ public class RobotMovement {
     	return BallSwitch;
     }
     
-    public boolean Convayer(){
-    	return ConvayerSwitch;
+    public boolean conveyor(){
+    	return conveyorSwitch;
     }
-	//set climber motor
-	public void setclimbmoter(){
-		m_climbmoter = new Talon(6);
-	}
 	
 	//set speed for climb motor
 	//in:speed
 	//out:nothing
-	public void climbmotermovement(double speed){
-		speed = speedLimit(speed);
-		m_climbmoter.set(speed);
-	}
-	
-	//set shoot motor
-	public void setshootmoter(){
-		m_shootmoter = new Talon(7);
+	public void climbmotormovement(double speed){
+		//speed = speedLimit(speed);
+		m_climbmotor.setSpeed(speed);
+		
 	}
 	
 	//set shoot motor speed
 	//in:speed
 	//out:nothing
-	public void shootmotorspeed(double speed){
+	public void setDoorMotorSpeed(double speed){
 		if(speed>1.0){
 			speed=1.0;
 		}
 		if(speed<0){
 			speed=0;
 		}
-		m_shootmoter.set(speed);
+		m_doormotor.set(speed);
 	}
 	
 	
@@ -508,7 +475,6 @@ public class RobotMovement {
 		}
 		return true;
 	}
-	
 	//Test the functions
 	//in:Testing
 	//out:Testing
@@ -534,7 +500,7 @@ public class RobotMovement {
 			timer.reset();
 		}/*else if(timer.get() < 9.0){
 			ConveyerOn();
-			coveyormoterwork();
+			coveyormotorwork();
 		}else if(timer.get() < 10.0){
 			ConveyerOff();
 		}else if(timer.get() < 11.0){
@@ -547,10 +513,6 @@ public class RobotMovement {
 		}*/
 	
 	}
-	
-
-	
-
 	
 		
 }
