@@ -1,8 +1,9 @@
 package org.usfirst.frc.team5229.robot;
 
 
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.PWMSpeedController;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -14,11 +15,11 @@ public class RobotMovement {
     private static double Track = 24.0;//distance between center of wheels of each side or robot
     public boolean Testing;// start test function
 	Timer timer = new Timer();//timer for testing
-	protected PWMSpeedController m_ballmotor;//motor for opening ball entrance (do we still need this?)
-	protected PWMSpeedController m_conveyormotor;//motor for moving balls (is this also the motor entrance now?)
-	protected PWMSpeedController m_climbmotor;//motor for climbing rope
-	protected PWMSpeedController m_doormotor;//motor for dumping balls
-	public boolean conveyorSwitch;//Turn on or off conveyer
+	protected SpeedController m_ballmoter;//motor for opening ball entrance
+	protected SpeedController m_convayeromoter;//motor for moving balls
+	protected SpeedController m_climbmoter;//motor for climbing rope
+	protected SpeedController m_shootmoter;//motor for shooting balls
+	public boolean ConvayerSwitch;//Turn on or off conveyer
 	public boolean BallSwitch;//Open or close ball entrance
 	public boolean climbing = false; //turns on and off the climbing motor
 	RobotDrive myRobot = new RobotDrive(0, 1, 2, 3); // why is there 0, 1, 2, 3? What are those?
@@ -33,6 +34,11 @@ public class RobotMovement {
 	}
  
 	State state = State.STOPPED;
+	private VictorSP m_ballmotor;
+	private VictorSP m_conveyormotor;
+	private boolean conveyorSwitch;
+	private PWM m_climbmotor;
+	private VictorSP m_doormotor;
 	
 	//create states
 	public void tick(){
@@ -120,8 +126,8 @@ public class RobotMovement {
 	
 	//in:Controller myController, wheelbase
 	//out: nothing
-	public RobotMovement(Controller controller){
-		myController = controller;
+	public RobotMovement(Controller myController){
+		myController = new Controller();
 	}
 
     //in:Controller myController, Track
@@ -257,7 +263,7 @@ public class RobotMovement {
     		r=180;
     	}
     	//myRobot.drive(speed, rToCurve(r));
-    	myRobot.drive(speed, -rToCurve(Math.toRadians(r)));
+    	myRobot.drive(speed, rToCurve(Math.toRadians(r)));
     }
     
     //turn right
@@ -272,7 +278,7 @@ public class RobotMovement {
     		r=180;
     	}
     	//myRobot.drive(speed, rToCurve(r));
-    	myRobot.drive(speed, rToCurve(Math.toRadians(r)));
+    	myRobot.drive(speed, -rToCurve(Math.toRadians(r)));
     }
     
     //tell what the is speed//
