@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 public class Robot extends IterativeRobot {
 	Controller myController = new Controller();
 	RobotMovement myRobot = new RobotMovement(myController);
-	//Sensors mySensors = new Sensors();
+	Sensors mySensors = new Sensors();
 	
 	boolean aLast = false;
 	boolean aWasPressed = false;
@@ -37,7 +37,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		CameraServer.getInstance().startAutomaticCapture("cam0", 1);
+		//CameraServer.getInstance().startAutomaticCapture("cam0", 1);
 		myRobot.init();			
 	}
 
@@ -72,10 +72,36 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control
 	 */
 	@Override
-	public void teleopPeriodic() {		
+	public void teleopPeriodic() {	
+		/*
+		if (myRobot.climbing){
+			myRobot.climbmotormovement(1.0);
+		}
+		
 		myController.updateController();
 		myRobot.doDriveType();
+		if (myController.yWasPressed()){
+			if (myRobot.climbing){
+				myRobot.climbing = false;
+			}
+			else{
+				myRobot.climbing = true;
+			}
+		}
+		*/
+		//If right trigger is fully depressed, the
+		//mode is set to fine. Otherwise the mode is
+		//being set to coarse.
+		if (myController.stick.getRawAxis(3) >= .5){
+			myRobot.setmodeFine();
+		}else{
+			myRobot.setmodeCoarse();
+		}
+			
+		//When ever the A button is pressed the mode is
+		//set to either arcade or tank (depending on current mode)
 		if (myController.aWasPressed()) {
+			System.out.println("AAAAAAA");
 			if (myRobot.ismodeArcade())
 				myRobot.setmodeTank();
 			else
