@@ -155,7 +155,7 @@ public class RobotMovement {
     //speed<0, moves backward
     public void DrivefowardBackward(double speed){
     	speed = speedLimit(speed);
-    	myRobot.drive(speed,0);   	// WHY is there a -? Should motors be reversed?
+    	myRobot.drive(-speed,0);   	// WHY is there a -? Should motors be reversed?
     }
 
 	/**
@@ -456,8 +456,8 @@ public class RobotMovement {
 		if(speed>1.0){
 			speed=1.0;
 		}
-		if(speed<0){
-			speed=0;
+		if(speed<-1){
+			speed=-1;
 		}
 		m_doormotor.set(speed);
 	}

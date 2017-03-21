@@ -16,10 +16,10 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
 public class Sensors extends IterativeRobot {
-	private AnalogInput SonicSideLeft = new AnalogInput(0);
-	private AnalogInput SonicCenterLeft = new AnalogInput(1);
-	private AnalogInput SonicCenterRight = new AnalogInput(2);
-	private AnalogInput SonicSideRight = new AnalogInput(3);
+	private AnalogInput SonicSideLeft = new AnalogInput(3);
+	private AnalogInput SonicCenterLeft = new AnalogInput(2);
+	private AnalogInput SonicCenterRight = new AnalogInput(1);
+	private AnalogInput SonicSideRight = new AnalogInput(0);
 
 	//Distance in inches the robot wants to stay from object,
 	private static final double kHoldDistance = 12.0;
@@ -73,9 +73,9 @@ public class Sensors extends IterativeRobot {
 	//In: nothing
 	//Out: distance in mm
 	public void test(){
-		System.out.print(SonicRightSide());
-		System.out.print(" "+SonicLeftCenter());
-		System.out.print(" "+SonicRightCenter());
-		System.out.println(" "+SonicLeftSide());		
+		System.out.print("Right Side:  "+SonicRightSide());
+		System.out.print(" Right Center: "+SonicRightCenter());
+		System.out.print(" Left Center: "+SonicLeftCenter());
+		System.out.println(" Left Side: "+SonicLeftSide());		
 	}	
 }
