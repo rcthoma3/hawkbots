@@ -10,6 +10,8 @@ public class auto {
 	public boolean Sensordetecting = false; //boolean for autotesting statement
 	double value;
 	double value2;
+	double ScaleVal = 2;
+	
 	
 	public void straightenOut() {
 		
@@ -31,6 +33,12 @@ public class auto {
 	
 	
 	public void AutoTesting(){
+		
+		if (AutoTimer.get() < 4.0)
+		robot.DrivefowardBackward(Math.max(Math.min((sensors.SonicLeftCenter() + sensors.SonicRightCenter() / 2)/ScaleVal,1),0));
+		
+	}
+		/*
 		if(AutoTimer.get() < 2.0){
 			if(sensors.SonicRightCenter() > value)
 				robot.DrivefowardBackward(1.0);
@@ -53,6 +61,6 @@ public class auto {
 			
 			
 
-		}
+		}*/
 	}
-}	
+	
