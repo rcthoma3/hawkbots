@@ -424,7 +424,7 @@ public class RobotMovement {
 	//out:nonthing
     public void coveyormotorwork(){
     	if(conveyorSwitch == true){
-    		m_conveyormotor.set(1.0);
+    		m_conveyormotor.set(-1.0);
     	}
     }
 	

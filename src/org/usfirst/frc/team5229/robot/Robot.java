@@ -84,6 +84,8 @@ public class Robot extends IterativeRobot {
 		myController.updateController();
 		myRobot.tick();
 		myRobot.doDriveType();
+		myRobot.coveyormotorwork();
+		myRobot.ballmotorwork();
 		
 		//When ever the A button is pressed the mode is
 		//set to either arcade or tank (depending on current mode)
