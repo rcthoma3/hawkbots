@@ -16,10 +16,10 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
 public class Sensors extends IterativeRobot {
-	private AnalogInput SonicSideLeft = new AnalogInput(0);
-	private AnalogInput SonicCenterLeft = new AnalogInput(1);
-	private AnalogInput SonicCenterRight = new AnalogInput(2);
-	private AnalogInput SonicSideRight = new AnalogInput(3);
+	private AnalogInput SonicSideLeft = new AnalogInput(3);
+	private AnalogInput SonicCenterLeft = new AnalogInput(2);
+	private AnalogInput SonicCenterRight = new AnalogInput(1);
+	private AnalogInput SonicSideRight = new AnalogInput(0);
 
 	//Distance in inches the robot wants to stay from object,
 	private static final double kHoldDistance = 12.0;
@@ -37,39 +37,9 @@ public class Sensors extends IterativeRobot {
 	private static final int kLeftMotorPort = 0;
 	private static final int kRightMotorPort = 1;
 	private static final int kUltrasonicPort = 0;
+
 	
-	private AnalogInput ultrasonic = new AnalogInput(kUltrasonicPort);
-	private RobotDrive myRobot = new RobotDrive(kLeftMotorPort, kRightMotorPort);
-	private PIDController pidController = new PIDController(kP, kI, kD, ultrasonic, new MyPidOutput());
-	
-	public Sensors() {
-		
-	}
-	
-	@Override
-	public void teleopInit() {
-		//Set expected range to 0-24 inches; e.g. at from object go
-		//full forward, at 0 inches from object go full backwards
-		pidController.setInputRange(0, kMaxDistance * kValueToInches);
-		//Set setpoint  of the pidController
-		pidController.setSetpoint(kHoldDistance * kValueToInches);
-		pidController.enable(); //Begin PID control
-	}
-	
-	private class MyPidOutput implements PIDOutput {
-		@Override
-		public void pidWrite(double output) {
-			myRobot.drive(output, 0);
-		}
-	}
-	
-	public void teleopPeriodic() {
-		//Sensor returns a value from 0-4095 that is scaled to inches
-		double currentDistance = ultrasonic.getValue() * kValueToInches;
-		//Convert distance error to a motor speed
-		double currentSpeed = (kHoldDistance - currentDistance) * kP;
-		myRobot.drive(currentSpeed, 0);
-	}
+	public Sensors() {}	
 	
 	//Description: Read the sensor and returns the distance in mm to a wall
 	//in: Nothing
@@ -103,27 +73,9 @@ public class Sensors extends IterativeRobot {
 	//In: nothing
 	//Out: distance in mm
 	public void test(){
-		System.out.print(SonicRightSide());
-		System.out.print(" "+SonicLeftCenter());
-		System.out.print(" "+SonicRightCenter());
-		System.out.println(" "+SonicLeftSide());		
-	}
-	
-	//Color helps tell the robot what team it is on
-	//In: nothing
-	//Out: Color as int
-	public int ColorSensors() {
-		int color = 0;
-		//Color in code goes here
-		return color;
-	}
-	//This lets side and front sensors to tell the angle of how close the wall is
-	//In: nothing
-	//Out: angle 
-	public float angle() {
-		float angle = 0;
-		
-		return angle;
-		
-	}
+		System.out.print("Right Side:  "+SonicRightSide());
+		System.out.print(" Right Center: "+SonicRightCenter());
+		System.out.print(" Left Center: "+SonicLeftCenter());
+		System.out.println(" Left Side: "+SonicLeftSide());		
+	}	
 }

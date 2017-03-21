@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class Controller {
-	public static int kButtonA = 0;
-	public static int kButtonB = 1;
-	public static int kButtonX = 2;
-	public static int kButtonY = 3;
+	public static int kButtonA = 1;
+	public static int kButtonB = 2;
+	public static int kButtonX = 3;
+	public static int kButtonY = 4;
 	public Joystick stick = new Joystick(0);
 	public Timer rumbleTimer;
 	boolean aWasPressed=false;
@@ -36,20 +36,20 @@ public class Controller {
 		else 
 			bWasPressed=false;
 		
-		if (!xLast && getButtonB())
+		if (!xLast && getButtonX())
 			xWasPressed=true;		
 		else 
 			xWasPressed=false;
 		
-		if (!yLast && getButtonB())
+		if (!yLast && getButtonY())
 			yWasPressed=true;		
 		else 
 			yWasPressed=false;
 		
 		aLast = getButtonA();
 		bLast = getButtonB();
-		xLast = getButtonB();
-		yLast = getButtonB();
+		xLast = getButtonX();
+		yLast = getButtonY();
 	}
 	
 	public boolean aWasPressed() {
@@ -68,26 +68,26 @@ public class Controller {
 	
 	//Controls the X axis of the right joystick
 	public double getRightJoyX() {
-		return stick.getRawAxis(0);
+		return stick.getRawAxis(4);
 	}
 	
 	
 	//Controls the Y axis of the right joystick
 	public double getRightJoyY() {
-		return stick.getRawAxis(1);
+		return stick.getRawAxis(5);
 	}
 	
 	
 	//Controls the X axis of the left joystick
 	public double getLeftJoyX() {
-		return stick.getRawAxis(2);
+		return stick.getRawAxis(0);
 	}
 	
 	
 	
 	//Controls the Y axis of the left joystick
 	public double getLeftJoyY() {
-		return stick.getRawAxis(3);
+		return stick.getRawAxis(1);
 	}
 	
 	
@@ -147,29 +147,21 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonUpD() {
-		boolean isPressed = false;
-		
-		return isPressed;
-		
+		return stick.getPOV()==0;
 	}
 	
 	//Is Down D button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonDownD() {
-		boolean isPressed = false;
-		
-		return isPressed;
-		
+		return stick.getPOV()==180;		
 	}
 	
 	//Is Right D pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonRightD() {
-		boolean isPressed = false;
-		
-		return isPressed;
+		return stick.getPOV()==90;
 		
 	}
 	
@@ -177,12 +169,7 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonLeftD() {
-		boolean isPressed = false;
-		
-		
-		return isPressed;
-		
-		
+		return stick.getPOV()==270;
 	}
 	
 	//Is the Right Trigger button pressed or not
@@ -303,4 +290,3 @@ public class Controller {
 	}
 }
 	
-
