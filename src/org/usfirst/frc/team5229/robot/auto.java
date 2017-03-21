@@ -3,8 +3,8 @@ package org.usfirst.frc.team5229.robot;
 import edu.wpi.first.wpilibj.Timer;
 
 public class auto {
-	RobotMovement robot = new RobotMovement();
-	Sensors sensors = new Sensors();
+	RobotMovement robot;
+	Sensors sensors;
 	Timer AutoTimer = new Timer();//timer for automonous 
 	public boolean AutoTesting;//start auto test funtcion
 	public boolean Sensordetecting = false; //boolean for autotesting statement
@@ -12,6 +12,15 @@ public class auto {
 	double value2;
 	double ScaleVal = 2;
 	
+	public auto() {
+		
+	}
+	
+	public auto (Sensors sensors, RobotMovement robot) {
+		this();
+		this.sensors=sensors;
+		this.robot=robot;
+	}
 	
 	public void straightenOut() {
 		
