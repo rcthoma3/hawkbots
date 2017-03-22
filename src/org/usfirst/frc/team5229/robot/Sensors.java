@@ -80,10 +80,10 @@ public class Sensors extends IterativeRobot {
 		System.out.print(" Right Center: "+SonicRightCenter());
 		System.out.print(" Left Center: "+SonicLeftCenter());
 		System.out.println(" Left Side: "+SonicLeftSide());		
-	}
+	}	
 	//Calculating Rolling average
-	public void rollingAverage(double nextValue) {
-		average = average * ((5-1)/5) + nextValue/5;
+	public void update() {
+		average = average * ((5-1)/5) + instantAverage()/5;
 	}
 	//The average between the two sensors
 	public double instantAverage() {

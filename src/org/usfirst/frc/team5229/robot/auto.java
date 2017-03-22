@@ -43,7 +43,7 @@ public class auto {
 	
 	
 	public void AutoTesting(){
-		double sensorAvg = (sensors.SonicLeftCenter() + sensors.SonicRightCenter() / 2);
+		double sensorAvg = sensors.getAverage();
 		
 		if (AutoTimer.get() < 4.0)
 			robot.DrivefowardBackward(Math.max(Math.min(sensorAvg/DISTANCE_TO_SPEED_SCALE,MAX_AUTO_SPEED),0));
