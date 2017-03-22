@@ -10,7 +10,7 @@ public class auto {
 	public boolean Sensordetecting = false; //boolean for autotesting statement
 	double value;
 	double value2;
-	static final double DISTANCE_TO_SPEED_SCALE = 2;
+	static final double DISTANCE_TO_SPEED_SCALE = 2540;
 	static final double MAX_AUTO_SPEED=.5;
 	
 	public auto() {
@@ -43,9 +43,12 @@ public class auto {
 	
 	
 	public void AutoTesting(){
+		double sensorAvg = (sensors.SonicLeftCenter() + sensors.SonicRightCenter() / 2);
 		
 		if (AutoTimer.get() < 4.0)
-			robot.DrivefowardBackward(Math.max(Math.min((sensors.SonicLeftCenter() + sensors.SonicRightCenter() / 2)/DISTANCE_TO_SPEED_SCALE,MAX_AUTO_SPEED),0));
+			robot.DrivefowardBackward(Math.max(Math.min(sensorAvg/DISTANCE_TO_SPEED_SCALE,MAX_AUTO_SPEED),0));
+		if (sensorAvg<610)
+			straightenOut();		
 		
 	}
 		/*
@@ -68,9 +71,6 @@ public class auto {
 			
 			AutoTesting = false;
 			AutoTimer.reset();
-			
-			
-
 		}*/
 	}
 	
