@@ -20,6 +20,9 @@ public class Sensors extends IterativeRobot {
 	private AnalogInput SonicCenterLeft = new AnalogInput(2);
 	private AnalogInput SonicCenterRight = new AnalogInput(1);
 	private AnalogInput SonicSideRight = new AnalogInput(0);
+	//Keeps track of rolling average
+	private double average = 0;
+	
 
 	//Distance in inches the robot wants to stay from object,
 	private static final double kHoldDistance = 12.0;
@@ -77,5 +80,18 @@ public class Sensors extends IterativeRobot {
 		System.out.print(" Right Center: "+SonicRightCenter());
 		System.out.print(" Left Center: "+SonicLeftCenter());
 		System.out.println(" Left Side: "+SonicLeftSide());		
-	}	
+	}
+	//Calculating Rolling average
+	public void rollingAverage(double nextValue) {
+		average = average * ((5-1)/5) + nextValue/5;
+	}
+	//The average between the two sensors
+	public double instantAverage() {
+		return (SonicLeftCenter() + SonicRightCenter()) /2;
+	}
+	
+	public double getAverage(){
+		return average;
+	}
+	
 }
