@@ -10,7 +10,7 @@ public class auto {
 	public boolean Sensordetecting = false; //boolean for autotesting statement
 	double value;
 	double value2;
-	static final double DISTANCE_TO_SPEED_SCALE = 2540;
+	static final double DISTANCE_TO_SPEED_SCALE = 254;
 	static final double MAX_AUTO_SPEED=.5;
 	
 	public auto() {
@@ -24,20 +24,21 @@ public class auto {
 	}
 	
 	public void straightenOut() {
+		double turnSpeed = Math.abs(sensors.SonicLeftCenter()-sensors.SonicRightCenter());
+		turnSpeed = turnSpeed / 20;
+		turnSpeed = Math.max(Math.min(turnSpeed, .25), 0);
 		
 		if (sensors.SonicRightCenter() > sensors.SonicLeftCenter())
-			robot.turnLeft(.25, 1);
+			robot.turnLeft(turnSpeed, 1);
 		
 		else if (sensors.SonicLeftCenter() > sensors.SonicRightCenter())
-			robot.turnRight(.25, 1);
+			robot.turnRight(turnSpeed, 1);
 	}
 	
-	public boolean StartAutoTimer(){
-		if(AutoTesting = true){
+	public void StartAutoTimer(){
 			AutoTimer.reset();
 			AutoTimer.start();
-		}
-		return true;
+		
 	}
 	
 	
@@ -45,11 +46,12 @@ public class auto {
 	public void AutoTesting(){
 		double sensorAvg = sensors.getAverage();
 		
-		if (AutoTimer.get() < 4.0)
-			robot.DrivefowardBackward(Math.max(Math.min(sensorAvg/DISTANCE_TO_SPEED_SCALE,MAX_AUTO_SPEED),0));
-		if (sensorAvg<610)
+		double speed = Math.max(Math.min(sensorAvg/DISTANCE_TO_SPEED_SCALE,MAX_AUTO_SPEED),0);
+		System.out.println(sensorAvg +"/"+DISTANCE_TO_SPEED_SCALE +"=" + speed);		
+		if (sensorAvg<120 && AutoTimer.get()%2==1)
 			straightenOut();		
-		
+		else if (AutoTimer.get() < 4000.0) 
+				robot.DrivefowardBackward(speed);
 	}
 		/*
 		if(AutoTimer.get() < 2.0){

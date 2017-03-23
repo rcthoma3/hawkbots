@@ -83,11 +83,11 @@ public class Sensors extends IterativeRobot {
 	}	
 	//Calculating Rolling average
 	public void update() {
-		average = average * ((5-1)/5) + instantAverage()/5;
+		average = average * (4.0/5.0) + instantAverage()/5.0;
 	}
 	//The average between the two sensors
 	public double instantAverage() {
-		return (SonicLeftCenter() + SonicRightCenter()) /2;
+		return (SonicLeftCenter() + SonicRightCenter()) /2.0;
 	}
 	
 	public double getAverage(){

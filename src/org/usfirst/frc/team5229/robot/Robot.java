@@ -40,7 +40,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		//CameraServer.getInstance().startAutomaticCapture("cam0", 1);
 		myRobot.init();
-		myRobot.ConveyerOn();
+		//myRobot.ConveyerOn();
 		myAuto.StartAutoTimer();
 	}
 
@@ -62,7 +62,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		System.out.println("auto per");
+		mySensors.update();
 		myAuto.AutoTesting();
+		
 		
 	}
 
@@ -87,12 +89,13 @@ public class Robot extends IterativeRobot {
 		myRobot.coveyormotorwork();
 		myRobot.ballmotorwork();
 		mySensors.update();
+		System.out.println("Sensor: "+mySensors.instantAverage());
+		//mySensors.test();
 		
 		//When ever the A button is pressed the mode is
 		//set to either arcade or tank (depending on current mode)
 		if (myController.aWasPressed()) {
-			System.out.println("AAAAAAA");
-			mySensors.test();
+			System.out.println("AAAAAAA");			
 			if (myRobot.ismodeArcade())
 				myRobot.setmodeTank();
 			else

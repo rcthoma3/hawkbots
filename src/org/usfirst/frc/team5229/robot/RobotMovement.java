@@ -22,7 +22,7 @@ public class RobotMovement {
 	public boolean ConvayerSwitch=true;//Turn on or off conveyer
 	public boolean BallSwitch = false;//Open or close ball entrance
 	public boolean climbing = false; //turns on and off the climbing motor
-	RobotDrive myRobot = new RobotDrive(0, 1, 2, 3); // why is there 0, 1, 2, 3? What are those?
+	RobotDrive myRobot = new RobotDrive(2,3,0,1); // why is there 0, 1, 2, 3? What are those?
     Controller myController;//set controller
 	
     private double r = 0;
