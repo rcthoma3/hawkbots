@@ -11,7 +11,7 @@ public class auto {
 	double value;
 	double value2;
 	static final double DISTANCE_TO_SPEED_SCALE = 254;
-	static final double MAX_AUTO_SPEED=.5;
+	static final double MAX_AUTO_SPEED=.4;
 	
 	public auto() {
 		
@@ -42,16 +42,21 @@ public class auto {
 	}
 	
 	
-	
+	boolean doForward = true;
 	public void AutoTesting(){
-		double sensorAvg = sensors.getAverage();
+		System.out.println(AutoTimer.get());
+		int dir = 1;
 		
+		
+		double sensorAvg = sensors.getAverage();		
 		double speed = Math.max(Math.min(sensorAvg/DISTANCE_TO_SPEED_SCALE,MAX_AUTO_SPEED),0);
-		System.out.println(sensorAvg +"/"+DISTANCE_TO_SPEED_SCALE +"=" + speed);		
-		if (sensorAvg<120 && AutoTimer.get()%2==1)
-			straightenOut();		
-		else if (AutoTimer.get() < 4000.0) 
-				robot.DrivefowardBackward(speed);
+		//System.out.println(sensorAvg +"/"+DISTANCE_TO_SPEED_SCALE +"=" + speed);	
+		if (AutoTimer.get()<4.0) {
+			if (sensorAvg<120 && AutoTimer.get()>0.5)
+				straightenOut();
+			robot.DrivefowardBackward(speed*dir);
+		}
+		
 	}
 		/*
 		if(AutoTimer.get() < 2.0){

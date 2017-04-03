@@ -38,9 +38,8 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		//CameraServer.getInstance().startAutomaticCapture("cam0", 1);
+		CameraServer.getInstance().startAutomaticCapture();
 		myRobot.init();
-		//myRobot.ConveyerOn();
 		myAuto.StartAutoTimer();
 	}
 
@@ -61,7 +60,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		System.out.println("auto per");
+		//System.out.println("auto per");
 		mySensors.update();
 		myAuto.AutoTesting();
 		
@@ -89,7 +88,7 @@ public class Robot extends IterativeRobot {
 		myRobot.coveyormotorwork();
 		myRobot.ballmotorwork();
 		mySensors.update();
-		System.out.println("Sensor: "+mySensors.instantAverage());
+		
 		//mySensors.test();
 		
 		//When ever the A button is pressed the mode is
@@ -102,20 +101,29 @@ public class Robot extends IterativeRobot {
 				myRobot.setmodeArcade();
 		}
 		
+		if (myController.bWasPressed() && myRobot.conveyorSwitch==false) {
+			myRobot.ConveyerOn();
+		} else if (myController.bWasPressed() && myRobot.ConvayerSwitch) {
+			myRobot.ConveyerOff();
+		}
+ 		
 		//If right trigger is fully depressed, the
 		//mode is set to fine. Otherwise the mode is
 		//being set to coarse.
-		if (myController.stick.getRawAxis(3) >= .5){
+		if (myController.xWasPressed() && myRobot.ismodeFine()==false){
 			myRobot.setmodeFine();
-		}else{
+		}else if (myController.xWasPressed() && myRobot.ismodeFine()==true){
 			myRobot.setmodeCoarse();
 		}
 		
-		if (myController.getButtonUpD()) {
+		if (myController.getButtonY())
+			myAuto.straightenOut();
+		
+		if (myController.getButtonUpD() || myController.getButtonRightBump()) {
 			myRobot.climbmotormovement(1);		
 			System.out.println("D UP");
-		} else if (myController.getButtonDownD()) {
-			System.out.println("D DOWN");
+		} else if (myController.getButtonDownD() || myController.getButtonLeftBump()  ) {
+			//System.out.println("D DOWN");
 			myRobot.climbmotormovement(-1);
 		} else {			
 			myRobot.climbmotormovement(0);			

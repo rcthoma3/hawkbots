@@ -14,6 +14,8 @@ public class Controller {
 	public static int kButtonB = 2;
 	public static int kButtonX = 3;
 	public static int kButtonY = 4;
+	public static int kButtonLeft = 5;
+	public static int kButtonRight = 6;
 	public Joystick stick = new Joystick(0);
 	public Timer rumbleTimer;
 	boolean aWasPressed=false;
@@ -66,6 +68,8 @@ public class Controller {
 		return yWasPressed;
 	}
 	
+	
+	//void loop
 	//Controls the X axis of the right joystick
 	public double getRightJoyX() {
 		return stick.getRawAxis(4);
@@ -147,14 +151,14 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonUpD() {
-		return stick.getPOV()==0;
+		return (stick.getPOV()>270 || stick.getPOV()<90) && stick.getPOV()>=0;
 	}
 	
 	//Is Down D button pressed or not
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonDownD() {
-		return stick.getPOV()==180;		
+		return stick.getPOV()>90 && stick.getPOV()<270;		
 	}
 	
 	//Is Right D pressed or not
@@ -216,9 +220,7 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonLeftBump() {
-		boolean isPressed = false;
-		
-		return isPressed;
+		return stick.getRawButton(kButtonLeft);
 		
 	}
 	
@@ -226,9 +228,7 @@ public class Controller {
 	//in: nothing
 	//out: is a button pressed, boolean
 	public boolean getButtonRightBump() {
-		boolean isPressed = false;
-		
-		return isPressed;
+		return stick.getRawButton(kButtonRight);
 		
 	}
 	//This tells whether or not everything on the controller works or not

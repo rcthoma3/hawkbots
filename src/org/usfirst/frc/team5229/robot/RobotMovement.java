@@ -26,7 +26,7 @@ public class RobotMovement {
     Controller myController;//set controller
 	
     private double r = 0;
-    private double speed = 1.0;
+    private double speed = .5;
     
     private static final int DOOR_MOTOR = 4;
     private static final int CLIMB_MOTOR = 5;
@@ -43,7 +43,7 @@ public class RobotMovement {
 	State state = State.STOPPED;
 	private VictorSP m_ballmotor;
 	private VictorSP m_conveyormotor;
-	private boolean conveyorSwitch;
+	public boolean conveyorSwitch;
 	private PWM m_climbmotor;
 	private VictorSP m_doormotor;
 	
@@ -155,7 +155,7 @@ public class RobotMovement {
     //speed<0, moves backward
     public void DrivefowardBackward(double speed){
     	speed = speedLimit(speed);
-    	myRobot.drive(-speed,0);   	// WHY is there a -? Should motors be reversed?
+    	myRobot.drive(-speed,-.01);   	// WHY is there a -? Should motors be reversed?
     }
 
 	/**
@@ -340,22 +340,26 @@ public class RobotMovement {
 	//in:nothing
 	//out:nothing
 	public void doDriveType(){
+		//myRobot.setMaxOutput(.3);
+		//myRobot.setSensitivity(.3);
 		if(modeArcade == true && modeFine == true){
+	    	myRobot.setMaxOutput(.3);
+	    	myRobot.setSensitivity(.3);
 	    	myRobot.arcadeDrive(myController.stick, squaredInputs);
-	    	myRobot.setMaxOutput(.5);
-	    	myRobot.setSensitivity(.5);
 	    }else if(modeArcade == false && modeFine == true){
+	    	myRobot.setMaxOutput(.3);
+	    	myRobot.setSensitivity(.3);
 	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY(), squaredInputs);
-	    	myRobot.setMaxOutput(.5);
-	    	myRobot.setSensitivity(.5);
+	    	
 	    }else if(modeArcade == true && modeFine == false){
+	    	myRobot.setMaxOutput(.8);
+	    	myRobot.setSensitivity(.8);
 	    	myRobot.arcadeDrive(myController.stick);
-	    	myRobot.setMaxOutput(1);
-	    	myRobot.setSensitivity(1);
+	    	
 	    }else{
-	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY()); 
-	    	myRobot.setMaxOutput(1);
-	    	myRobot.setSensitivity(1);
+	    	myRobot.setMaxOutput(.8);
+	    	myRobot.setSensitivity(.8);
+	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY()); 	    	
 	    }	
 	}
 	
@@ -425,6 +429,8 @@ public class RobotMovement {
     public void coveyormotorwork(){
     	if(conveyorSwitch == true){
     		m_conveyormotor.set(-1.0);
+    	} else {
+    		m_conveyormotor.set(0);
     	}
     }
 	
