@@ -24,7 +24,7 @@ public class RobotMovement {
 	public boolean climbing = false; //turns on and off the climbing motor
 	RobotDrive myRobot = new RobotDrive(2,3,0,1); // why is there 0, 1, 2, 3? What are those?
     Controller myController;//set controller
-	
+    
     private double r = 0;
     private double speed = .5;
     
@@ -343,23 +343,23 @@ public class RobotMovement {
 		//myRobot.setMaxOutput(.3);
 		//myRobot.setSensitivity(.3);
 		if(modeArcade == true && modeFine == true){
-	    	myRobot.setMaxOutput(.3);
-	    	myRobot.setSensitivity(.3);
+	    	myRobot.setMaxOutput(.4);
+	    	myRobot.setSensitivity(.4);
 	    	myRobot.arcadeDrive(myController.stick, squaredInputs);
 	    }else if(modeArcade == false && modeFine == true){
-	    	myRobot.setMaxOutput(.3);
-	    	myRobot.setSensitivity(.3);
+	    	myRobot.setMaxOutput(.4);
+	    	myRobot.setSensitivity(.4);
 	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY(), squaredInputs);
 	    	
 	    }else if(modeArcade == true && modeFine == false){
-	    	myRobot.setMaxOutput(.8);
-	    	myRobot.setSensitivity(.8);
-	    	myRobot.arcadeDrive(myController.stick);
+	    	myRobot.setMaxOutput(.4);
+	    	myRobot.setSensitivity(.4);
+	    	myRobot.arcadeDrive(myController.stick, squaredInputs);
 	    	
 	    }else{
-	    	myRobot.setMaxOutput(.8);
-	    	myRobot.setSensitivity(.8);
-	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY()); 	    	
+	    	myRobot.setMaxOutput(.4);
+	    	myRobot.setSensitivity(.4);
+	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY(), squaredInputs); 	    	
 	    }	
 	}
 	

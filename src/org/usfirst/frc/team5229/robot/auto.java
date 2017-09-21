@@ -10,8 +10,9 @@ public class auto {
 	public boolean Sensordetecting = false; //boolean for autotesting statement
 	double value;
 	double value2;
-	static final double DISTANCE_TO_SPEED_SCALE = 254;
+	static final double DISTANCE_TO_SPEED_SCALE = 1;
 	static final double MAX_AUTO_SPEED=.4;
+	static final double STOP_DIST=100;
 	
 	public auto() {
 		
@@ -25,8 +26,8 @@ public class auto {
 	
 	public void straightenOut() {
 		double turnSpeed = Math.abs(sensors.SonicLeftCenter()-sensors.SonicRightCenter());
-		turnSpeed = turnSpeed / 20;
-		turnSpeed = Math.max(Math.min(turnSpeed, .25), 0);
+		turnSpeed = turnSpeed / 5;
+		turnSpeed = Math.max(Math.min(turnSpeed, .5), 0);
 		
 		if (sensors.SonicRightCenter() > sensors.SonicLeftCenter())
 			robot.turnLeft(turnSpeed, 1);
@@ -48,13 +49,17 @@ public class auto {
 		int dir = 1;
 		
 		
-		double sensorAvg = sensors.getAverage();		
+		double sensorAvg = sensors.getAverage();
+		System.out.println("Sensor: "+ sensorAvg);
 		double speed = Math.max(Math.min(sensorAvg/DISTANCE_TO_SPEED_SCALE,MAX_AUTO_SPEED),0);
 		//System.out.println(sensorAvg +"/"+DISTANCE_TO_SPEED_SCALE +"=" + speed);	
-		if (AutoTimer.get()<4.0) {
-			if (sensorAvg<120 && AutoTimer.get()>0.5)
-				straightenOut();
+		if (AutoTimer.get()<3.0) {
+			//if (sensorAvg<120 && AutoTimer.get()>0.5)
+			//	straightenOut();
+		if (sensorAvg>STOP_DIST)
 			robot.DrivefowardBackward(speed*dir);
+		else 
+			robot.DrivefowardBackward(0.1);
 		}
 		
 	}

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team5229.robot;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -19,13 +20,17 @@ public class Robot extends IterativeRobot {
 	RobotMovement myRobot = new RobotMovement(myController);
 	Sensors mySensors = new Sensors();
 	auto myAuto = new auto(mySensors,myRobot);
-	
+	public static int kBasePort;
+	public static int kSize640x480;
+	public static int kSize320x240;
+	public static int kSize160x120;
 	boolean aLast = false;
 	boolean aWasPressed = false;
 	boolean bLast = false;
 	boolean xLast = false;
 	boolean yLast = false;
-	
+	UsbCamera Camera1;
+	UsbCamera Camera2;
 	//Test Movement
 	//RobotDrive drive = new RobotDrive(0,1,2,3); //4 motor drive
 	
@@ -35,13 +40,18 @@ public class Robot extends IterativeRobot {
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
-	
 	@Override
 	public void robotInit() {
-		CameraServer.getInstance().startAutomaticCapture();
+		Camera1 = CameraServer.getInstance().startAutomaticCapture();
+		Camera2 = CameraServer.getInstance().startAutomaticCapture();
 		myRobot.init();
 		myAuto.StartAutoTimer();
 	}
+	
+	/**
+	 * 
+	 */
+	
 
 	/**
 	 * This function is run once each time the robot enters autonomous mode
@@ -89,7 +99,7 @@ public class Robot extends IterativeRobot {
 		myRobot.ballmotorwork();
 		mySensors.update();
 		
-		//mySensors.test();
+		mySensors.test();
 		
 		//When ever the A button is pressed the mode is
 		//set to either arcade or tank (depending on current mode)
@@ -102,9 +112,9 @@ public class Robot extends IterativeRobot {
 		}
 		
 		if (myController.bWasPressed() && myRobot.conveyorSwitch==false) {
-			myRobot.ConveyerOn();
+		//	myRobot.ConveyerOn();
 		} else if (myController.bWasPressed() && myRobot.ConvayerSwitch) {
-			myRobot.ConveyerOff();
+		//	myRobot.ConveyerOff();
 		}
  		
 		//If right trigger is fully depressed, the
@@ -120,11 +130,11 @@ public class Robot extends IterativeRobot {
 			myAuto.straightenOut();
 		
 		if (myController.getButtonUpD() || myController.getButtonRightBump()) {
-			myRobot.climbmotormovement(1);		
+			myRobot.climbmotormovement(-1);		
 			System.out.println("D UP");
 		} else if (myController.getButtonDownD() || myController.getButtonLeftBump()  ) {
 			//System.out.println("D DOWN");
-			myRobot.climbmotormovement(-1);
+			myRobot.climbmotormovement(-.5);
 		} else {			
 			myRobot.climbmotormovement(0);			
 		};	

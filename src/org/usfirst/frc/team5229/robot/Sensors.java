@@ -16,10 +16,10 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
 public class Sensors extends IterativeRobot {
-	private AnalogInput SonicSideLeft = new AnalogInput(3);
-	private AnalogInput SonicCenterLeft = new AnalogInput(2);
-	private AnalogInput SonicCenterRight = new AnalogInput(1);
-	private AnalogInput SonicSideRight = new AnalogInput(0);
+	//private AnalogInput SonicSideLeft = new AnalogInput(3);
+	private AnalogInput SonicCenterLeft = new AnalogInput(1);
+	private AnalogInput SonicCenterRight = new AnalogInput(2);
+	// AnalogInput SonicSideRight = new AnalogInput(0);
 	//Keeps track of rolling average
 	private double average = 0;
 	
@@ -47,17 +47,17 @@ public class Sensors extends IterativeRobot {
 	//Description: Read the sensor and returns the distance in mm to a wall
 	//in: Nothing
 	//Out: double distance in mm
-	public double SonicRightSide(){
-		return SonicSideRight.getValue()*.125;
+//	public double SonicRightSide(){
+//		return SonicSideRight.getValue()*.125;
 		
-	}
+//	}
 	//Description: Read the sensor and returns the distance in mm to a wall
 	//in: Nothing
 	//Out: double distance in mm
-	public double SonicLeftSide(){
-		return SonicSideLeft.getValue()*.125;
+//	public double SonicLeftSide(){
+//		return SonicSideLeft.getValue()*.125;
 		
-	}
+//	}
 	//Description: Read the sensor and returns the distance in mm to a wall
 	//in: Nothing
 	//Out: double distance in mm
@@ -76,10 +76,10 @@ public class Sensors extends IterativeRobot {
 	//In: nothing
 	//Out: distance in mm
 	public void test(){
-		System.out.print("Right Side:  "+SonicRightSide());
+//		System.out.print("Right Side:  "+SonicRightSide());
 		System.out.print(" Right Center: "+SonicRightCenter());
-		System.out.print(" Left Center: "+SonicLeftCenter());
-		System.out.println(" Left Side: "+SonicLeftSide());		
+		System.out.println(" Left Center: "+SonicLeftCenter());
+//		System.out.println(" Left Side: "+SonicLeftSide());		
 	}	
 	//Calculating Rolling average
 	public void update() {
