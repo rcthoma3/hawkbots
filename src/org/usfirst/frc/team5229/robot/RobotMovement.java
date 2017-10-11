@@ -343,22 +343,22 @@ public class RobotMovement {
 		//myRobot.setMaxOutput(.3);
 		//myRobot.setSensitivity(.3);
 		if(modeArcade == true && modeFine == true){
-	    	myRobot.setMaxOutput(.4);
-	    	myRobot.setSensitivity(.4);
+	    	myRobot.setMaxOutput(.7);
+	    	myRobot.setSensitivity(.7);
 	    	myRobot.arcadeDrive(myController.stick, squaredInputs);
 	    }else if(modeArcade == false && modeFine == true){
-	    	myRobot.setMaxOutput(.4);
-	    	myRobot.setSensitivity(.4);
+	    	myRobot.setMaxOutput(.7);
+	    	myRobot.setSensitivity(.7);
 	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY(), squaredInputs);
 	    	
 	    }else if(modeArcade == true && modeFine == false){
-	    	myRobot.setMaxOutput(.4);
-	    	myRobot.setSensitivity(.4);
+	    	myRobot.setMaxOutput(.7);
+	    	myRobot.setSensitivity(.7);
 	    	myRobot.arcadeDrive(myController.stick, squaredInputs);
 	    	
 	    }else{
-	    	myRobot.setMaxOutput(.4);
-	    	myRobot.setSensitivity(.4);
+	    	myRobot.setMaxOutput(.7);
+	    	myRobot.setSensitivity(.7);
 	    	myRobot.tankDrive(myController.getLeftJoyY(), myController.getRightJoyY(), squaredInputs); 	    	
 	    }	
 	}
