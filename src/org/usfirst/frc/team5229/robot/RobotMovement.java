@@ -25,6 +25,7 @@ public class RobotMovement {
 	RobotDrive myRobot = new RobotDrive(2,3,0,1); // why is there 0, 1, 2, 3? What are those?
     Controller myController;//set controller
     
+    
     private double r = 0;
     private double speed = .5;
     
