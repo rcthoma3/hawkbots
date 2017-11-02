@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class RobotMovement {
 	private boolean modeArcade = true; //change modes Arcade and Tank
@@ -24,25 +25,26 @@ public class RobotMovement {
 	public boolean climbing = false; //turns on and off the climbing motor
 	RobotDrive myRobot = new RobotDrive(2,3,0,1); // why is there 0, 1, 2, 3? What are those?
     Controller myController;//set controller
+    Encoder Leftenc = new Encoder(7, 8, false, Encoder.EncodingType.k4X);
     
     
-    private double r = 0;
-    private double speed = .5;
+    private double r = 0;//radius of how a robot turns
+    private double speed = .5;//speed of a robot
     
-    private static final int DOOR_MOTOR = 4;
-    private static final int CLIMB_MOTOR = 5;
-    private static final int CONVAYER_MOTOR = 6;
-    private static final int BALL_MOTOR = 7;
+    private static final int DOOR_MOTOR = 4;//Motor for ball opener
+    private static final int CLIMB_MOTOR = 5;//Motor for climbing
+    private static final int CONVAYER_MOTOR = 6;//Motor for ball conveyer
+    //private static final int BALL_MOTOR = 7;//Motor for shooting balls
     
     
     
-    //Initialize states
+    //Initialize states for robot movement
     private enum State {
 		STOPPED, FORWARD, BACKWARD, LEFT, RIGHT, CLIMBING, DESCENDING
 	}
  
 	State state = State.STOPPED;
-	private VictorSP m_ballmotor;
+	//private VictorSP m_ballmotor;
 	private VictorSP m_conveyormotor;
 	public boolean conveyorSwitch;
 	private PWM m_climbmotor;
@@ -51,7 +53,7 @@ public class RobotMovement {
 	//a constructor that doesn't take an input
 	public RobotMovement(){
 		m_climbmotor = new VictorSP(CLIMB_MOTOR);
-		m_ballmotor = new VictorSP(BALL_MOTOR);		
+		//m_ballmotor = new VictorSP(BALL_MOTOR);		
 		m_doormotor = new VictorSP(DOOR_MOTOR);
 		m_conveyormotor = new VictorSP(CONVAYER_MOTOR);		
 	}
@@ -392,7 +394,7 @@ public class RobotMovement {
     //turn on ball motor
     //in:nothing
     //out:nothing
-    public void BallOn(){
+    /*public void BallOn(){
     	BallSwitch=true;
     }
     //turn off ball motor
@@ -408,7 +410,7 @@ public class RobotMovement {
 		if(BallSwitch==true){
 			m_ballmotor.set(1.0);
 		}
-	}
+	}*/
 	
 	//turn on conveyer motor
 	//in:nothing
@@ -434,14 +436,14 @@ public class RobotMovement {
     		m_conveyormotor.set(0);
     	}
     }
-	
-    public boolean ballon(){
+
+    /*public boolean ballon(){
     	return BallSwitch;
     }
     
     public boolean balloff(){
     	return BallSwitch;
-    }
+    }*/
     
     public boolean conveyor(){
     	return conveyorSwitch;
@@ -468,6 +470,7 @@ public class RobotMovement {
 		}
 		m_doormotor.set(speed);
 	}
+
 	
 	
 	
