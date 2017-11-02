@@ -25,8 +25,14 @@ public class RobotMovement {
 	public boolean climbing = false; //turns on and off the climbing motor
 	RobotDrive myRobot = new RobotDrive(2,3,0,1); // why is there 0, 1, 2, 3? What are those?
     Controller myController;//set controller
-    Encoder Leftenc = new Encoder(7, 8, false, Encoder.EncodingType.k4X);
     
+    
+    
+    Encoder Leftenc = new Encoder(7, 8, false, Encoder.EncodingType.k4X);//Encoder for left motor
+    Encoder Rightenc = new Encoder(9, 0, false, Encoder.EncodingType.k4X);//Encoder for right motor
+    int speedRight;//Speed of right motor, with the right motor as the slave motor
+    int Distance1;//Distance of right motor
+    int Distance2;//Distance of left motor
     
     private double r = 0;//radius of how a robot turns
     private double speed = .5;//speed of a robot
