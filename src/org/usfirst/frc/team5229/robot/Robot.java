@@ -1,10 +1,14 @@
 package org.usfirst.frc.team5229.robot;
 
+import com.ctre.CANTalon;
+import com.ctre.CANTalon.TalonControlMode;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
@@ -33,6 +37,12 @@ public class Robot extends IterativeRobot {
 	UsbCamera Camera2;
 	//Test Movement
 	//RobotDrive drive = new RobotDrive(0,1,2,3); //4 motor drive
+	
+	CANTalon _frontLeftMotor = new CANTalon(7); 
+	CANTalon _rearLeftMotor = new CANTalon(5);
+	CANTalon _frontRightMotor = new CANTalon(8);
+	CANTalon _rearRightMotor = new CANTalon(6);
+	RobotDrive _drive = new RobotDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
 	
 	Timer timer = new Timer();
 
