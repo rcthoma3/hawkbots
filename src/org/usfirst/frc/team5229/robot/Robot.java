@@ -96,7 +96,7 @@ public class Robot extends IterativeRobot {
 		myRobot.tick();
 		myRobot.doDriveType();
 		myRobot.coveyormotorwork();
-		myRobot.ballmotorwork();
+		//myRobot.ballmotorwork();
 		mySensors.update();
 		
 		mySensors.test();
