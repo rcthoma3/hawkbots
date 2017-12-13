@@ -4,6 +4,7 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
@@ -21,30 +22,33 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  */
 public class Robot extends IterativeRobot {
 	Controller myController = new Controller();
-	RobotMovement myRobot = new RobotMovement(myController);
-	Sensors mySensors = new Sensors();
-	auto myAuto = new auto(mySensors,myRobot);
-	public static int kBasePort;
-	public static int kSize640x480;
-	public static int kSize320x240;
-	public static int kSize160x120;
-	boolean aLast = false;
-	boolean aWasPressed = false;
-	boolean bLast = false;
-	boolean xLast = false;
-	boolean yLast = false;
+	//RobotMovement myRobot = new RobotMovement(myController);
+	//Sensors mySensors = new Sensors();
+	//auto myAuto = new auto(mySensors,myRobot);
+	//public static int kBasePort;
+	//public static int kSize640x480;
+	//public static int kSize320x240;
+	//public static int kSize160x120;
+	//boolean aLast = false;
+	//boolean aWasPressed = false;
+	//boolean bLast = false;
+	//boolean xLast = false;
+	//boolean yLast = false;
 	UsbCamera Camera1;
 	UsbCamera Camera2;
-	//Test Movement
-	//RobotDrive drive = new RobotDrive(0,1,2,3); //4 motor drive
 	
+	//Timer timer = new Timer();
+	
+	//https://mililanirobotics.gitbooks.io/frc-electrical-bible/content/Drive_Code/custom_program_mecanum_drive.html
 	CANTalon _frontLeftMotor = new CANTalon(7); 
 	CANTalon _rearLeftMotor = new CANTalon(5);
 	CANTalon _frontRightMotor = new CANTalon(8);
 	CANTalon _rearRightMotor = new CANTalon(6);
+	
+	public Joystick stick = new Joystick(0);
 	RobotDrive _drive = new RobotDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
 	
-	Timer timer = new Timer();
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -54,8 +58,25 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		Camera1 = CameraServer.getInstance().startAutomaticCapture();
 		Camera2 = CameraServer.getInstance().startAutomaticCapture();
-		myRobot.init();
-		myAuto.StartAutoTimer();
+		
+		//_frontLeftMotor.changeControlMode(TalonControlMode.Voltage); 
+		//_rearLeftMotor.changeControlMode(TalonControlMode.Voltage);
+		//_frontRightMotor.changeControlMode(TalonControlMode.Voltage);
+		//_rearRightMotor.changeControlMode(TalonControlMode.Voltage);
+		
+		// One side will be inverted, but may not be left
+		_frontLeftMotor.setInverted(true);
+		_rearLeftMotor.setInverted(true);
+		
+		// Initialize to zero
+		_frontLeftMotor.set(0);
+		_rearLeftMotor.set(0);
+		_frontRightMotor.set(0);
+		_rearRightMotor.set(0);
+		
+		// Something to do with safety 
+		_drive.setSafetyEnabled(true);
+		_drive.setExpiration(0.1);
 	}
 	
 	/**
@@ -68,10 +89,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {		
-		System.out.println("Auto Init");
-		timer.reset();
-		timer.start();		
-		myAuto.StartAutoTimer();
 		
 	}
 
@@ -79,11 +96,7 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during autonomous
 	 */
 	@Override
-	public void autonomousPeriodic() {
-		//System.out.println("auto per");
-		mySensors.update();
-		myAuto.AutoTesting();
-		
+	public void autonomousPeriodic() {	
 		
 	}
 
@@ -102,63 +115,30 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {	
-		myController.updateController();
-		myRobot.tick();
-		myRobot.doDriveType();
-		myRobot.coveyormotorwork();
-		//myRobot.ballmotorwork();
-		mySensors.update();
 		
-		mySensors.test();
+		_drive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.getZ(), 0); // Found in example
+		//_drive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.TwistZ(), 0); // Found in example FRC
+		//_drive.mecanumDrive_Cartesian(stick.getX(GenericHID.Hand.kLeft), stick.getY(GenericHID.Hand.kLeft), stick.getX(GenericHID.Hand.kRight), 0); // My Idea
+		Timer.delay(0.005); // Saw this in an example
 		
-		//When ever the A button is pressed the mode is
-		//set to either arcade or tank (depending on current mode)
-		if (myController.aWasPressed()) {
-			System.out.println("AAAAAAA");			
-			if (myRobot.ismodeArcade())
-				myRobot.setmodeTank();
-			else
-				myRobot.setmodeArcade();
-		}
+		// Possible Improvements
+		/*
+		double leftYjoystick = stick.getY(GenericHID.Hand.kLeft);
+		double leftXjoystick = stick.getX(GenericHID.Hand.kLeft);
+		//double rightYjoystick = stick.getY(GenericHID.Hand.kRight);
+		double rightXjoystick = stick.getX(GenericHID.Hand.kRight);
 		
-		if (myController.bWasPressed() && myRobot.conveyorSwitch==false) {
-		//	myRobot.ConveyerOn();
-		} else if (myController.bWasPressed() && myRobot.ConvayerSwitch) {
-		//	myRobot.ConveyerOff();
-		}
- 		
-		//If right trigger is fully depressed, the
-		//mode is set to fine. Otherwise the mode is
-		//being set to coarse.
-		if (myController.xWasPressed() && myRobot.ismodeFine()==false){
-			myRobot.setmodeFine();
-		}else if (myController.xWasPressed() && myRobot.ismodeFine()==true){
-			myRobot.setmodeCoarse();
-		}
+		double lfPower = (-leftXjoystick + leftYjoystick + rightXjoystick)/3;
+		double lbPower = (leftXjoystick + leftYjoystick + rightXjoystick)/3;
+		double rfPower = (leftXjoystick + leftYjoystick + rightXjoystick)/3;
+		double rbPower = (-leftXjoystick + leftYjoystick + rightXjoystick)/3;
 		
-		if (myController.getButtonY())
-			myAuto.straightenOut();
-		
-		if (myController.getButtonUpD() || myController.getButtonRightBump()) {
-			myRobot.climbmotormovement(-1);		
-			System.out.println("D UP");
-		} else if (myController.getButtonDownD() || myController.getButtonLeftBump()  ) {
-			//System.out.println("D DOWN");
-			myRobot.climbmotormovement(-.5);
-		} else {			
-			myRobot.climbmotormovement(0);			
-		};	
-		
-		if (myController.getButtonRightD()) {
-			myRobot.setDoorMotorSpeed(1);
-		} else if (myController.getButtonLeftD()) {
-			myRobot.setDoorMotorSpeed(-1);
-		} else {
-			myRobot.setDoorMotorSpeed(0);
-		}
-		
-		myController.test();
-		
+		_frontLeftMotor.set(12.0 * lfPower);
+		_rearLeftMotor.set(12.0 * rfPower);
+		_frontRightMotor.set(12.0 * lbPower);
+		_rearRightMotor.set(12.0 * rbPower);
+		*/
+
 	}
 
 	/**
