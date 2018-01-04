@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
 	CANTalon _frontRightMotor = new CANTalon(8);
 	CANTalon _rearRightMotor = new CANTalon(6);
 	
-	public Joystick stick = new Joystick(0);
+	//public Joystick stick = new Joystick(0);
 	RobotDrive _drive = new RobotDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
 	
 	
@@ -116,7 +116,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {	
 		
-		_drive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.getZ(), 0); // Found in example
+		_drive.mecanumDrive_Cartesian(myController.getLeftJoyX(), myController.getLeftJoyY(), -myController.getRightJoyX(), 0); // Found in example
 		//_drive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.TwistZ(), 0); // Found in example FRC
 		//_drive.mecanumDrive_Cartesian(stick.getX(GenericHID.Hand.kLeft), stick.getY(GenericHID.Hand.kLeft), stick.getX(GenericHID.Hand.kRight), 0); // My Idea
 		Timer.delay(0.005); // Saw this in an example
