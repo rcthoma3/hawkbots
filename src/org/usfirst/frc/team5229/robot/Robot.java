@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	Controller myController = new Controller();
+	ControllerLogitech myController = new ControllerLogitech();
 	//RobotMovement myRobot = new RobotMovement(myController);
 	//Sensors mySensors = new Sensors();
 	//auto myAuto = new auto(mySensors,myRobot);
@@ -106,7 +106,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopInit() {	
-	
+		_drive.setMaxOutput(.6);
+		_drive.setSensitivity(.1);
 	}
 
 

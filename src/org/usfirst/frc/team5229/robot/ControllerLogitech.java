@@ -15,7 +15,7 @@ public class ControllerLogitech {
  public static int kButtonStart = 8;
  public static int kBottomLeftStickPress = 9;
  public static int kButtonRightStickPress = 10;
- public Joystick stick = new Joystick(0);
+ public Joystick stick = new Joystick(1);
  public Timer rumbleTimer;
  boolean aWasPressed=false;
  boolean aLast=false;
