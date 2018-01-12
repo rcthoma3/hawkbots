@@ -4,13 +4,14 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
@@ -21,7 +22,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	//
 	ControllerLogitech myController = new ControllerLogitech();
 	//RobotMovement myRobot = new RobotMovement(myController);
 	//Sensors mySensors = new Sensors();
@@ -39,15 +39,26 @@ public class Robot extends IterativeRobot {
 	UsbCamera Camera2;
 	
 	//Timer timer = new Timer();
-	
 	//https://mililanirobotics.gitbooks.io/frc-electrical-bible/content/Drive_Code/custom_program_mecanum_drive.html
-	CANTalon _frontLeftMotor = new CANTalon(7); 
-	CANTalon _rearLeftMotor = new CANTalon(5);
-	CANTalon _frontRightMotor = new CANTalon(8);
-	CANTalon _rearRightMotor = new CANTalon(6);
+	
+	/*
+	 * IMPORTANT UPDATES 1/11/2018
+	 * Updated FRC Plugins, due to deprecated RobotDrive functionality.
+	 * MecanumDrive functions replaced RobotDrive.
+	 * CANTalon temporarily replaced by Talon (CANTalon isn't recognized properly for the updated library)
+	 * Talon libraries may need to be updated (Check their documentation)
+	 * Main branch has been moved to Master2018
+	 * ControllerLogitech has been updated on previous Master branch, needs to be merged into Master2018.
+	 * For compiling with the new libraries, Roborio needs to be reimaged. This can be a TODO for Wednesday, 1/17/2018
+	 */
+	
+	Talon _frontLeftMotor = new Talon(7); 
+	Talon _rearLeftMotor = new Talon(5);
+	Talon _frontRightMotor = new Talon(8);
+	Talon _rearRightMotor = new Talon(6);
 	
 	//public Joystick stick = new Joystick(0);
-	RobotDrive _drive = new RobotDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
+	MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
 	
 	
 
@@ -90,7 +101,14 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {		
-		
+		String gameData;
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		if(gameData.charAt(0) == 'L')
+		{
+			//Put left auto code here
+		} else {
+			//Put right auto code here
+		}
 	}
 
 	/**
@@ -108,7 +126,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {	
 		_drive.setMaxOutput(.6);
-		_drive.setSensitivity(.1);
 	}
 
 
@@ -118,7 +135,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {	
 		
-		_drive.mecanumDrive_Cartesian(myController.getLeftJoyX(), myController.getLeftJoyY(), -myController.getRightJoyX(), 0); // Found in example
+		_drive.driveCartesian(myController.getLeftJoyX(), myController.getLeftJoyY(), -myController.getRightJoyX(), 0); // Found in example
 		//_drive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.TwistZ(), 0); // Found in example FRC
 		//_drive.mecanumDrive_Cartesian(stick.getX(GenericHID.Hand.kLeft), stick.getY(GenericHID.Hand.kLeft), stick.getX(GenericHID.Hand.kRight), 0); // My Idea
 		Timer.delay(0.005); // Saw this in an example
