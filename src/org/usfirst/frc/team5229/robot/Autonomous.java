@@ -3,18 +3,27 @@ package org.usfirst.frc.team5229.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class Autonomous {
+	String gameData;
+	int location; 
 	public String getGameMsg(){
-		String gameData;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		return gameData;
 	} 
 	
 	public int getLocation() {
-		int location = 0;
 		return location;
 	}
 	
-	
+	public void AutoPlan() {
+		if(location == 2){
+			if(gameData.charAt(0) == 'L') {
+				
+			}else{
+				
+			}
+			
+		}
+	}
 	
 		
 	
