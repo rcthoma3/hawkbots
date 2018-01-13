@@ -9,6 +9,15 @@ public class Autonomous {
 		return gameData;
 	} 
 	
+	public int getLocation() {
+		int location = 0;
+		return location;
+	}
+	
+	
+	
+		
+	
 	
 	
 	
