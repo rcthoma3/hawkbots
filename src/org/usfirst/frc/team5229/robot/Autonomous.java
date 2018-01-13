@@ -1,6 +1,14 @@
 package org.usfirst.frc.team5229.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 public class Autonomous {
+	public String getGameMsg(){
+		String gameData;
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		return gameData;
+	} 
+	
 	
 	
 	
