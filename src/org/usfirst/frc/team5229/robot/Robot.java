@@ -1,7 +1,8 @@
 package org.usfirst.frc.team5229.robot;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -52,10 +53,18 @@ public class Robot extends IterativeRobot {
 	 * For compiling with the new libraries, Roborio needs to be reimaged. This can be a TODO for Wednesday, 1/17/2018
 	 */
 	
-	Talon _frontLeftMotor = new Talon(7); 
-	Talon _rearLeftMotor = new Talon(5);
-	Talon _frontRightMotor = new Talon(8);
-	Talon _rearRightMotor = new Talon(6);
+	/*
+	 * IMPORTANT UPDATES 1/13/2018
+	 * Updated Talon libraries
+	 * Replaced Talon with WPI_TalonSRX
+	 * Copied ControllerLogitech from old master
+	 * reimaged RoboRio
+	 */
+	
+	WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(7); 
+	WPI_TalonSRX _rearLeftMotor = new WPI_TalonSRX(5);
+	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(8);
+	WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(6);
 	
 	//public Joystick stick = new Joystick(0);
 	MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
@@ -139,24 +148,6 @@ public class Robot extends IterativeRobot {
 		//_drive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.TwistZ(), 0); // Found in example FRC
 		//_drive.mecanumDrive_Cartesian(stick.getX(GenericHID.Hand.kLeft), stick.getY(GenericHID.Hand.kLeft), stick.getX(GenericHID.Hand.kRight), 0); // My Idea
 		Timer.delay(0.005); // Saw this in an example
-		
-		// Possible Improvements
-		/*
-		double leftYjoystick = stick.getY(GenericHID.Hand.kLeft);
-		double leftXjoystick = stick.getX(GenericHID.Hand.kLeft);
-		//double rightYjoystick = stick.getY(GenericHID.Hand.kRight);
-		double rightXjoystick = stick.getX(GenericHID.Hand.kRight);
-		
-		double lfPower = (-leftXjoystick + leftYjoystick + rightXjoystick)/3;
-		double lbPower = (leftXjoystick + leftYjoystick + rightXjoystick)/3;
-		double rfPower = (leftXjoystick + leftYjoystick + rightXjoystick)/3;
-		double rbPower = (-leftXjoystick + leftYjoystick + rightXjoystick)/3;
-		
-		_frontLeftMotor.set(12.0 * lfPower);
-		_rearLeftMotor.set(12.0 * rfPower);
-		_frontRightMotor.set(12.0 * lbPower);
-		_rearRightMotor.set(12.0 * rbPower);
-		*/
 
 	}
 

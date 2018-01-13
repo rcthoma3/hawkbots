@@ -4,224 +4,344 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-public class ControllerLogitech {
- public static int kButtonA = 1;
- public static int kButtonB = 2;
- public static int kButtonX = 3;
- public static int kButtonY = 4;
- public static int kButtonLeftBumber = 5;
- public static int kButtonRightBumber = 6;
- public static int kButtonBack = 7;
- public static int kButtonStart = 8;
- public static int kBottomLeftStickPress = 9;
- public static int kButtonRightStickPress = 10;
- public Joystick stick = new Joystick(1);
- public Timer rumbleTimer;
- boolean aWasPressed=false;
- boolean aLast=false;
- boolean bWasPressed=false;
- boolean bLast=false;
- boolean xWasPressed=false;
- boolean xLast=false;
- boolean yWasPressed=false;
- boolean yLast=false;
- boolean startWasPressed=false;
- boolean startLast=false;
- // This method will check to see if any of the buttons have been pressed, every tick.
- public void updateController() {
-  if (!aLast && getButtonA())
-   aWasPressed=true;  
-  else 
-   aWasPressed=false;
+
+public class ControllerLogitech 
+{
+	// initializing variables Controller buttons
+	public static int kButtonA = 1;
+	public static int kButtonB = 2;
+	public static int kButtonX = 3;
+	public static int kButtonY = 4;
+	public static int kButtonLeftBumber = 5;// new button
+	public static int kButtonRightBumber = 6; // new button
+	public static int kButtonBack = 7; // new button
+	public static int kButtonStart = 8;
+	public static int kButtonLeftStickPress = 9; // new button
+	public static int kButtonRightStickPress = 10; // new button
+	public Joystick stick = new Joystick(0);
+	public Timer rumbleTimer;
+	boolean aWasPressed=false;
+	boolean aLast=false;
+	boolean bWasPressed=false;
+	boolean bLast=false;
+	boolean xWasPressed=false;
+	boolean xLast=false;
+	boolean yWasPressed=false;
+	boolean yLast=false;
+	boolean leftBumberWasPressed= false; //new button 
+	boolean leftBumberLast = false;
+	boolean rightBumberWasPressed = false; // new button
+	boolean rightBumberLast = false;
+	boolean backWasPressed = false; // new button
+	boolean backLast = false;
+	boolean startWasPressed=false;
+	boolean startLast=false;
+	boolean leftStickPressWasPressed = false;// new button
+	boolean leftStickLast = false;
+	boolean rightStickPressWasPressed = false; // new button
+	boolean rightStickLast = false;
+	
+ 
+// This method will check to see if any of the buttons have been pressed, every tick.
+ public void updateController() 
+ {
+	 // to check if the y button was pressed
+	 if (!aLast && getButtonA())
+		 aWasPressed=true;  
+	 else 
+		 aWasPressed=false;
+	 // to check if the b button was pressed 
+	 if (!bLast && getButtonB())
+		 bWasPressed=true;  
+	 else 
+		 bWasPressed=false;
   
-  if (!bLast && getButtonB())
-   bWasPressed=true;  
-  else 
-   bWasPressed=false;
-  
-  if (!xLast && getButtonX())
-   xWasPressed=true;  
-  else 
-   xWasPressed=false;
-  
-  if (!yLast && getButtonY())
-   yWasPressed=true;  
-  else 
-   yWasPressed=false;
-  
-  if (!startLast && getButtonStart())
-   startWasPressed=true;  
-  else 
-   startWasPressed=false;
+	 if (!xLast && getButtonX())
+		 xWasPressed=true;  
+	 else 
+		 xWasPressed=false;
+	 // to check if the y button was pressed 
+	 if (!yLast && getButtonY())
+		 yWasPressed=true;  
+	 else 
+		 yWasPressed=false;
+	 // to check if the left bumber button was pressed
+	 if (!leftBumberLast && getButtonLeftBumber())
+		 leftBumberWasPressed = true;
+	 else 
+		 leftBumberWasPressed = false;
+	 // to check if the right bumber button was pressed
+	 if (!rightBumberLast && getButtonRightBumber())
+		 rightBumberWasPressed = true;
+	 else 
+		 rightBumberWasPressed = false;
+	 // to check if the start button was pressed
+	 
+	 if (!startLast && getButtonStart())
+		 startWasPressed=true;  
+	 else 
+		 startWasPressed=false;
+	 // to check if the back button was pressed
+	 if(!backLast && getButtonBack())
+		 backWasPressed = true;
+	 else
+		 backWasPressed = false;
+	 // to check if the left stick button was pressed
+	 if(!leftStickLast && getButtonLeftStickPress())
+		 leftStickPressWasPressed = true;
+	 else
+		 leftStickPressWasPressed = false;
+	 // to check if the right stick button was pressed
+	 if(!rightStickLast && getButtonRightStickPress())
+		 rightStickPressWasPressed = true;
+	 else
+		 rightStickPressWasPressed = false;
   
   aLast = getButtonA();
   bLast = getButtonB();
   xLast = getButtonX();
   yLast = getButtonY();
   startLast = getButtonStart();
+  leftBumberLast = getButtonLeftBumber(); // new button
+  rightBumberLast = getButtonRightBumber(); // new button
+  backLast = getButtonBack(); // new button
+  leftStickLast = getButtonLeftStickPress(); // new button
+  rightStickLast = getButtonRightStickPress();// new button
+  
  }
  
  // The following functions return the boolean value <button>WasPressed depending on which was called.
  public boolean aWasPressed() {
-  return aWasPressed;
+	 return aWasPressed;
  }
  
  public boolean bWasPressed() {
-  return bWasPressed;
+	 return bWasPressed;
  }
+ 
  public boolean xWasPressed() {
-  return xWasPressed;
+	 return xWasPressed;
  }
+ 
  public boolean yWasPressed() {
-  return yWasPressed;
+	 return yWasPressed;
  }
+ 
  public boolean startWasPressed() {
-  return startWasPressed;
+	 return startWasPressed;
+ }
+ 
+ public boolean leftBumberWasPressed()
+ {
+	 return leftBumberWasPressed;
+ }
+ 
+ public boolean rightBumberWasPressed()
+ {
+	 return rightBumberWasPressed;
+ }
+ 
+ public boolean backWasPressed()
+ {
+	 return backWasPressed;
+ }
+ 
+ public boolean leftStickPressWasPressed()
+ {
+	 return leftStickPressWasPressed;
+ }
+ 
+ public boolean rightStickPressWasPressed()
+ {
+	return rightStickPressWasPressed;
  }
  
  // The following functions all return the raw value of the respective control.
  
  //Controls the X axis of the right joystick
  public double getRightJoyX() {
-  return stick.getRawAxis(4);
+	 return stick.getRawAxis(4);
  }
  
  //Controls the Y axis of the right joystick
  public double getRightJoyY() {
-  return stick.getRawAxis(5);
+	 return stick.getRawAxis(5);
  }
  
  //Controls the X axis of the left joystick
  public double getLeftJoyX() {
-  return stick.getRawAxis(0);
+	 return stick.getRawAxis(0);
  }
  
  //Controls the Y axis of the left joystick
  public double getLeftJoyY() {
-  return stick.getRawAxis(1);
+	 return stick.getRawAxis(1);
  }
   
  //Is the A button pressed or not
  //in: nothing
  //out: is A button pressed, boolean
  public boolean getButtonA() {
-  return stick.getRawButton(kButtonA);
+	 return stick.getRawButton(kButtonA);
  }
  
  //Is the Right Trigger button pressed or not
  //in: nothing
  //out: is a button pressed, double
  public double RightTrigger() {    
-  return stick.getRawAxis(3);
+	 return stick.getRawAxis(3);
  }
  
  //Is the Left Trigger button pressed or not
  //in: nothing 
  //out: is a button pressed, double
  public double LeftTrigger() {
-  return stick.getRawAxis(2);
+	 return stick.getRawAxis(2);
  }
  
  //Is the B button pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonB() {
-  return stick.getRawButton(kButtonB);
+	 return stick.getRawButton(kButtonB);
  }
  
  //Is the X button pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonX() {
-  return stick.getRawButton(kButtonX);
+	 return stick.getRawButton(kButtonX);
  }
  
  //Is the Y button pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonY() {
-  return stick.getRawButton(kButtonY);  
+	 return stick.getRawButton(kButtonY);  
  }
+ /* Is the left Bumber button pressed or not
+  * in: nothing
+  * out: is a button pressed, boolean
+  */
+ public boolean getButtonLeftBumber()
+ {
+	 return stick.getRawButton(kButtonLeftBumber);
+ }
+ 
+ /* Is the right Bumber button pressed or not
+  * in: nothing
+  * out: is a button pressed, boolean
+  */
+ public boolean getRawButtonRightBumber()
+ {
+	 return stick.getRawButton(kButtonRightBumber);
+ }
+ 
  
  //Is the start button pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonStart() {
-  return stick.getRawButton(kButtonStart);  
+	 return stick.getRawButton(kButtonStart);  
+ }
+ 
+ /* Is the back button pressed or not 
+  * in: nothing
+  * out: is a button pressed, boolean
+  */
+ public boolean getButtonBack()
+ {
+	 return stick.getRawButton(kButtonBack);
+ }
+/*Is the left stick press button pressed or not
+ * in: nothing
+ * out: is a button pressed, boolean
+ */
+ public boolean getButtonLeftStickPress()
+ {
+	 return stick.getRawButton(kButtonLeftStickPress);
+ }
+ /*Is the right stick press button pressed or not
+  * in: nothing 
+  * out: is a button pressed, boolean
+  */
+ public boolean getButtonRightStickPress()
+ {
+	 return stick.getRawButton(kButtonRightStickPress);
  }
  
  //Is Up D pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonUpD() {
-  return (stick.getPOV()>270 || stick.getPOV()<90) && stick.getPOV()>=0;
+	 return (stick.getPOV()>270 || stick.getPOV()<90) && stick.getPOV()>=0;
  }
  
  //Is Down D button pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonDownD() {
-  return stick.getPOV()>90 && stick.getPOV()<270;  
+	 return stick.getPOV()>90 && stick.getPOV()<270;  
  }
  
  //Is Right D pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonRightD() {
-  return stick.getPOV()==90;
+	 return stick.getPOV()==90;
  }
  
  //Is Left D pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonLeftD() {
-  return stick.getPOV()==270;
+	 return stick.getPOV()==270;
  }
  
  //Is the Right Trigger button pressed or not
  //in:nothing
  //out: is a button pressed, float
  public int getRightTrigger() {
-  int rt=0;
-  return rt;
+	 int rt=0;
+	 return rt;
  }
  
  //Is the Left Trigger button pressed or not
  //in: nothing
  //out: is a button pressed, float
  public int getLeftTrigger() {
-  int rt=0;
-  return rt; 
+	 int rt=0;
+	 return rt; 
  }
  
  //Is the Right Joy button pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonRightJoy() {
-  boolean isPressed = false;
-  return isPressed;
+	 boolean isPressed = false;
+	 return isPressed;
  }
  
  //Is the Left Joy button pressed or not
  //in: nothing
  //out: is a button pressed, boolean
  public boolean getButtonLeftJoy() {
-  boolean isPressed = false;
-  return isPressed;
+	 boolean isPressed = false;
+	 return isPressed;
  }
  
  //Is LB button pressed or not
  //in: nothing
  //out: is a button pressed, boolean
- public boolean getButtonLeftBump() {
-  return stick.getRawButton(kButtonLeftBumber);
+ public boolean getButtonLeftBumber1() {
+	 return stick.getRawButton(kButtonLeftBumber);
  }
  
  //Is RB button pressed or not
  //in: nothing
  //out: is a button pressed, boolean
- public boolean getButtonRightBump() {
-  return stick.getRawButton(kButtonRightBumber);
+ public boolean getButtonRightBumber() {
+	 return stick.getRawButton(kButtonRightBumber);
  }
  
  //This tells whether or not everything on the controller works or not by printing
@@ -238,8 +358,8 @@ public class ControllerLogitech {
   boolean buttonLeftD = getButtonLeftD();
   boolean buttonRightJoy = getButtonRightJoy();
   boolean buttonLeftJoy = getButtonLeftJoy();
-  boolean buttonLeftBump = getButtonLeftBump();
-  boolean buttonRightBump = getButtonRightBump();
+  //boolean buttonLeftBump = getButtonLeftBump();
+  //boolean buttonRightBump = getButtonRightBump();
   int buttonLeftTrigger = getLeftTrigger();
   int buttonRightTrigger = getRightTrigger();
   double axisRightJoyX = getRightJoyX();
@@ -264,6 +384,7 @@ public class ControllerLogitech {
    System.out.println(" RD="+buttonRightD);
   if (buttonLeftD)
    System.out.println(" LD="+buttonLeftD);
+  /*
   if (buttonLeftBump) {
    System.out.print(" LT="+buttonLeftTrigger); 
    System.out.print(" LJ="+buttonLeftJoy);
@@ -277,6 +398,7 @@ public class ControllerLogitech {
    System.out.print(" RX="+axisRightJoyX);
    System.out.println(" RY="+axisRightJoyY);
   }
+  */
   if (axisLeftJoyY > .2 || axisLeftJoyX > .2 ){
    System.out.println(" Left Joystick = "+ axisLeftJoyY + "   " + axisLeftJoyX);
   }
