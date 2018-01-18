@@ -17,63 +17,19 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	
 	ControllerLogitech myController = new ControllerLogitech();
-	//RobotMovement myRobot = new RobotMovement(myController);
-	//Sensors mySensors = new Sensors();
-	//auto myAuto = new auto(mySensors,myRobot);
-	//public static int kBasePort;
-	//public static int kSize640x480;
-	//public static int kSize320x240;
-	//public static int kSize160x120;
-	//boolean aLast = false;
-	//boolean aWasPressed = false;
-	//boolean bLast = false;
-	//boolean xLast = false;
-	//boolean yLast = false;
+	
 	UsbCamera Camera1;
 	UsbCamera Camera2;
-	
-	//Timer timer = new Timer();
-	//https://mililanirobotics.gitbooks.io/frc-electrical-bible/content/Drive_Code/custom_program_mecanum_drive.html
-	
-	/*
-	 * IMPORTANT UPDATES 1/11/2018
-	 * Updated FRC Plugins, due to deprecated RobotDrive functionality.
-	 * MecanumDrive functions replaced RobotDrive.
-	 * CANTalon temporarily replaced by Talon (CANTalon isn't recognized properly for the updated library)
-	 * Talon libraries may need to be updated (Check their documentation)
-	 * Main branch has been moved to Master2018
-	 * ControllerLogitech has been updated on previous Master branch, needs to be merged into Master2018.
-	 * For compiling with the new libraries, Roborio needs to be reimaged. This can be a TODO for Wednesday, 1/17/2018
-	 */
-	
-	/*
-	 * IMPORTANT UPDATES 1/13/2018
-	 * Updated Talon libraries
-	 * Replaced Talon with WPI_TalonSRX
-	 * Copied ControllerLogitech from old master
-	 * reimaged RoboRio
-	 */
-	
-	/*
-	 * IMPORTANT UPDATES 1/18/2018
-	 * Installed Eclipse Oxygen on laptop
-	 * Updated driver station on laptop
-	 * Updated wpilibs on laptop
-	 * Updated talon libs on laptop
-	 * Removed unused imports from master
-	 */
 	
 	WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(7); 
 	WPI_TalonSRX _rearLeftMotor = new WPI_TalonSRX(5);
 	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(8);
 	WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(6);
 	
-	//public Joystick stick = new Joystick(0);
 	MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
 	
-	
-
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -82,11 +38,6 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		Camera1 = CameraServer.getInstance().startAutomaticCapture();
 		Camera2 = CameraServer.getInstance().startAutomaticCapture();
-		
-		//_frontLeftMotor.changeControlMode(TalonControlMode.Voltage); 
-		//_rearLeftMotor.changeControlMode(TalonControlMode.Voltage);
-		//_frontRightMotor.changeControlMode(TalonControlMode.Voltage);
-		//_rearRightMotor.changeControlMode(TalonControlMode.Voltage);
 		
 		// One side will be inverted, but may not be left
 		_frontLeftMotor.setInverted(true);
@@ -102,10 +53,6 @@ public class Robot extends IterativeRobot {
 		_drive.setSafetyEnabled(true);
 		_drive.setExpiration(0.1);
 	}
-	
-	/**
-	 * 
-	 */
 	
 
 	/**
@@ -137,7 +84,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopInit() {	
-		_drive.setMaxOutput(.6);
+		
+		_drive.setMaxOutput(.6);		
 	}
 
 
@@ -148,10 +96,8 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {	
 		
 		_drive.driveCartesian(myController.getLeftJoyX(), myController.getLeftJoyY(), -myController.getRightJoyX(), 0); // Found in example
-		//_drive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.TwistZ(), 0); // Found in example FRC
-		//_drive.mecanumDrive_Cartesian(stick.getX(GenericHID.Hand.kLeft), stick.getY(GenericHID.Hand.kLeft), stick.getX(GenericHID.Hand.kRight), 0); // My Idea
+		
 		Timer.delay(0.005); // Saw this in an example
-
 	}
 
 	/**
