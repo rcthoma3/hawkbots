@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class ControllerLogitech 
 {
+	
+	public Joystick stick = new Joystick(1);
+	
 	// initializing variables Controller buttons
 	public static int kButtonA = 1;
 	public static int kButtonB = 2;
@@ -16,7 +19,6 @@ public class ControllerLogitech
 	public static int kButtonStart = 8;
 	public static int kButtonLeftStickPress = 9; // new button
 	public static int kButtonRightStickPress = 10; // new button
-	public Joystick stick = new Joystick(0);
 	public Timer rumbleTimer;
 	boolean aWasPressed=false;
 	boolean aLast=false;
