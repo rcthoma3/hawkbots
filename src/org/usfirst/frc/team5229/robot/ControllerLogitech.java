@@ -1,9 +1,7 @@
 package org.usfirst.frc.team5229.robot;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class ControllerLogitech 
 {
@@ -347,6 +345,7 @@ public class ControllerLogitech
  //This tells whether or not everything on the controller works or not by printing
  // the value of the button if it's respective button is pressed.
  public void test() {
+	 
   boolean buttonA = getButtonA();
   boolean buttonB = getButtonB();
   boolean buttonX = getButtonX();
@@ -356,12 +355,12 @@ public class ControllerLogitech
   boolean buttonDownD = getButtonDownD();
   boolean buttonRightD = getButtonRightD();
   boolean buttonLeftD = getButtonLeftD();
-  boolean buttonRightJoy = getButtonRightJoy();
-  boolean buttonLeftJoy = getButtonLeftJoy();
+  //boolean buttonRightJoy = getButtonRightJoy();
+  //boolean buttonLeftJoy = getButtonLeftJoy();
   //boolean buttonLeftBump = getButtonLeftBump();
   //boolean buttonRightBump = getButtonRightBump();
-  int buttonLeftTrigger = getLeftTrigger();
-  int buttonRightTrigger = getRightTrigger();
+  //int buttonLeftTrigger = getLeftTrigger();
+  //int buttonRightTrigger = getRightTrigger();
   double axisRightJoyX = getRightJoyX();
   double axisRightJoyY = getRightJoyY();
   double axisLeftJoyX = getLeftJoyX();

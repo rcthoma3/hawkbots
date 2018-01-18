@@ -1,19 +1,13 @@
 package org.usfirst.frc.team5229.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.AxisType;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -59,6 +53,15 @@ public class Robot extends IterativeRobot {
 	 * Replaced Talon with WPI_TalonSRX
 	 * Copied ControllerLogitech from old master
 	 * reimaged RoboRio
+	 */
+	
+	/*
+	 * IMPORTANT UPDATES 1/18/2018
+	 * Installed Eclipse Oxygen on laptop
+	 * Updated driver station on laptop
+	 * Updated wpilibs on laptop
+	 * Updated talon libs on laptop
+	 * Removed unused imports from master
 	 */
 	
 	WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(7); 
@@ -156,6 +159,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		LiveWindow.run();
+		
+		
 	}
 }
