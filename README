@@ -1,0 +1,31 @@
+	
+	LINKS:
+  //https://mililanirobotics.gitbooks.io/frc-electrical-bible/content/Drive_Code/custom_program_mecanum_drive.html
+	
+	/*
+	 * IMPORTANT UPDATES 1/11/2018
+	 * Updated FRC Plugins, due to deprecated RobotDrive functionality.
+	 * MecanumDrive functions replaced RobotDrive.
+	 * CANTalon temporarily replaced by Talon (CANTalon isn't recognized properly for the updated library)
+	 * Talon libraries may need to be updated (Check their documentation)
+	 * Main branch has been moved to Master2018
+	 * ControllerLogitech has been updated on previous Master branch, needs to be merged into Master2018.
+	 * For compiling with the new libraries, Roborio needs to be reimaged. This can be a TODO for Wednesday, 1/17/2018
+	 */
+	
+	/*
+	 * IMPORTANT UPDATES 1/13/2018
+	 * Updated Talon libraries
+	 * Replaced Talon with WPI_TalonSRX
+	 * Copied ControllerLogitech from old master
+	 * reimaged RoboRio
+	 */
+	
+	/*
+	 * IMPORTANT UPDATES 1/18/2018
+	 * Installed Eclipse Oxygen on laptop
+	 * Updated driver station on laptop
+	 * Updated wpilibs on laptop
+	 * Updated talon libs on laptop
+	 * Removed unused imports from master
+	 */
