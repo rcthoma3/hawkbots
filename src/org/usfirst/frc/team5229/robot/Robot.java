@@ -36,6 +36,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		
 		Camera1 = CameraServer.getInstance().startAutomaticCapture();
 		Camera2 = CameraServer.getInstance().startAutomaticCapture();
 		
@@ -59,7 +60,8 @@ public class Robot extends IterativeRobot {
 	 * This function is run once each time the robot enters autonomous mode
 	 */
 	@Override
-	public void autonomousInit() {		
+	public void autonomousInit() {
+		
 		String gameData;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		if(gameData.charAt(0) == 'L')
