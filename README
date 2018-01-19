@@ -3,11 +3,14 @@ LINKS:
   MecDrive Setup
   https://mililanirobotics.gitbooks.io/frc-electrical-bible/content/Drive_Code/custom_program_mecanum_drive.html
   
-  WpiLib API Doc
+  WpiLib JavaDoc
   http://first.wpi.edu/FRC/roborio/release/docs/java/
   
   CTR Phoenix Framework Docs (TalonSRX Motor Controllers)
   https://github.com/CrossTheRoadElec/Phoenix-Documentation/blob/master/README.md
+  
+  CTR Phoenix Framework JavaDoc (TalonSRX Motor Controllers)
+  http://www.ctr-electronics.com/downloads/api/java/html/index.html
   
  IMPORTANT UPDATES:
 	1/11/2018
