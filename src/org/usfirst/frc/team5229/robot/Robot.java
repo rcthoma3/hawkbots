@@ -20,13 +20,13 @@ public class Robot extends IterativeRobot {
 	
 	ControllerLogitech myController = new ControllerLogitech();
 	
-	UsbCamera Camera1;
-	UsbCamera Camera2;
+	//UsbCamera Camera1;
+	//UsbCamera Camera2;
 	
-	WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(7); 
-	WPI_TalonSRX _rearLeftMotor = new WPI_TalonSRX(5);
-	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(8);
-	WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(6);
+	WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(6); 
+	WPI_TalonSRX _rearLeftMotor = new WPI_TalonSRX(8);
+	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(5);
+	WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(7);
 	
 	MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
 	
@@ -37,12 +37,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		
-		Camera1 = CameraServer.getInstance().startAutomaticCapture();
-		Camera2 = CameraServer.getInstance().startAutomaticCapture();
-		
-		// One side will be inverted, but may not be left
-		_frontLeftMotor.setInverted(true);
-		_rearLeftMotor.setInverted(true);
+		//Camera1 = CameraServer.getInstance().startAutomaticCapture();
+		//Camera2 = CameraServer.getInstance().startAutomaticCapture();
 		
 		// Initialize to zero
 		_frontLeftMotor.set(0);
@@ -53,6 +49,9 @@ public class Robot extends IterativeRobot {
 		// Something to do with safety 
 		_drive.setSafetyEnabled(true);
 		_drive.setExpiration(0.1);
+		
+		_frontLeftMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
+		_frontLeftMotor.setSensorPhase(false);
 	}
 	
 
@@ -97,7 +96,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {	
 		
-		_drive.driveCartesian(myController.getLeftJoyX(), myController.getLeftJoyY(), -myController.getRightJoyX(), 0); // Found in example
+		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0); // Found in example
+		
+		System.out.println("Encoder" + _frontLeftMotor.getSelectedSensorPosition(0));
 		
 		Timer.delay(0.005); // Saw this in an example
 	}
