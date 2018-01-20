@@ -36,4 +36,6 @@ LINKS:
 	  Updated wpilibs on laptop
 	  Updated talon libs on laptop
 	  Removed unused imports from master
+	  Mecanum Drive is now functioning
+	  Getting values from encoder
 	 
