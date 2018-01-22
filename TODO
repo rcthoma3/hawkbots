@@ -21,3 +21,15 @@ TODO 1/20/2018:
 
 7. Make auton function to drive forward a specified distance
 	  Use what you learned in 1-6
+	  
+TODO 1/22/2018:
+
+1. Make auton function to turn based on desired angle and robot width
+
+2. Make auton function to strafe based on desired distance
+
+3. Investigate how to tune PID control
+
+4. Make a sensor function to get input from a toggle button
+
+5. Get build team to install the other 3 encoders. 
