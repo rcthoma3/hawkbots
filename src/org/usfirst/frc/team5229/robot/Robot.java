@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5229.robot;
 
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -52,6 +53,25 @@ public class Robot extends IterativeRobot {
 		
 		_frontLeftMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
 		_frontLeftMotor.setSensorPhase(false);
+		_rearLeftMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
+		_rearLeftMotor.setSensorPhase(false);
+		_frontRightMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
+		_frontRightMotor.setSensorPhase(true);
+		_rearRightMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
+		_rearRightMotor.setSensorPhase(true);
+		
+		/* set the peak and nominal outputs, 12V means full */
+		_frontLeftMotor.configNominalOutputForward(0, 10);
+		_frontLeftMotor.configNominalOutputReverse(0, 10);
+		_frontLeftMotor.configPeakOutputForward(1, 10);
+		_frontLeftMotor.configPeakOutputReverse(-1, 10);
+        
+		/* first param is the slot, second param is generally zero (for primary PID loop) */
+		_frontLeftMotor.selectProfileSlot(0, 0);
+		_frontLeftMotor.config_kF(0, 0, 10);
+		_frontLeftMotor.config_kP(0, .5, 10);
+		_frontLeftMotor.config_kI(0, 0, 10);
+		_frontLeftMotor.config_kD(0, 0, 10);
 	}
 	
 
@@ -96,10 +116,17 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {	
 		
+		
+		//_frontLeftMotor.set(ControlMode.Position, 20000);
+		
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0); // Found in example
 		
-		System.out.println("Encoder" + _frontLeftMotor.getSelectedSensorPosition(0));
 		
+		System.out.println("FrontLeftMotor Encoder" + _frontLeftMotor.getSelectedSensorPosition(0));
+		//System.out.println("RearLeftMotor Encoder" + _rearLeftMotor.getSelectedSensorPosition(0));
+		//System.out.println("FrontRightMotor Encoder" + _frontRightMotor.getSelectedSensorPosition(0));
+		//System.out.println("RearRightMotor Encoder" + _rearRightMotor.getSelectedSensorPosition(0));
+
 		Timer.delay(0.005); // Saw this in an example
 	}
 
