@@ -39,3 +39,7 @@ LINKS:
 	  Mecanum Drive is now functioning
 	  Getting values from encoder
 	 
+	1/22/2018
+	  Installed remaining encoders
+	  Added code to init and read encoders
+	 
