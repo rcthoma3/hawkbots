@@ -1,0 +1,35 @@
+TODO 1/20/2018:
+
+1. Figure out how many encoder pulses is one rotation of the wheel
+	  See encoder specs -> http://www.andymark.com/E4T-OEM-Miniature-Optical-Encoder-Kit-p/am-3132.htm
+	  Verify by running robot, reading encoder pulses, and rotate wheel manually
+
+2. Make a sensor function that initializes wheel encoders
+	  See Master2018 on correct initialization of one encoder
+	  Decide if you want to initialize all the encoders in one function or a function that does one at a time
+
+3. Make a sensor function that returns a wheel's encoder count
+	  See Master 2018 on how to do this
+
+4. Make a sensor function that converts encoder pulses to distance
+
+5. Make a sensor function that converts distance to encoder pulses
+
+6. Investigate how to make the robot respond to a distance/encoder pulse count
+	  See set function in class BaseMotorController in CTR JavaDoc (refer to link in README doc)
+	  Look at examples of encoder use and position control (https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages)
+
+7. Make auton function to drive forward a specified distance
+	  Use what you learned in 1-6
+	  
+TODO 1/22/2018:
+
+1. Make auton function to turn based on desired angle and robot width
+
+2. Make auton function to strafe based on desired distance
+
+3. Investigate how to tune PID control
+
+4. Make a sensor function to get input from a toggle button
+
+5. Get build team to install the other 3 encoders. 
