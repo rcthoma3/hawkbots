@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
 	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(5);
 	WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(7);
 	
-	MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
+	//MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -48,8 +48,8 @@ public class Robot extends IterativeRobot {
 		_rearRightMotor.set(0);
 		
 		// Something to do with safety 
-		_drive.setSafetyEnabled(true);
-		_drive.setExpiration(0.1);
+		//_drive.setSafetyEnabled(true);
+		//_drive.setExpiration(0.1);
 		
 		_frontLeftMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
 		_frontLeftMotor.setSensorPhase(false);
@@ -106,7 +106,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {	
 		
-		_drive.setMaxOutput(.6);		
+		//_drive.setMaxOutput(.6);		
 	}
 
 
@@ -117,9 +117,10 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {	
 		
 		
-		//_frontLeftMotor.set(ControlMode.Position, 20000);
-		
-		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0); // Found in example
+		//_frontLeftMotor.set(ControlMode.Velocity, 100);
+		_frontLeftMotor.set(ControlMode.Position, 100);
+
+		//_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0); // Found in example
 		
 		
 		System.out.println("FrontLeftMotor Encoder" + _frontLeftMotor.getSelectedSensorPosition(0));
