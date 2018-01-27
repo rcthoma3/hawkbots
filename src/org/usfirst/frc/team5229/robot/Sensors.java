@@ -175,9 +175,29 @@ public class Sensors {
 	//Make a robot move forward during autonomous
 	//in:Distance, 4 motor controllers
 	//out:nothing
-	public void driveFowardAuto(int dis) {
+	public void driveFowardAuto(int dis, ControlMode ControlMode) {
 		
 		int enc = disToEnc(dis);
+		
+		if (!setEnc) {
+			System.out.println("Encoders Not Set");
+		}
+		else if(!initEnc) {
+			System.out.println("Encoders Not Initalized");
+		}
+		else {
+			_frontLeftMotor.set(ControlMode.MotionMagic, enc );
+			_frontRightMotor.set(ControlMode.MotionMagic, enc);
+			_rearLeftMotor.set(ControlMode.MotionMagic, enc);
+			_rearRightMotor.set(ControlMode.MotionMagic, enc);
+		}
+	}
+	
+	//Make a robot move backwards
+	//in:Distance 4 motor controller
+	//out:nothing
+	public void driveBackwardAuto(int dis, ControlMode ControlMode){
+		int enc = disToEnc(dis) * -1;//Robot move backwards
 		
 		if (!setEnc) {
 			System.out.println("Encoders Not Set");
