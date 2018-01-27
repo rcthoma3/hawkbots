@@ -15,7 +15,7 @@ public class Sensors {
 	private double whlSize;
 	private double roboDim = 30; // Robot diagonal distance between wheels
 	
-	private WPI_talonSRX _frontLeftMotor;
+	private WPI_TalonSRX _frontLeftMotor;
 	private WPI_TalonSRX _rearLeftMotor;
 	private WPI_TalonSRX _frontRightMotor;
 	private WPI_TalonSRX _rearRightMotor;
