@@ -13,6 +13,7 @@ public class Sensors {
 	private boolean initEnc = false;
 	private boolean setWhlSize = false;
 	private double whlSize;
+	private double roboDim = 30; // Robot diagonal distance between wheels
 	
 	private WPI_talonSRX _frontLeftMotor;
 	private WPI_TalonSRX _rearLeftMotor;
@@ -190,6 +191,69 @@ public class Sensors {
 			_frontRightMotor.set(ControlMode.MotionMagic, enc);
 			_rearLeftMotor.set(ControlMode.MotionMagic, enc);
 			_rearRightMotor.set(ControlMode.MotionMagic, enc);
+		}
+	}
+	
+	//Make a robot move backwards
+	//in:Distance 4 motor controller
+	//out:nothing
+	public void driveBackwardAuto(int dis){
+		int enc = disToEnc(dis) * -1;//Robot move backwards
+		
+		if (!setEnc) {
+			System.out.println("Encoders Not Set");
+		}
+		else if(!initEnc) {
+			System.out.println("Encoders Not Initalized");
+		}
+		else {
+			_frontLeftMotor.set(ControlMode.MotionMagic, enc );
+			_frontRightMotor.set(ControlMode.MotionMagic, enc);
+			_rearLeftMotor.set(ControlMode.MotionMagic, enc);
+			_rearRightMotor.set(ControlMode.MotionMagic, enc);
+		}
+	}
+	
+	// This allows the robot to turn right
+	//In: Distance 4 motor controller
+	//out:Nothing
+	public void turnRobotRight (double deg) {
+		double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360);
+		int enc = disToEnc(dis);
+		if (!setEnc) {
+			System.out.println("Encoders Not Set");
+		}
+		else if(!initEnc) {
+			System.out.println("Encoders Not Initalized");
+		}
+		else {
+		_frontLeftMotor.set(ControlMode.MotionMagic, enc );
+		_frontRightMotor.set(ControlMode.MotionMagic, -enc);
+		_rearLeftMotor.set(ControlMode.MotionMagic, enc);
+		_rearRightMotor.set(ControlMode.MotionMagic, -enc);
+		
+		}
+	}
+		
+	
+	//This allows the robot to turn left
+	//In: Distance 4 motor controller
+	//out:Nothing
+	public void turnRobotLeft (double deg) {
+		double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360);
+		int enc = disToEnc(dis);
+		if (!setEnc) {
+			System.out.println("Encoders Not Set");
+		}
+		else if(!initEnc) {
+			System.out.println("Encoders Not Initalized");
+		}
+		else {
+		_frontLeftMotor.set(ControlMode.MotionMagic, -enc );
+		_frontRightMotor.set(ControlMode.MotionMagic, enc);
+		_rearLeftMotor.set(ControlMode.MotionMagic, -enc);
+		_rearRightMotor.set(ControlMode.MotionMagic, enc);
+		
 		}
 	}
 }
