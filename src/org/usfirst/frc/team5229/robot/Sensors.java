@@ -104,10 +104,10 @@ public class Sensors {
 	
 	
 	//Make a robot move forward during autonomous
-	//in:Distance, Speed
+	//in:Distance, 4 motor controllers
 	//out:nothing
-	public void DriveFowardAuto(int Distance, double speed) {
-
+	public void DriveFowardAuto(WPI_TalonSRX _frontLeftMotor, WPI_TalonSRX _rearLeftMotor, WPI_TalonSRX _frontRightMotor, WPI_TalonSRX _rearRightMotor, int distance) {
+		int enc; 
 	}
 
 
