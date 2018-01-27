@@ -1,29 +1,22 @@
 package org.usfirst.frc.team5229.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Autonomous {
 	String gameData;
-	int location; 
+	int startpos;
+	SendableChooser<Integer> autoChooser;
+	public boolean setPos = false;
+	
+	
 	public String getGameMsg(){
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		return gameData;
 	} 
 	
-	public int getLocation() {
-		return location;
-	}
 	
-	public void AutoPlan() {
-		if(location == 2){
-			if(gameData.charAt(0) == 'L') {
-				
-			}else{
-				
-			}
-			
-		}
-	}
+	
 	
 		
 	
