@@ -20,12 +20,12 @@ public class Sensors {
 	private double whlSize; // Robot wheel size
 	private double roboDim; // Robot diagonal distance between wheels
 	
-	private WPI_TalonSRX _frontLeftMotor;
-	private WPI_TalonSRX _rearLeftMotor;
-	private WPI_TalonSRX _frontRightMotor;
-	private WPI_TalonSRX _rearRightMotor;
+	private  WPI_TalonSRX _frontLeftMotor;
+	private  WPI_TalonSRX _rearLeftMotor;
+	private  WPI_TalonSRX _frontRightMotor;
+	private  WPI_TalonSRX _rearRightMotor;
 	
-	public boolean setEncoders (WPI_TalonSRX _frontLeftMotorIn, WPI_TalonSRX _rearLeftMotorIn, WPI_TalonSRX _frontRightMotorIn, WPI_TalonSRX _rearRightMotorIn) {
+	public  boolean setEncoders (WPI_TalonSRX _frontLeftMotorIn, WPI_TalonSRX _rearLeftMotorIn, WPI_TalonSRX _frontRightMotorIn, WPI_TalonSRX _rearRightMotorIn) {
 		_frontLeftMotor = _frontLeftMotorIn;
 		_rearLeftMotor = _rearLeftMotorIn;
 		_frontRightMotor = _frontRightMotorIn;
