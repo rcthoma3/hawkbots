@@ -186,6 +186,7 @@ public class Sensors {
 	public void driveFowardAuto(int dis) {
 		
 		int enc = disToEnc(dis);
+		System.out.println("Enc count: " + enc);
 		
 		if (!setEnc) {
 			System.err.println("ERROR: Encoders Not Set");
@@ -194,10 +195,11 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Initalized");
 		}
 		else {
-			_frontLeftMotor.set(ControlMode.MotionMagic, enc );
+			_frontLeftMotor.set(ControlMode.MotionMagic, enc);
 			_frontRightMotor.set(ControlMode.MotionMagic, enc);
 			_rearLeftMotor.set(ControlMode.MotionMagic, enc);
 			_rearRightMotor.set(ControlMode.MotionMagic, enc);
+			System.out.println("Front Left: "+ _frontLeftMotor.getSelectedSensorPosition(0));
 		}
 	}
 	
