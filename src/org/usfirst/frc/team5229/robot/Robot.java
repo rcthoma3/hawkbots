@@ -82,7 +82,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		myRobot.driveFowardAuto(60);
+		myRobot.driveFowardAuto(120);
 		
 		Timer.delay(0.005);
 	}
