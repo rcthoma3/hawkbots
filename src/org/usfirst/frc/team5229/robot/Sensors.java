@@ -29,6 +29,8 @@ public class Sensors {
 	private  WPI_TalonSRX _frontRightMotor;
 	private  WPI_TalonSRX _rearRightMotor;
 	
+	private DigitalInput limSwitch;
+	
 	public  boolean setEncoders (WPI_TalonSRX _frontLeftMotorIn, WPI_TalonSRX _rearLeftMotorIn, WPI_TalonSRX _frontRightMotorIn, WPI_TalonSRX _rearRightMotorIn) {
 		_frontLeftMotor = _frontLeftMotorIn;
 		_rearLeftMotor = _rearLeftMotorIn;
@@ -307,12 +309,12 @@ public class Sensors {
 
 	public DigitalInput limitswitch (int input) {
 		
-		DigitalInput limSwitch = new DigitalInput(1);
+		limSwitch = new DigitalInput(1);
 		
 		return limSwitch;
 	}
 	
-	public boolean getstate (DigitalInput limSwitch) {
+	public boolean getstate () {
 		
 		return limSwitch.get();
 	}
