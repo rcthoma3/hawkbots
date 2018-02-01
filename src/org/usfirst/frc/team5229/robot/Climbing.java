@@ -8,7 +8,13 @@ public class Climbing {
 	private PWM m_climbMotor;
 
 	private boolean setMotor = false;
+	private Sensors topSwitch = new Sensors();
+	private Sensors bottomSwitch = new Sensors();
 	
+	public void setSwitches(int dio) {
+		topSwitch.limitswitch(dio);
+		bottomSwitch.limitswitch(dio);
+	}
 	
 	
 	public boolean setClimbMotor (PWM m_climbMotorIn) {
@@ -17,12 +23,12 @@ public class Climbing {
 		return setMotor;
 	}
 	
-	
-	
 	public void raiseElevator (double speed) {
 		//Raises elevator to hook bar 
 		//Spins motor forward (Speed = +)
-		boolean sensorpressed = true; 
+		
+		boolean sensorpressed = topSwitch.getstate(); 
+		
 		if (!setMotor) {
 			System.out.println("ERROR: Climb Motor Not Initiated!");
 		}
@@ -40,7 +46,7 @@ public class Climbing {
 	public void lowerElavator (double speed) {
 		//pull up robot using hook attached to bar
 		//Spins motor backwards (Speed = -)
-		boolean sensorpressed = true; 
+		boolean sensorpressed = bottomSwitch.getstate(); 
 		if (!setMotor) {
 			System.out.println("ERROR: Climb Motor Not Initiated!");
 		}
