@@ -2,6 +2,7 @@ package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -303,4 +304,17 @@ public class Sensors {
 			_rearRightMotor.set(ControlMode.MotionMagic, enc);
 		}
 	}
+
+	public DigitalInput limitswitch (int input) {
+		
+		DigitalInput limSwitch = new DigitalInput(1);
+		
+		return limSwitch;
+	}
+	
+	public boolean getstate (DigitalInput limSwitch) {
+		
+		return limSwitch.get();
+	}
+	
 }
