@@ -1,6 +1,9 @@
 package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
@@ -9,8 +12,8 @@ public class Sensors {
 	private int timeoutMs = 10;
 	private int pidIdx = 0;
 	private int encTicksPerRot = 1440;
-	private int acc = 600; // Acceleration
-	private int cruiseVel = 600; // Cruise Velocity 
+	private int acc = 150; // Acceleration
+	private int cruiseVel = 300; // Cruise Velocity 
 	
 	private boolean setEnc = false;
 	private boolean initEnc = false;
@@ -20,12 +23,12 @@ public class Sensors {
 	private double whlSize; // Robot wheel size
 	private double roboDim; // Robot diagonal distance between wheels
 	
-	private WPI_TalonSRX _frontLeftMotor;
-	private WPI_TalonSRX _rearLeftMotor;
-	private WPI_TalonSRX _frontRightMotor;
-	private WPI_TalonSRX _rearRightMotor;
+	private  WPI_TalonSRX _frontLeftMotor;
+	private  WPI_TalonSRX _rearLeftMotor;
+	private  WPI_TalonSRX _frontRightMotor;
+	private  WPI_TalonSRX _rearRightMotor;
 	
-	public boolean setEncoders (WPI_TalonSRX _frontLeftMotorIn, WPI_TalonSRX _rearLeftMotorIn, WPI_TalonSRX _frontRightMotorIn, WPI_TalonSRX _rearRightMotorIn) {
+	public  boolean setEncoders (WPI_TalonSRX _frontLeftMotorIn, WPI_TalonSRX _rearLeftMotorIn, WPI_TalonSRX _frontRightMotorIn, WPI_TalonSRX _rearRightMotorIn) {
 		_frontLeftMotor = _frontLeftMotorIn;
 		_rearLeftMotor = _rearLeftMotorIn;
 		_frontRightMotor = _frontRightMotorIn;
@@ -57,6 +60,8 @@ public class Sensors {
 			// Inverts Motors
 			_frontRightMotor.setInverted(true);
 			_rearRightMotor.setInverted(true);
+			_frontLeftMotor.setInverted(false);
+			_rearLeftMotor.setInverted(false);
 			_frontLeftMotor.setSensorPhase(false);
 			_rearLeftMotor.setSensorPhase(false);
 			_frontRightMotor.setSensorPhase(false);
@@ -79,6 +84,21 @@ public class Sensors {
 			_frontLeftMotor.configNominalOutputReverse(0, timeoutMs);
 			_frontLeftMotor.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
 			_frontLeftMotor.configPeakOutputReverse(-1, timeoutMs);
+			
+			_rearLeftMotor.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
+			_rearLeftMotor.configNominalOutputReverse(0, timeoutMs);
+			_rearLeftMotor.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
+			_rearLeftMotor.configPeakOutputReverse(-1, timeoutMs);
+			
+			_frontRightMotor.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
+			_frontRightMotor.configNominalOutputReverse(0, timeoutMs);
+			_frontRightMotor.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
+			_frontRightMotor.configPeakOutputReverse(-1, timeoutMs);
+			
+			_rearRightMotor.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
+			_rearRightMotor.configNominalOutputReverse(0, timeoutMs);
+			_rearRightMotor.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
+			_rearRightMotor.configPeakOutputReverse(-1, timeoutMs);
 			
 			// Init Sensor to zero
 			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
@@ -194,11 +214,23 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Initalized");
 		}
 		else {
-			_frontLeftMotor.set(ControlMode.MotionMagic, enc );
+			_frontLeftMotor.set(ControlMode.MotionMagic, enc);
 			_frontRightMotor.set(ControlMode.MotionMagic, enc);
 			_rearLeftMotor.set(ControlMode.MotionMagic, enc);
 			_rearRightMotor.set(ControlMode.MotionMagic, enc);
 		}
+		
+		SmartDashboard.putNumber("Front Left Pos: ", _frontLeftMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Front Right Pos: ", _frontRightMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Rear Left Pos: ", _rearLeftMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Rear Right Pos: ", _rearRightMotor.getSelectedSensorPosition(0));
+		
+		SmartDashboard.putNumber("Front Left Vel: ", _frontLeftMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Front Right Vel: ", _frontRightMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Rear Left Vel: ", _rearLeftMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Rear Right Vel: ", _rearRightMotor.getSelectedSensorVelocity(0));
+		
+		
 	}
 	
 	//Make a robot move backwards
