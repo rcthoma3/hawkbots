@@ -7,13 +7,18 @@ public class Autonomous {
 	String gameData;
 	int startpos;
 	SendableChooser<Integer> autoChooser;
-	public boolean setPos = false;
+
 	
 	
 	public String getGameMsg(){
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		return gameData;
 	} 
+	
+	public int getPosition() {
+		return startpos; 
+	}
+	
 	
 	
 	
