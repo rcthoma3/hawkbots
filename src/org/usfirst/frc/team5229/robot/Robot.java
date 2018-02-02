@@ -7,6 +7,7 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
@@ -20,7 +21,11 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 public class Robot extends IterativeRobot {
 	
 	MecanumDrive _drive;
+	
 	ControllerLogitech myController = new ControllerLogitech();
+	Climbing myClimber = new Climbing();
+	Elevator myElevator = new Elevator();
+	
 	
 	//UsbCamera Camera1;
 	//UsbCamera Camera2;
@@ -103,6 +108,11 @@ public class Robot extends IterativeRobot {
 		
 		// Set Max output
 		_drive.setMaxOutput(0.6);	
+		
+		PWM climbMotor = new PWM(0);
+		myClimber.setClimbMotor(climbMotor);
+		myClimber.setSwitches(0);
+		
 	}
 
 
@@ -114,6 +124,9 @@ public class Robot extends IterativeRobot {
 		
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0); // Found in example
 
+		if (myController.getButtonY()) { myClimber.raiseElevator(.3); }
+		if (myController.getButtonA()) { myClimber.lowerElavator(.3); }
+		
 		Timer.delay(0.005); // Saw this in an example
 	}
 
