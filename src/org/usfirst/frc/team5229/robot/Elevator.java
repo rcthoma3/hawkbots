@@ -15,6 +15,7 @@ public class Elevator {
 	private PWM _rightMoter;
 	private boolean  setMoters;
 	
+	
 	public boolean setElevator(WPI_TalonSRX elevatorMoterIn) {
 		_elevatorMoter = elevatorMoterIn;
 		setElevator = true;
