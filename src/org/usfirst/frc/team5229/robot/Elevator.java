@@ -1,7 +1,7 @@
 package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -65,6 +65,23 @@ public class Elevator {
     		
     	}
     		
+    } 
+    
+    public void raiseElevatorDis(double dis) {
+    	boolean sensorpressed = upperSwitch.getstate();
+    	
+    	if(!setSwitches) {
+    		System.err.println("Error: Switches not set up.");
+    	}else if(!setElevator){
+    		System.err.println("Error: Elevator moter not set up.");
+    	}else if(!inElevator){
+    		System.err.println("Error: Elevator moter not initialized");
+    	}else {
+    		while(sensorpressed) {
+    			_elevatorMoter.set(ControlMode.Position, dis);
+    		}
+    		
+    	}
     }
     
     public void lowerElevator (double speed) {
@@ -78,6 +95,22 @@ public class Elevator {
     	}else {
     		while(sensorpressed) {
     			_elevatorMoter.set(-speed);
+    			
+    		}
+    	}
+    }
+    
+    public void lowerElevatorDis(double dis) {
+    	boolean sensorpressed = lowerSwitch.getstate();
+    	if(!setSwitches) {
+    		System.err.println("Error: Switches not set up.");
+    	}else if(!setElevator){
+    		System.err.println("Error: Elevator moter not set up.");
+    	}else if(!inElevator) {
+    		System.err.println("Error: Elevator moter not initialized");
+    	}else {
+    		while(sensorpressed) {
+    			_elevatorMoter.set(ControlMode.Postion, dis);
     			
     		}
     	}
