@@ -77,7 +77,7 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		while(sensorpressed) {
-    			_elevatorMoter.set(speed);
+    			_elevatorMoter.set(-speed);
     			
     		}
     	}
