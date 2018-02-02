@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.VictorSP;
 public class Elevator {
 	private WPI_TalonSRX _elevatorMoter;
 	private boolean setElevator = false;
@@ -31,9 +32,9 @@ public class Elevator {
 		return setSwitches;
 	}
 	
-	public boolean setMoters(PWM _leftMoterIn, PWM _rightMoterIn) {
-		_leftMoter = _leftMoterIn;
-		_rightMoter = _rightMoterIn;
+	public boolean setMoters(int _leftMoterIn, int _rightMoterIn) {
+		_leftMoter = new VictorSP(_leftMoterIn);
+		_rightMoter = new VictorSP(_rightMoterIn);
 		setMoters = true;
 		return setMoters;
 	}
