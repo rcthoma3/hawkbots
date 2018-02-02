@@ -14,6 +14,7 @@ public class Elevator {
 	private PWM _leftMoter;
 	private PWM _rightMoter;
 	private boolean  setMoters;
+	private Sensors grabSwitch;
 	
 	
 	public boolean setElevator(WPI_TalonSRX elevatorMoterIn) {
@@ -22,9 +23,10 @@ public class Elevator {
 		return setElevator;
 	}
 	
-	public boolean setSwitches(int upperSwitchIn, int lowerSwitchIn) {
+	public boolean setSwitches(int upperSwitchIn, int lowerSwitchIn, int grabSwitchIn) {
 		upperSwitch.limitswitch(upperSwitchIn);
 		lowerSwitch.limitswitch(lowerSwitchIn);
+		grabSwitch.limitswitch(grabSwitchIn);
 		setSwitches = true;
 		return setSwitches;
 	}
@@ -51,6 +53,10 @@ public class Elevator {
     	
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
+    	}else if(!setElevator){
+    		System.err.println("Error: Elevator moter not set up.");
+    	}else if(!inElevator){
+    		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		while(sensorpressed) {
     			_elevatorMoter.set(speed);
@@ -64,6 +70,10 @@ public class Elevator {
     	boolean sensorpressed = lowerSwitch.getstate();
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
+    	}else if(!setElevator){
+    		System.err.println("Error: Elevator moter not set up.");
+    	}else if(!inElevator) {
+    		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		while(sensorpressed) {
     			_elevatorMoter.set(speed);
@@ -73,20 +83,37 @@ public class Elevator {
     }
     
     public void grabBlock(double speed) {
+    	boolean sensorpressed = grabSwitch.getState();
     	if(!setMoters) {
     		System.err.println("Error: Grabbing moters are not set up");
+    	}else if(!setSwitches){
+    		System.err.println("Error: Grab Switch not set up");
     	}else {
+    		if(!sensorpressed){
     		_leftMoter.setSpeed(speed);
     		_rightMoter.setSpeed(-speed);
+    		
+    		}else {
+    			_leftMoter.setSpeed(0);
+    			_rightMoter.setSpeed(0);
+    		}
     	}
     }
     
     public void ejectBlock(double speed) {
+    	boolean sensorpressed = grabSwitch.getstate();
     	if(!setMoters) {
     		System.err.println("Error: Grabbing moters are not set up.");
+    	}else if(!setSwitches){
+    		System.err.println("Error: Grab Switch not set up");
     	}else {
+    		if(!sensorpressed) {
     		_leftMoter.setSpeed(-speed);
     		_rightMoter.setSpeed(speed);
+    		}else {
+    			_leftMoter.setSpeed(0);
+    			_rightMoter.setSpeed(0);
+    		}
     	}
     }
     
