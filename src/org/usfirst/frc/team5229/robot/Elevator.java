@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class Elevator {
-	private WPI_TalonSRX _elevatorMoter=0;
+	private WPI_TalonSRX _elevatorMoter;
 	private boolean setElevator = false;
 	private boolean initElevator = false; 
 	private Sensors upperSwitch;

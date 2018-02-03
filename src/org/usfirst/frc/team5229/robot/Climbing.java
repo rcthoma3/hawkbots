@@ -22,7 +22,7 @@ public class Climbing {
 	//Initialize climb motor with PWM
 	//IN:PWM the motor is connected to
 	//OUT:setMotor is true
-	public boolean setClimbMotor (PWM m_climbMotorIn) {
+	public boolean setClimbMotor (VictorSP m_climbMotorIn) {
 		m_climbMotor = m_climbMotorIn;
 		setMotor = true;
 		return setMotor;
