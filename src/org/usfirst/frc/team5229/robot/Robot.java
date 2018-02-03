@@ -1,18 +1,13 @@
 package org.usfirst.frc.team5229.robot;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.AxisType;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,63 +17,54 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	ControllerLogitech myController = new ControllerLogitech();
-	//RobotMovement myRobot = new RobotMovement(myController);
-	//Sensors mySensors = new Sensors();
-	//auto myAuto = new auto(mySensors,myRobot);
-	//public static int kBasePort;
-	//public static int kSize640x480;
-	//public static int kSize320x240;
-	//public static int kSize160x120;
-	//boolean aLast = false;
-	//boolean aWasPressed = false;
-	//boolean bLast = false;
-	//boolean xLast = false;
-	//boolean yLast = false;
-	UsbCamera Camera1;
-	UsbCamera Camera2;
-	
-	//Timer timer = new Timer();
-	//https://mililanirobotics.gitbooks.io/frc-electrical-bible/content/Drive_Code/custom_program_mecanum_drive.html
-	
-	/*
-	 * IMPORTANT UPDATES 1/11/2018
-	 * Updated FRC Plugins, due to deprecated RobotDrive functionality.
-	 * MecanumDrive functions replaced RobotDrive.
-	 * CANTalon temporarily replaced by Talon (CANTalon isn't recognized properly for the updated library)
-	 * Talon libraries may need to be updated (Check their documentation)
-	 * Main branch has been moved to Master2018
-	 * ControllerLogitech has been updated on previous Master branch, needs to be merged into Master2018.
-	 * For compiling with the new libraries, Roborio needs to be reimaged. This can be a TODO for Wednesday, 1/17/2018
-	 */
-	
-	Talon _frontLeftMotor = new Talon(7); 
-	Talon _rearLeftMotor = new Talon(5);
-	Talon _frontRightMotor = new Talon(8);
-	Talon _rearRightMotor = new Talon(6);
-	
-	//public Joystick stick = new Joystick(0);
-	MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
-	
-	
 
+	ControllerLogitech myController = new ControllerLogitech();
+	Climbing myClimber = new Climbing();
+	Elevator myElevator = new Elevator();
+	Sensors myAutonRobot = new Sensors();
+	
+	//UsbCamera Camera1;
+	//UsbCamera Camera2;
+	
+	MecanumDrive _drive;
+	
+	// Motor Declerations 
+	WPI_TalonSRX _frontLeftMotor; 
+	WPI_TalonSRX _rearLeftMotor;
+	WPI_TalonSRX _frontRightMotor;
+	WPI_TalonSRX _rearRightMotor;
+	//TODO: Declare elevator motor
+	//TODO: Declare climb motor
+	//TODO: Declare left claw motor
+	//TODO: Declare right claw motor
+
+	// These values correspond to roboRIO ports
+	// TODO: Global variable for top elevator switch 
+	// TODO: Global variable for bottom elevator switch
+	// TODO: Global variable for top climb switch
+	// TODO: Global variable for bottom climb switch
+	// TODO: Global Variable for left claw motor
+	// TODO: Global Variable for right claw motor
+	// TODO: Global Variable for elevator motor
+	// TODO: Global Variable for climb motor
+	
+	double whlSize = 8; // Wheel diameter in inches
+	double roboDim = 30; // Diagonal distance between wheels in inches
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
-		Camera1 = CameraServer.getInstance().startAutomaticCapture();
-		Camera2 = CameraServer.getInstance().startAutomaticCapture();
 		
-		//_frontLeftMotor.changeControlMode(TalonControlMode.Voltage); 
-		//_rearLeftMotor.changeControlMode(TalonControlMode.Voltage);
-		//_frontRightMotor.changeControlMode(TalonControlMode.Voltage);
-		//_rearRightMotor.changeControlMode(TalonControlMode.Voltage);
+		_frontLeftMotor = new WPI_TalonSRX(6); 
+		_rearLeftMotor = new WPI_TalonSRX(8);
+		_frontRightMotor = new WPI_TalonSRX(5);
+		_rearRightMotor = new WPI_TalonSRX(7);
 		
-		// One side will be inverted, but may not be left
-		_frontLeftMotor.setInverted(true);
-		_rearLeftMotor.setInverted(true);
+		//Camera1 = CameraServer.getInstance().startAutomaticCapture();
+		//Camera2 = CameraServer.getInstance().startAutomaticCapture();
 		
 		// Initialize to zero
 		_frontLeftMotor.set(0);
@@ -86,29 +72,22 @@ public class Robot extends IterativeRobot {
 		_frontRightMotor.set(0);
 		_rearRightMotor.set(0);
 		
-		// Something to do with safety 
-		_drive.setSafetyEnabled(true);
-		_drive.setExpiration(0.1);
+		//TODO: setAutoChooser	
 	}
-	
-	/**
-	 * 
-	 */
 	
 
 	/**
 	 * This function is run once each time the robot enters autonomous mode
 	 */
 	@Override
-	public void autonomousInit() {		
-		String gameData;
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		if(gameData.charAt(0) == 'L')
-		{
-			//Put left auto code here
-		} else {
-			//Put right auto code here
-		}
+	public void autonomousInit() {
+		
+		myAutonRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
+		myAutonRobot.setWheelSize(whlSize);
+		myAutonRobot.setChassisSize(roboDim);	
+		myAutonRobot.initEncoders();
+		//TODO: getGameMsg
+		//TODO: getPosition
 	}
 
 	/**
@@ -117,6 +96,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
+		myAutonRobot.driveFowardAuto(120);
+		
+		Timer.delay(0.005);
 	}
 
 	/**
@@ -125,9 +107,21 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopInit() {	
-		_drive.setMaxOutput(.6);
+		
+		// Initialize mecanum drive
+		_drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);		
+		
+		// Something to do with safety 
+		_drive.setSafetyEnabled(true);
+		_drive.setExpiration(0.1);
+		
+		// Set Max output
+		_drive.setMaxOutput(0.6);	
+		
+		PWM climbMotor = new PWM(0); // TODO: change PWM to Victor SP
+		myClimber.setClimbMotor(climbMotor);
+		myClimber.setSwitches(0);	
 	}
-
 
 	/**
 	 * This function is called periodically during operator control
@@ -135,29 +129,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {	
 		
-		_drive.driveCartesian(myController.getLeftJoyX(), myController.getLeftJoyY(), -myController.getRightJoyX(), 0); // Found in example
-		//_drive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.TwistZ(), 0); // Found in example FRC
-		//_drive.mecanumDrive_Cartesian(stick.getX(GenericHID.Hand.kLeft), stick.getY(GenericHID.Hand.kLeft), stick.getX(GenericHID.Hand.kRight), 0); // My Idea
-		Timer.delay(0.005); // Saw this in an example
-		
-		// Possible Improvements
-		/*
-		double leftYjoystick = stick.getY(GenericHID.Hand.kLeft);
-		double leftXjoystick = stick.getX(GenericHID.Hand.kLeft);
-		//double rightYjoystick = stick.getY(GenericHID.Hand.kRight);
-		double rightXjoystick = stick.getX(GenericHID.Hand.kRight);
-		
-		double lfPower = (-leftXjoystick + leftYjoystick + rightXjoystick)/3;
-		double lbPower = (leftXjoystick + leftYjoystick + rightXjoystick)/3;
-		double rfPower = (leftXjoystick + leftYjoystick + rightXjoystick)/3;
-		double rbPower = (-leftXjoystick + leftYjoystick + rightXjoystick)/3;
-		
-		_frontLeftMotor.set(12.0 * lfPower);
-		_rearLeftMotor.set(12.0 * rfPower);
-		_frontRightMotor.set(12.0 * lbPower);
-		_rearRightMotor.set(12.0 * rbPower);
-		*/
+		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);
 
+		if (myController.getButtonY()) { myClimber.raiseElevator(.3); }
+		if (myController.getButtonA()) { myClimber.lowerElavator(.3); }
+		// TODO: raise front elevator to max
+		// TODO: lower front elevator to min
+		// TODO: raise front elevator to dis
+		// TODO: lower front elevator to dis
+		// TODO: grab block
+		// TODO: eject block
+		
+		Timer.delay(0.005);
 	}
 
 	/**
@@ -165,6 +148,19 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		LiveWindow.run();
+		
+		
 	}
+	
+	/* Ethans thoughts on TeleOp
+	 * function to keep robot from curving when driving forward
+	 * function to act as gateway between controller and any items the controller is activating if needed
+	 * function to set robot to starting and/or ending configuration using a button on the controller
+	 * function that activates the controller when auton ends so there is no chance of the controller interfering with auton
+	 * function to disable any blocks black on the movement range of robot pieces to keep robot within allowed height/length/width/etc
+	 * function that allows you to press a button on the controller and let go while the part activated keeps moving to allow for more things to be done at once if needed. EX: press a button versus hold for an evelvator to go up or down
+	 * function that disables controller at end of teleop for a set amount of time so there's no chance of continuing to move the robot after time is up
+	 * function to override auton and skip to teleop for testing or any other purpose using the controller or something else
+	 * any other functions that fit best inside the TeleOp class 
+	 * */
 }
