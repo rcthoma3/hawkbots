@@ -10,6 +10,10 @@ public class Autonomous {
 	private int startpos = 0;//Determine the start position of the robot
 	private SendableChooser<Integer> autoChooser;//Created a method that allowed driver to input position
 	private boolean setAutoChooser = false;//Check if AutoChooser is set up
+	Sensors sensor = new Sensors();
+	Elevator elevator = new Elevator();
+	public double autoSpeed = 0.3;
+	public int autoDis = 0;
    
 	
 	//Return game string
@@ -71,6 +75,55 @@ public class Autonomous {
 		return secondSwitch;
 	}
 	
-	//TODO: Function to pick path
+	public void followPath() {
+		char MySwitch = getMySwitch();
+		int myPosition = getPositoin();
+		if(myPosition == 0) {
+			if(MySwitch == 'L') {
+				sensor.driveFowardAuto(168);
+				sensor.turnRobotRight(90);
+				elevator.raiseElevatorDis(autoDis);
+				elevator.ejectBlock(autoSpeed);
+			}else if (MySwitch == 'R') {
+				sensor.driveFowardAuto(140);
+				sensor.turnRobotRight(90);
+				sensor.driveFowardAuto(5);
+				sensor.turnRobotRight(75);
+			}
+		}else if(myPosition == 1) {
+			if(MySwitch == 'L') {
+				sensor.driveFowardAuto(125);
+				sensor.turnRobotLeft(90);
+				sensor.driveFowardAuto(3);
+				sensor.turnRobotRight(90);
+				sensor.driveFowardAuto(15);
+				elevator.raiseElevatorDis(autoDis);
+				elevator.ejectBlock(autoSpeed);
+			}else if(MySwitch == 'R') {
+				sensor.driveFowardAuto(125);
+				sensor.turnRobotRight(90);
+				sensor.driveFowardAuto(3);
+				sensor.turnRobotLeft(90);
+				sensor.driveFowardAuto(15);
+				elevator.raiseElevatorDis(autoDis);
+				elevator.ejectBlock(autoSpeed);
+			}
+		}else if(myPosition == 2) {
+			if(MySwitch == 'L') {
+			sensor.driveFowardAuto(140);
+			sensor.turnRobotLeft(75);
+			
+			}else if(MySwitch == 'R') {
+				sensor.driveFowardAuto(125);
+				sensor.turnRobotRight(90);
+				sensor.driveFowardAuto(8);
+				sensor.turnRobotLeft(90);
+				sensor.driveFowardAuto(30);
+				elevator.raiseElevatorDis(autoDis);
+				elevator.ejectBlock(autoSpeed);
+			}
+			
+		}
+	}
 	
 }
