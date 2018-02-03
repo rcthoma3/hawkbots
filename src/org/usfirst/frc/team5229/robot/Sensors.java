@@ -36,7 +36,9 @@ public class Sensors {
 	
 	private DigitalInput limSwitch;
 	
-	// TODO: Add Comments
+	// Set Encoders/Talons 
+	//in:All 4 Encoders or Motor Controllers
+	//out:setEnc
 	public  boolean setEncoders (WPI_TalonSRX _frontLeftMotorIn, WPI_TalonSRX _rearLeftMotorIn, WPI_TalonSRX _frontRightMotorIn, WPI_TalonSRX _rearRightMotorIn) {
 		_frontLeftMotor = _frontLeftMotorIn;
 		_rearLeftMotor = _rearLeftMotorIn;
@@ -54,14 +56,18 @@ public class Sensors {
 		return setEnc;
 	}
 	
-	// TODO: Add Comments
+	// Set up wheel size
+	//in:whlSizeIn or the size of the wheel
+	//out:setWhlSize
 	public boolean setWheelSize(double whlSizeIn) {
 		whlSize = whlSizeIn;
 		setWhlSize = true;
 		return setWhlSize;
 	}
 	
-	// TODO: Add Comments
+	// Set the distance between the diagonal wheels
+	//in:ChsSizeIn or the Chassis Size
+	//out:setChsSize
 	public boolean setChassisSize(double ChsSizeIn) {
 		roboDim = ChsSizeIn;
 		setChsSize = true;
@@ -70,7 +76,7 @@ public class Sensors {
 	
 	//Intiate Encoders or WPI Talons
 	//in:4 Motor Controllers
-	//out:nothing
+	//out:intEnc
 	public boolean initEncoders() {
 		if (!setEnc) {
 			System.err.println("ERROR: Encoders Not Set");
@@ -311,7 +317,9 @@ public class Sensors {
 		}
 	}
 	
-	// TODO: Add Comments
+	// Set up the limit switch
+	//in:input
+	//out:limswitch
 	public DigitalInput limitswitch (int input) {
 		
 		limSwitch = new DigitalInput(1);
@@ -319,13 +327,17 @@ public class Sensors {
 		return limSwitch;
 	}
 	
-	// TODO: Add Comments
+	// Get the state of the limit switch
+	//in:nothing
+	//out:limSwitch.get()
 	public boolean getstate () {
 		
 		return limSwitch.get();
 	}
 	
-	// TODO: Add Comments
+	// Check the Encoders to see if they work properly
+	//in:nothing
+	//out:nothing
 	public void checkEncoders() {
 		//Get encoder positions
 		int frontLeft = _frontLeftMotor.getSelectedSensorPosition(0);
