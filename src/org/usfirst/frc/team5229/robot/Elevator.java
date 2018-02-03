@@ -2,15 +2,15 @@ package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.VictorSP;
+
 public class Elevator {
 	private WPI_TalonSRX _elevatorMoter;
 	private boolean setElevator = false;
-	private boolean inElevator = false; 
-	public Sensors upperSwitch;
-	public Sensors lowerSwitch;
+	private boolean initElevator = false; 
+	private Sensors upperSwitch;
+	private Sensors lowerSwitch;
 	private boolean setSwitches = false;
 	private PWM _leftMoter;
 	private PWM _rightMoter;
@@ -20,6 +20,7 @@ public class Elevator {
 	
 	public boolean setElevator(WPI_TalonSRX elevatorMoterIn) {
 		_elevatorMoter = elevatorMoterIn;
+		// TODO: Initialize to zero
 		setElevator = true;
 		return setElevator;
 	}
@@ -40,13 +41,17 @@ public class Elevator {
 	}
 	
 	
-	public boolean inElevator() {
+	public boolean initElevator() {
 		if(!setElevator) {
 			System.err.println("Error: Elevator Moter not set up yet.");
 		}else {
-			inElevator = true;
+			// TODO: Init Encoders
+			// TODO: Set the peak and nominal outputs, 12V means full
+			// TODO: Init Sensor to zero
+			// TODO: PID controls
+			initElevator = true;
 		}
-		return inElevator;
+		return initElevator;
 	}
 	
     public void raiseElevator(double speed) {
@@ -56,11 +61,11 @@ public class Elevator {
     		System.err.println("Error: Switches not set up.");
     	}else if(!setElevator){
     		System.err.println("Error: Elevator moter not set up.");
-    	}else if(!inElevator){
+    	}else if(!initElevator){
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
-    		while(sensorpressed) {
-    			_elevatorMoter.set(speed);
+    		if(!sensorpressed) {
+    			_elevatorMoter.set(ControlMode.Velocity, speed);
     		}
     		
     	}
@@ -74,10 +79,10 @@ public class Elevator {
     		System.err.println("Error: Switches not set up.");
     	}else if(!setElevator){
     		System.err.println("Error: Elevator moter not set up.");
-    	}else if(!inElevator){
+    	}else if(!initElevator){
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
-    		while(sensorpressed) {
+    		if(!sensorpressed) {
     			_elevatorMoter.set(ControlMode.Position, dis);
     		}
     		
@@ -90,11 +95,11 @@ public class Elevator {
     		System.err.println("Error: Switches not set up.");
     	}else if(!setElevator){
     		System.err.println("Error: Elevator moter not set up.");
-    	}else if(!inElevator) {
+    	}else if(!initElevator) {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
-    		while(sensorpressed) {
-    			_elevatorMoter.set(-speed);
+    		if(!sensorpressed) {
+    			_elevatorMoter.set(ControlMode.Velocity, -speed);
     			
     		}
     	}
@@ -106,27 +111,26 @@ public class Elevator {
     		System.err.println("Error: Switches not set up.");
     	}else if(!setElevator){
     		System.err.println("Error: Elevator moter not set up.");
-    	}else if(!inElevator) {
+    	}else if(!initElevator) {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
-    		while(sensorpressed) {
-    			_elevatorMoter.set(ControlMode.Postion, dis);
+    		if(!sensorpressed) {
+    			_elevatorMoter.set(ControlMode.Position, dis);
     			
     		}
     	}
     }
     
     public void grabBlock(double speed) {
-    	boolean sensorpressed = grabSwitch.getState();
+    	boolean sensorpressed = grabSwitch.getstate();
     	if(!setMoters) {
     		System.err.println("Error: Grabbing moters are not set up");
     	}else if(!setSwitches){
     		System.err.println("Error: Grab Switch not set up");
     	}else {
     		if(!sensorpressed){
-    		_leftMoter.setSpeed(speed);
-    		_rightMoter.setSpeed(-speed);
-    		
+    			_leftMoter.setSpeed(speed);
+    			_rightMoter.setSpeed(-speed);		
     		}else {
     			_leftMoter.setSpeed(0);
     			_rightMoter.setSpeed(0);
@@ -142,14 +146,12 @@ public class Elevator {
     		System.err.println("Error: Grab Switch not set up");
     	}else {
     		if(!sensorpressed) {
-    		_leftMoter.setSpeed(-speed);
-    		_rightMoter.setSpeed(speed);
+    			_leftMoter.setSpeed(-speed);
+    			_rightMoter.setSpeed(speed);
     		}else {
     			_leftMoter.setSpeed(0);
     			_rightMoter.setSpeed(0);
     		}
     	}
-    }
-    
-    
+    }    
 }
