@@ -188,15 +188,15 @@ public class ControllerLogitech
  //Is the Right Trigger button pressed or not
  //in: nothing
  //out: is a button pressed, double
- public double RightTrigger() {    
+ public double getRightTrigger() {    
 	 return stick.getRawAxis(3);
  }
  
  //Is the Left Trigger button pressed or not
  //in: nothing 
  //out: is a button pressed, double
- public double LeftTrigger() {
-	 return stick.getRawAxis(2);
+ public double getLeftTrigger() {
+	 return stick.getRawAxis(3);
  }
  
  //Is the B button pressed or not
@@ -296,22 +296,6 @@ public class ControllerLogitech
  //out: is a button pressed, boolean
  public boolean getButtonLeftD() {
 	 return stick.getPOV()==270;
- }
- 
- //Is the Right Trigger button pressed or not
- //in:nothing
- //out: is a button pressed, float
- public int getRightTrigger() {
-	 int rt=0;
-	 return rt;
- }
- 
- //Is the Left Trigger button pressed or not
- //in: nothing
- //out: is a button pressed, float
- public int getLeftTrigger() {
-	 int rt=0;
-	 return rt; 
  }
  
  //Is the Right Joy button pressed or not
