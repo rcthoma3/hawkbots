@@ -56,9 +56,9 @@ public class Robot extends IterativeRobot {
 	int topClimbPort = 0;
 	int bottomClimbPort = 3;
 	//PWM
-	int leftClawPort = 2;
+	int leftClawPort = 0;
 	int rightClawPort = 1;
-	int climbMotorPort = 0;
+	int climbMotorPort = 2;
 		
 	double whlSize = 8; // Wheel diameter in inches
 	double roboDim = 30; // Diagonal distance between wheels in inches
@@ -134,7 +134,9 @@ public class Robot extends IterativeRobot {
 		topClimbSwitch = new DigitalInput(topClimbPort);
 		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
 		myClimber.setClimbMotor(_climbMotor);
-		myClimber.setSwitches(topClimbSwitch, bottomClimbSwitch);	
+		myClimber.setSwitches(topClimbSwitch, topClimbSwitch);
+		_leftClawMotor = new VictorSP(leftClawPort);
+		_rightClawMotor = new VictorSP(rightClawPort);
 	}
 
 	/**
@@ -145,8 +147,10 @@ public class Robot extends IterativeRobot {
 		
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);
 		
-		System.out.println("Y: " + myController.getButtonY());
-		System.out.println("A: " + myController.getButtonA());
+		//System.out.println("Y: " + myController.getButtonY());
+		//System.out.println("A: " + myController.getButtonA());
+		
+		myClimber.checkSwitches(false);
 		
 		if (myController.getButtonY()) { myClimber.raiseElevator(.3); }
 		if (myController.getButtonA()) { myClimber.lowerElavator(.3); }
@@ -156,7 +160,8 @@ public class Robot extends IterativeRobot {
 		if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(0); } 
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(.3); }
 		if (myController.getButtonRightBumber()) { myElevator.ejectBlock(.3); }
-		myClimber.checkSwitches(false);
+		
+		
 		
 		Timer.delay(0.005);
 	}
