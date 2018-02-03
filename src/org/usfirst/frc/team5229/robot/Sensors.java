@@ -31,21 +31,32 @@ public class Sensors {
 	
 	private DigitalInput limSwitch;
 	
+	// TODO: Add Comments
 	public  boolean setEncoders (WPI_TalonSRX _frontLeftMotorIn, WPI_TalonSRX _rearLeftMotorIn, WPI_TalonSRX _frontRightMotorIn, WPI_TalonSRX _rearRightMotorIn) {
 		_frontLeftMotor = _frontLeftMotorIn;
 		_rearLeftMotor = _rearLeftMotorIn;
 		_frontRightMotor = _frontRightMotorIn;
 		_rearRightMotor = _rearRightMotorIn;
+		
+        // Initialize to zero
+		_frontLeftMotor.set(0);
+		_rearLeftMotor.set(0);
+		_frontRightMotor.set(0);
+		_rearRightMotor.set(0);	
+		
 		setEnc = true;
+		
 		return setEnc;
 	}
 	
+	// TODO: Add Comments
 	public boolean setWheelSize(double whlSizeIn) {
 		whlSize = whlSizeIn;
 		setWhlSize = true;
 		return setWhlSize;
 	}
 	
+	// TODO: Add Comments
 	public boolean setChassisSize(double ChsSizeIn) {
 		roboDim = ChsSizeIn;
 		setChsSize = true;
@@ -69,12 +80,6 @@ public class Sensors {
 			_rearLeftMotor.setSensorPhase(false);
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
-			
-	        // Initialize to zero
-			_frontLeftMotor.set(0);
-			_rearLeftMotor.set(0);
-			_frontRightMotor.set(0);
-			_rearRightMotor.set(0);	
 			
 			// Init Encoders
 			_frontLeftMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0); // (feedbackDevice, int pidIdx, int timeoutMs)
@@ -136,13 +141,7 @@ public class Sensors {
 			_rearRightMotor.config_kP(0, 3.2, timeoutMs);
 			_rearRightMotor.config_kI(0, 0.02, timeoutMs);
 			_rearRightMotor.config_kD(0, 32, timeoutMs);
-			
-			// Init Sensor to zero
-			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs)
-			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			_frontRightMotor.setSelectedSensorPosition(0,pidIdx, timeoutMs);
-			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			
+
 			// Init acceleration and cruise velocity - MotionMagic
 			_frontLeftMotor.configMotionCruiseVelocity(cruiseVel, timeoutMs); //(int sensorUnitsPer100ms, int timeoutMs)
 			_frontLeftMotor.configMotionAcceleration(acc, timeoutMs); //(int sensorUnitsPer100msPerSec, int timeoutMs)
@@ -306,7 +305,8 @@ public class Sensors {
 			_rearRightMotor.set(ControlMode.MotionMagic, enc);
 		}
 	}
-
+	
+	// TODO: Add Comments
 	public DigitalInput limitswitch (int input) {
 		
 		limSwitch = new DigitalInput(1);
@@ -314,6 +314,7 @@ public class Sensors {
 		return limSwitch;
 	}
 	
+	// TODO: Add Comments
 	public boolean getstate () {
 		
 		return limSwitch.get();
