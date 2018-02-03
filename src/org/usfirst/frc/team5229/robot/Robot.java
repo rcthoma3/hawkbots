@@ -156,6 +156,7 @@ public class Robot extends IterativeRobot {
 		if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(0); } 
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(.3); }
 		if (myController.getButtonRightBumber()) { myElevator.ejectBlock(.3); }
+		myClimber.checkSwitches(false);
 		
 		Timer.delay(0.005);
 	}
