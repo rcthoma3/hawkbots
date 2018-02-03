@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 /**
@@ -21,11 +22,12 @@ public class Robot extends IterativeRobot {
 	ControllerLogitech myController = new ControllerLogitech();
 	Climbing myClimber = new Climbing();
 	Elevator myElevator = new Elevator();
-	Sensors myAutonRobot = new Sensors();
+	Sensors myRobot = new Sensors();
+	Autonomous myAutonRobot = new Autonomous();
 	
 	//UsbCamera Camera1;
 	//UsbCamera Camera2;
-	
+		
 	MecanumDrive _drive;
 	
 	// Motor Declerations 
@@ -33,21 +35,28 @@ public class Robot extends IterativeRobot {
 	WPI_TalonSRX _rearLeftMotor;
 	WPI_TalonSRX _frontRightMotor;
 	WPI_TalonSRX _rearRightMotor;
-	//TODO: Declare elevator motor
-	//TODO: Declare climb motor
-	//TODO: Declare left claw motor
-	//TODO: Declare right claw motor
+	WPI_TalonSRX _elevatorMotor;
+	VictorSP _climbMotor;
+	VictorSP _leftClawMotor;
+	VictorSP _rightClawMotor;
 
 	// These values correspond to roboRIO ports
-	// TODO: Global variable for top elevator switch 
-	// TODO: Global variable for bottom elevator switch
-	// TODO: Global variable for top climb switch
-	// TODO: Global variable for bottom climb switch
-	// TODO: Global Variable for left claw motor
-	// TODO: Global Variable for right claw motor
-	// TODO: Global Variable for elevator motor
-	// TODO: Global Variable for climb motor
-	
+	//Can
+	int frontLeftMotorPort = 6;
+	int rearLeftMotorPort = 8;
+	int frontRightMotorPort = 5;
+	int rearRightMotorPort = 7;
+	int elevatorMotorPort = 9;
+	//DIO
+	int topElevatorPort = 0;
+	int bottomElevatorPort = 1;
+	int topClimbPort = 2;
+	int bottomClimbPort = 3;
+	//PWM
+	int leftClawPort = 0;
+	int rightClawPort = 1;
+	int climbMotorPort = 2;
+		
 	double whlSize = 8; // Wheel diameter in inches
 	double roboDim = 30; // Diagonal distance between wheels in inches
 	
@@ -58,10 +67,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		
-		_frontLeftMotor = new WPI_TalonSRX(6); 
-		_rearLeftMotor = new WPI_TalonSRX(8);
-		_frontRightMotor = new WPI_TalonSRX(5);
-		_rearRightMotor = new WPI_TalonSRX(7);
+		_frontLeftMotor = new WPI_TalonSRX(frontLeftMotorPort); 
+		_rearLeftMotor = new WPI_TalonSRX(rearLeftMotorPort);
+		_frontRightMotor = new WPI_TalonSRX(frontRightMotorPort);
+		_rearRightMotor = new WPI_TalonSRX(rearRightMotorPort);
 		
 		//Camera1 = CameraServer.getInstance().startAutomaticCapture();
 		//Camera2 = CameraServer.getInstance().startAutomaticCapture();
@@ -72,7 +81,7 @@ public class Robot extends IterativeRobot {
 		_frontRightMotor.set(0);
 		_rearRightMotor.set(0);
 		
-		//TODO: setAutoChooser	
+		myAutonRobot.setAutoChooser();
 	}
 	
 
@@ -82,12 +91,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		
-		myAutonRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
-		myAutonRobot.setWheelSize(whlSize);
-		myAutonRobot.setChassisSize(roboDim);	
-		myAutonRobot.initEncoders();
-		//TODO: getGameMsg
-		//TODO: getPosition
+		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
+		myRobot.setWheelSize(whlSize);
+		myRobot.setChassisSize(roboDim);	
+		myRobot.initEncoders();
+		String gameMsg = myAutonRobot.getGameMsg();
+		int pos = myAutonRobot.getPositoin();
 	}
 
 	/**
@@ -96,7 +105,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		myAutonRobot.driveFowardAuto(120);
+		myRobot.driveFowardAuto(120);
 		
 		Timer.delay(0.005);
 	}
@@ -118,7 +127,7 @@ public class Robot extends IterativeRobot {
 		// Set Max output
 		_drive.setMaxOutput(0.6);	
 		
-		PWM climbMotor = new PWM(0); // TODO: change PWM to Victor SP
+		VictorSP climbMotor = new VictorSP(0); 
 		myClimber.setClimbMotor(climbMotor);
 		myClimber.setSwitches(0);	
 	}
@@ -133,12 +142,12 @@ public class Robot extends IterativeRobot {
 
 		if (myController.getButtonY()) { myClimber.raiseElevator(.3); }
 		if (myController.getButtonA()) { myClimber.lowerElavator(.3); }
-		// TODO: raise front elevator to max
-		// TODO: lower front elevator to min
-		// TODO: raise front elevator to dis
-		// TODO: lower front elevator to dis
-		// TODO: grab block
-		// TODO: eject block
+		if (myController.getButtonX()) { myElevator.raiseElevator(.3); }
+		if (myController.getButtonB()) { myElevator.lowerElevator(.3); }
+		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevatorDis(0); }
+		if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(0); } 
+		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(.3); }
+		if (myController.getButtonRightBumber()) { myElevator.ejectBlock(.3); }
 		
 		Timer.delay(0.005);
 	}

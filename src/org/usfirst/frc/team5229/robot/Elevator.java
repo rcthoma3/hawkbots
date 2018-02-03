@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class Elevator {
-	private WPI_TalonSRX _elevatorMoter;
+	private WPI_TalonSRX _elevatorMoter=0;
 	private boolean setElevator = false;
 	private boolean initElevator = false; 
 	private Sensors upperSwitch;
@@ -16,16 +16,21 @@ public class Elevator {
 	private PWM _rightMoter;
 	private boolean  setMoters;
 	private Sensors grabSwitch;
+	private int timeoutMs = 10;
+	private int pidIdx = 0;
 	
-	//TODO: Add Comments
+	//Set up Elevator motor
+	//in:elevatorMoterIn
+	//out:setElevator
 	public boolean setElevator(WPI_TalonSRX elevatorMoterIn) {
 		_elevatorMoter = elevatorMoterIn;
-		// TODO: Initialize to zero
 		setElevator = true;
 		return setElevator;
 	}
 	
-	//TODO: Add Comments
+	//Set up Switches
+	//in:uppperSwitchIn, lowerSwitchIn, grabSwitchIn
+	//out:setSwitches
 	public boolean setSwitches(int upperSwitchIn, int lowerSwitchIn, int grabSwitchIn) {
 		upperSwitch.limitswitch(upperSwitchIn);
 		lowerSwitch.limitswitch(lowerSwitchIn);
@@ -34,7 +39,9 @@ public class Elevator {
 		return setSwitches;
 	}
 	
-	//TODO: Add Comments
+	//Set the side motors of the elevator
+	//in:_leftMoterIn, _rightMoterIn
+	//out:setMoters
 	public boolean setMoters(int _leftMoterIn, int _rightMoterIn) {
 		_leftMoter = new VictorSP(_leftMoterIn);
 		_rightMoter = new VictorSP(_rightMoterIn);
@@ -42,21 +49,44 @@ public class Elevator {
 		return setMoters;
 	}
 	
-	//TODO: Add Comments
+	//Initialize the Elevator
+	//in:nothing
+	//out:initElevator
 	public boolean initElevator() {
 		if(!setElevator) {
 			System.err.println("Error: Elevator Moter not set up yet.");
 		}else {
-			// TODO: Init Encoders
-			// TODO: Set the peak and nominal outputs, 12V means full
-			// TODO: Init Sensor to zero
-			// TODO: PID controls
+			//Invert Motor
+			_elevatorMoter.setInverted(false);
+			_elevatorMoter.setSensorPhase(false);
+			
+			//Init Encoders
+			_elevatorMoter.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
+			
+			// Set the peak and nominal outputs, 12V means full
+			_elevatorMoter.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
+			_elevatorMoter.configNominalOutputReverse(0, timeoutMs);
+			_elevatorMoter.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
+			_elevatorMoter.configPeakOutputReverse(-1, timeoutMs);
+			
+			// Init Sensor to zero
+			_elevatorMoter.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
+			// PID controls
+			//Once ElevatorMoter is made, fix the PID Controls
+			_elevatorMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
+			_elevatorMoter.config_kF(0, 0.3, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
+			_elevatorMoter.config_kP(0, 3.0, timeoutMs);
+			_elevatorMoter.config_kI(0, 0.03, timeoutMs);
+			_elevatorMoter.config_kD(0, 30, timeoutMs);
+			
 			initElevator = true;
 		}
 		return initElevator;
 	}
 	
-	//TODO: Add Comments
+	//Raises the Elevator based on speed
+	//in:speed
+	//out:Nothing
     public void raiseElevator(double speed) {
     	boolean sensorpressed = upperSwitch.getstate();
     	
@@ -69,13 +99,17 @@ public class Elevator {
     	}else {
     		if(!sensorpressed) {
     			_elevatorMoter.set(ControlMode.Velocity, speed);
-    		} //TODO: Add else to set speed to zero
+    		} else {
+    			_elevatorMoter.set(ControlMode.Velocity, speed);
+    		}
     		
     	}
     		
     } 
     
-    //TODO: Add Comments
+    //Raises Elevator based on distance
+    //in:Distance
+    //out:nothing
     public void raiseElevatorDis(double dis) {
     	boolean sensorpressed = upperSwitch.getstate();
     	
@@ -93,7 +127,9 @@ public class Elevator {
     	}
     }
     
-    //TODO: Add Comments
+    //Lower Elevator based on speed
+    //in:speed
+    //out:nothing
     public void lowerElevator (double speed) {
     	boolean sensorpressed = lowerSwitch.getstate();
     	if(!setSwitches) {
@@ -106,11 +142,15 @@ public class Elevator {
     		if(!sensorpressed) {
     			_elevatorMoter.set(ControlMode.Velocity, -speed);
     			
-    		} //TODO: Added else to set speed to zero
+    		} else {
+    			_elevatorMoter.set(ControlMode.Velocity, 0);
+    		}
     	}
     }
     
-    //TODO: Add Comments
+    //Lower Elevator based on Distance
+    //in:nothing
+    //out:nothing
     public void lowerElevatorDis(double dis) {
     	boolean sensorpressed = lowerSwitch.getstate();
     	if(!setSwitches) {
@@ -127,7 +167,9 @@ public class Elevator {
     	}
     }
     
-    //TODO: Add Comments
+    //Method that grabs the block
+    //in:speed
+    //out:nothing
     public void grabBlock(double speed) {
     	boolean sensorpressed = grabSwitch.getstate();
     	if(!setMoters) {
@@ -145,7 +187,9 @@ public class Elevator {
     	}
     }
     
-    //TODO: Add Comments
+    //Ejects the block
+    //in:speed
+    //out:nothing
     public void ejectBlock(double speed) {
     	boolean sensorpressed = grabSwitch.getstate();
     	if(!setMoters) {
