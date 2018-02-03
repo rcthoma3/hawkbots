@@ -1,7 +1,5 @@
 package org.usfirst.frc.team5229.robot;
 
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -66,14 +64,6 @@ public class Robot extends IterativeRobot {
 		
 		myRobot.initEncoders();
 		
-		String gameData = "LRL";
-		//gameData = DriverStation.getInstance().getGameSpecificMessage();
-		if(gameData.charAt(0) == 'L')
-		{
-			//Put left auto code here
-		} else {
-			//Put right auto code here
-		}
 	}
 
 	/**

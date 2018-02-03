@@ -17,7 +17,7 @@ public class Elevator {
 	private boolean  setMoters;
 	private Sensors grabSwitch;
 	
-	
+	//TODO: Add Comments
 	public boolean setElevator(WPI_TalonSRX elevatorMoterIn) {
 		_elevatorMoter = elevatorMoterIn;
 		// TODO: Initialize to zero
@@ -25,6 +25,7 @@ public class Elevator {
 		return setElevator;
 	}
 	
+	//TODO: Add Comments
 	public boolean setSwitches(int upperSwitchIn, int lowerSwitchIn, int grabSwitchIn) {
 		upperSwitch.limitswitch(upperSwitchIn);
 		lowerSwitch.limitswitch(lowerSwitchIn);
@@ -33,6 +34,7 @@ public class Elevator {
 		return setSwitches;
 	}
 	
+	//TODO: Add Comments
 	public boolean setMoters(int _leftMoterIn, int _rightMoterIn) {
 		_leftMoter = new VictorSP(_leftMoterIn);
 		_rightMoter = new VictorSP(_rightMoterIn);
@@ -40,7 +42,7 @@ public class Elevator {
 		return setMoters;
 	}
 	
-	
+	//TODO: Add Comments
 	public boolean initElevator() {
 		if(!setElevator) {
 			System.err.println("Error: Elevator Moter not set up yet.");
@@ -54,6 +56,7 @@ public class Elevator {
 		return initElevator;
 	}
 	
+	//TODO: Add Comments
     public void raiseElevator(double speed) {
     	boolean sensorpressed = upperSwitch.getstate();
     	
@@ -66,12 +69,13 @@ public class Elevator {
     	}else {
     		if(!sensorpressed) {
     			_elevatorMoter.set(ControlMode.Velocity, speed);
-    		}
+    		} //TODO: Add else to set speed to zero
     		
     	}
     		
     } 
     
+    //TODO: Add Comments
     public void raiseElevatorDis(double dis) {
     	boolean sensorpressed = upperSwitch.getstate();
     	
@@ -89,6 +93,7 @@ public class Elevator {
     	}
     }
     
+    //TODO: Add Comments
     public void lowerElevator (double speed) {
     	boolean sensorpressed = lowerSwitch.getstate();
     	if(!setSwitches) {
@@ -101,10 +106,11 @@ public class Elevator {
     		if(!sensorpressed) {
     			_elevatorMoter.set(ControlMode.Velocity, -speed);
     			
-    		}
+    		} //TODO: Added else to set speed to zero
     	}
     }
     
+    //TODO: Add Comments
     public void lowerElevatorDis(double dis) {
     	boolean sensorpressed = lowerSwitch.getstate();
     	if(!setSwitches) {
@@ -121,6 +127,7 @@ public class Elevator {
     	}
     }
     
+    //TODO: Add Comments
     public void grabBlock(double speed) {
     	boolean sensorpressed = grabSwitch.getstate();
     	if(!setMoters) {
@@ -138,6 +145,7 @@ public class Elevator {
     	}
     }
     
+    //TODO: Add Comments
     public void ejectBlock(double speed) {
     	boolean sensorpressed = grabSwitch.getstate();
     	if(!setMoters) {
