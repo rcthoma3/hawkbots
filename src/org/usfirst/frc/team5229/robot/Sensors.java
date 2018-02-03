@@ -29,9 +29,16 @@ public class Sensors {
 	private  WPI_TalonSRX _frontRightMotor;
 	private  WPI_TalonSRX _rearRightMotor;
 	
+	private boolean frontLeftValid = true;
+	private boolean frontRightValid = true;
+	private boolean rearLeftValid = true;
+	private boolean rearRightValid = true;
+	
 	private DigitalInput limSwitch;
 	
-	// TODO: Add Comments
+	// Set Encoders/Talons 
+	//in:All 4 Encoders or Motor Controllers
+	//out:setEnc
 	public  boolean setEncoders (WPI_TalonSRX _frontLeftMotorIn, WPI_TalonSRX _rearLeftMotorIn, WPI_TalonSRX _frontRightMotorIn, WPI_TalonSRX _rearRightMotorIn) {
 		_frontLeftMotor = _frontLeftMotorIn;
 		_rearLeftMotor = _rearLeftMotorIn;
@@ -49,14 +56,18 @@ public class Sensors {
 		return setEnc;
 	}
 	
-	// TODO: Add Comments
+	// Set up wheel size
+	//in:whlSizeIn or the size of the wheel
+	//out:setWhlSize
 	public boolean setWheelSize(double whlSizeIn) {
 		whlSize = whlSizeIn;
 		setWhlSize = true;
 		return setWhlSize;
 	}
 	
-	// TODO: Add Comments
+	// Set the distance between the diagonal wheels
+	//in:ChsSizeIn or the Chassis Size
+	//out:setChsSize
 	public boolean setChassisSize(double ChsSizeIn) {
 		roboDim = ChsSizeIn;
 		setChsSize = true;
@@ -65,7 +76,7 @@ public class Sensors {
 	
 	//Intiate Encoders or WPI Talons
 	//in:4 Motor Controllers
-	//out:nothing
+	//out:intEnc
 	public boolean initEncoders() {
 		if (!setEnc) {
 			System.err.println("ERROR: Encoders Not Set");
@@ -306,7 +317,9 @@ public class Sensors {
 		}
 	}
 	
-	// TODO: Add Comments
+	// Set up the limit switch
+	//in:input
+	//out:limswitch
 	public DigitalInput limitswitch (int input) {
 		
 		limSwitch = new DigitalInput(1);
@@ -314,10 +327,151 @@ public class Sensors {
 		return limSwitch;
 	}
 	
-	// TODO: Add Comments
+	// Get the state of the limit switch
+	//in:nothing
+	//out:limSwitch.get()
 	public boolean getstate () {
 		
 		return limSwitch.get();
+	}
+	
+	// Check the Encoders to see if they work properly
+	//in:nothing
+	//out:nothing
+	public void checkEncoders() {
+		//Get encoder positions
+		int frontLeft = _frontLeftMotor.getSelectedSensorPosition(0);
+		int frontRight = _frontRightMotor.getSelectedSensorPosition(0);
+		int rearLeft = _rearLeftMotor.getSelectedSensorPosition(0);
+		int rearRight = _rearRightMotor.getSelectedSensorPosition(0);
+		
+		//"Stationary" range, must move beyond this position to check
+		final int CheckPos = 100;
+		
+		 while (frontLeft > CheckPos || frontRight > CheckPos || rearLeft > CheckPos || rearRight > CheckPos) {
+			//Error value to check difference against for each encoder pair
+			final int ErrorVal = 115;
+			
+			//Differences between encoders
+			int frontDiff = Math.abs(_frontRightMotor.getSelectedSensorPosition(0) - _frontLeftMotor.getSelectedSensorPosition(0));
+			int rearDiff = Math.abs(_rearRightMotor.getSelectedSensorPosition(0) - _rearLeftMotor.getSelectedSensorPosition(0));
+			int leftDiff = Math.abs(_frontLeftMotor.getSelectedSensorPosition(0) - _rearLeftMotor.getSelectedSensorPosition(0));
+			int rightDiff = Math.abs(_frontRightMotor.getSelectedSensorPosition(0) - _rearRightMotor.getSelectedSensorPosition(0));
+			int frontRightRearLeftDiff = Math.abs(_frontRightMotor.getSelectedSensorPosition(0) - _rearLeftMotor.getSelectedSensorPosition(0));
+			int frontLeftRearRightDiff = Math.abs(_frontLeftMotor.getSelectedSensorPosition(0) - _rearRightMotor.getSelectedSensorPosition(0));
+		
+			//Check if any encoders have a difference greater than the allowed error range
+			if ((frontDiff > ErrorVal && frontLeftValid && frontRightValid)
+					|| (rearDiff > ErrorVal && rearLeftValid && rearRightValid)
+					|| (leftDiff > ErrorVal && frontLeftValid && rearLeftValid)
+					|| (rightDiff > ErrorVal && frontRightValid && rearRightValid)
+					|| (frontRightRearLeftDiff > ErrorVal && frontRightValid && rearLeftValid)
+					|| (frontLeftRearRightDiff > ErrorVal && frontLeftValid && rearRightValid)) {
+				
+				//Calculate total differences for each encoder with every other encoder
+				int frontLeftTotalDiff = 0;//frontDiff + leftDiff + frontLeftRearRightDiff;
+				int frontRightTotalDiff = 0;//frontDiff + rightDiff + frontRightRearLeftDiff;
+				int rearLeftTotalDiff = 0;//rearDiff + leftDiff + frontRightRearLeftDiff;
+				int rearRightTotalDiff = 0;//rearDiff + rightDiff + frontLeftRearRightDiff;
+				
+				//Add totals (including only valid encoders)
+				if (frontLeftValid)
+				{
+					if (frontRightValid) {
+						frontLeftTotalDiff += frontDiff;
+					}
+					if (rearLeftValid) {
+						frontLeftTotalDiff += leftDiff;
+					}
+					if (rearRightValid) {
+						frontLeftTotalDiff += frontLeftRearRightDiff;
+					}
+				}
+				if (frontRightValid)
+				{
+					if (frontLeftValid) {
+						frontRightTotalDiff += frontDiff;
+					}
+					if (rearLeftValid) {
+						frontRightTotalDiff += frontRightRearLeftDiff;
+					}
+					if (rearRightValid) {
+						frontRightTotalDiff += rightDiff;
+					}
+				}
+				if (rearLeftValid)
+				{
+					if (frontLeftValid) {
+						rearLeftTotalDiff += leftDiff;
+					}
+					if (frontRightValid) {
+						rearLeftTotalDiff += frontRightRearLeftDiff;
+					}
+					if (rearRightValid) {
+						rearLeftTotalDiff += rearDiff;
+					}
+				}
+				if (rearRightValid)
+				{
+					if (frontLeftValid) {
+						rearRightTotalDiff += frontLeftRearRightDiff;
+					}
+					if (frontRightValid) {
+						rearRightTotalDiff += rightDiff;
+					}
+					if (rearLeftValid) {
+						rearRightTotalDiff += rearDiff;
+					}
+				}
+				
+				//Find Greatest
+				//1 - 4 Values
+				//1 gives frontLeft, 2 gives frontRight, 3 gives rearLeft, 4 gives rearRight
+				int badPosition = 0;
+				int currentLargest = 0;
+				if (frontLeftTotalDiff > currentLargest)
+				{
+					badPosition = 1;
+					currentLargest = frontLeftTotalDiff;
+				}
+				if (frontRightTotalDiff > currentLargest)
+				{
+					badPosition = 2;
+					currentLargest = frontRightTotalDiff;
+				}
+				if (rearLeftTotalDiff > currentLargest)
+				{
+					badPosition = 3;
+					currentLargest = rearLeftTotalDiff;
+				}
+				if (rearRightTotalDiff > currentLargest)
+				{
+					badPosition = 4;
+					currentLargest = rearRightTotalDiff;
+				}
+				
+				//For the greatest value, set that motor to follow and assign it to not be valid
+				switch (badPosition)
+				{
+					case 1:
+						_frontLeftMotor.follow(_frontRightMotor);
+						frontLeftValid = false;
+						break;
+					case 2:
+						_frontRightMotor.follow(_rearLeftMotor);
+						frontRightValid = false;
+						break;
+					case 3:
+						_rearLeftMotor.follow(_rearRightMotor);
+						rearLeftValid = false;
+						break;
+					case 4:
+						_rearRightMotor.follow(_frontLeftMotor); 
+						rearRightValid = false;
+						break;
+				}
+			}
+		}
 	}
 	
 }
