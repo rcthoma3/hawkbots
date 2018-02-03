@@ -320,9 +320,9 @@ public class Sensors {
 	// Set up the limit switch
 	//in:input
 	//out:limswitch
-	public DigitalInput limitswitch (int input) {
+	public DigitalInput limitswitch (DigitalInput input) {
 		
-		limSwitch = new DigitalInput(1);
+		limSwitch = input;
 		
 		return limSwitch;
 	}
