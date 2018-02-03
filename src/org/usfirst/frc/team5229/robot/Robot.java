@@ -3,6 +3,7 @@ package org.usfirst.frc.team5229.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PWM;
@@ -39,6 +40,8 @@ public class Robot extends IterativeRobot {
 	VictorSP _climbMotor;
 	VictorSP _leftClawMotor;
 	VictorSP _rightClawMotor;
+	DigitalInput topClimbSwitch;
+	DigitalInput bottomClimbSwitch;
 
 	// These values correspond to roboRIO ports
 	//Can
@@ -50,12 +53,12 @@ public class Robot extends IterativeRobot {
 	//DIO
 	int topElevatorPort = 0;
 	int bottomElevatorPort = 1;
-	int topClimbPort = 2;
+	int topClimbPort = 0;
 	int bottomClimbPort = 3;
 	//PWM
-	int leftClawPort = 0;
+	int leftClawPort = 2;
 	int rightClawPort = 1;
-	int climbMotorPort = 2;
+	int climbMotorPort = 0;
 		
 	double whlSize = 8; // Wheel diameter in inches
 	double roboDim = 30; // Diagonal distance between wheels in inches
@@ -127,9 +130,11 @@ public class Robot extends IterativeRobot {
 		// Set Max output
 		_drive.setMaxOutput(0.6);	
 		
-		VictorSP climbMotor = new VictorSP(0); 
-		myClimber.setClimbMotor(climbMotor);
-		myClimber.setSwitches(0);	
+		_climbMotor = new VictorSP(climbMotorPort);
+		topClimbSwitch = new DigitalInput(topClimbPort);
+		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
+		myClimber.setClimbMotor(_climbMotor);
+		myClimber.setSwitches(topClimbSwitch, bottomClimbSwitch);	
 	}
 
 	/**
@@ -139,7 +144,10 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {	
 		
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);
-
+		
+		System.out.println("Y: " + myController.getButtonY());
+		System.out.println("A: " + myController.getButtonA());
+		
 		if (myController.getButtonY()) { myClimber.raiseElevator(.3); }
 		if (myController.getButtonA()) { myClimber.lowerElavator(.3); }
 		if (myController.getButtonX()) { myElevator.raiseElevator(.3); }
@@ -148,6 +156,7 @@ public class Robot extends IterativeRobot {
 		if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(0); } 
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(.3); }
 		if (myController.getButtonRightBumber()) { myElevator.ejectBlock(.3); }
+		myClimber.checkSwitches(false);
 		
 		Timer.delay(0.005);
 	}

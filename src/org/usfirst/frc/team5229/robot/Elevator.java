@@ -2,11 +2,13 @@ package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class Elevator {
-	private WPI_TalonSRX _elevatorMoter=0;
+	private WPI_TalonSRX _elevatorMoter;
 	private boolean setElevator = false;
 	private boolean initElevator = false; 
 	private Sensors upperSwitch;
@@ -31,7 +33,7 @@ public class Elevator {
 	//Set up Switches
 	//in:uppperSwitchIn, lowerSwitchIn, grabSwitchIn
 	//out:setSwitches
-	public boolean setSwitches(int upperSwitchIn, int lowerSwitchIn, int grabSwitchIn) {
+	public boolean setSwitches(DigitalInput upperSwitchIn, DigitalInput lowerSwitchIn, DigitalInput grabSwitchIn) {
 		upperSwitch.limitswitch(upperSwitchIn);
 		lowerSwitch.limitswitch(lowerSwitchIn);
 		grabSwitch.limitswitch(grabSwitchIn);
