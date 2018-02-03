@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
 	ControllerLogitech myController = new ControllerLogitech();
 	Climbing myClimber = new Climbing();
 	Elevator myElevator = new Elevator();
-	Sensors myRobot = new Sensors();
+	Sensors myAutonRobot = new Sensors();
 	
 	//UsbCamera Camera1;
 	//UsbCamera Camera2;
@@ -72,10 +72,7 @@ public class Robot extends IterativeRobot {
 		_frontRightMotor.set(0);
 		_rearRightMotor.set(0);
 		
-		// TODO: These lines will need to move to auton
-		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
-		myRobot.setWheelSize(whlSize);
-		myRobot.setChassisSize(roboDim);		
+		//TODO: setAutoChooser	
 	}
 	
 
@@ -85,8 +82,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		
-		myRobot.initEncoders();
-		
+		myAutonRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
+		myAutonRobot.setWheelSize(whlSize);
+		myAutonRobot.setChassisSize(roboDim);	
+		myAutonRobot.initEncoders();
+		//TODO: getGameMsg
+		//TODO: getPosition
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		myRobot.driveFowardAuto(120);
+		myAutonRobot.driveFowardAuto(120);
 		
 		Timer.delay(0.005);
 	}
