@@ -130,13 +130,14 @@ public class Robot extends IterativeRobot {
 		// Set Max output
 		_drive.setMaxOutput(0.6);	
 		
-		_climbMotor = new VictorSP(climbMotorPort);
-		topClimbSwitch = new DigitalInput(topClimbPort);
-		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
-		myClimber.setClimbMotor(_climbMotor);
-		myClimber.setSwitches(topClimbSwitch, topClimbSwitch);
+		//_climbMotor = new VictorSP(climbMotorPort);
+		//topClimbSwitch = new DigitalInput(topClimbPort);
+		//bottomClimbSwitch = new DigitalInput(bottomClimbPort);
+		//myClimber.setClimbMotor(_climbMotor);
+		//myClimber.setSwitches(topClimbSwitch, topClimbSwitch);
 		_leftClawMotor = new VictorSP(leftClawPort);
 		_rightClawMotor = new VictorSP(rightClawPort);
+		_leftClawMotor.setInverted(true);
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class Robot extends IterativeRobot {
 		
 		//System.out.println("Y: " + myController.getButtonY());
 		//System.out.println("A: " + myController.getButtonA());
-		
+		/*
 		myClimber.checkSwitches(false);
 		
 		if (myController.getButtonY()) { myClimber.raiseElevator(.3); }
@@ -160,8 +161,24 @@ public class Robot extends IterativeRobot {
 		if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(0); } 
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(.3); }
 		if (myController.getButtonRightBumber()) { myElevator.ejectBlock(.3); }
+		*/
 		
-		
+		if (myController.getButtonLeftBumber()) { 
+			_leftClawMotor.set(1);
+			_rightClawMotor.set(1); 
+		}
+		else if (!myController.getButtonRightBumber()) {
+			_leftClawMotor.set(0); 
+			_rightClawMotor.set(0);
+		}
+		if (myController.getButtonRightBumber()) {
+			_leftClawMotor.set(-1);
+			_rightClawMotor.set(-1); 
+		 }
+		else if (!myController.getButtonLeftBumber()) {
+			_leftClawMotor.set(0);
+			_rightClawMotor.set(0);
+			}
 		
 		Timer.delay(0.005);
 	}
