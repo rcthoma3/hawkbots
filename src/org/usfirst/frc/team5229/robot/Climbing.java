@@ -1,5 +1,6 @@
 package org.usfirst.frc.team5229.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -16,15 +17,15 @@ public class Climbing {
 	//Initialize switch with DIO
 	//IN:DIO Switch is plugged in
 	//Out:None
-	public void setSwitches(int dio) {
-		topSwitch.limitswitch(dio);
-		bottomSwitch.limitswitch(dio);
+	public void setSwitches(DigitalInput topSwitchIn, DigitalInput bottomSwitchIn) {
+		topSwitch.limitswitch(topSwitchIn);
+		bottomSwitch.limitswitch(bottomSwitchIn);
 	}
 	
 	//Initialize climb motor with PWM
 	//IN:PWM the motor is connected to
 	//OUT:setMotor is true
-	public boolean setClimbMotor (PWM m_climbMotorIn) {
+	public boolean setClimbMotor (VictorSP m_climbMotorIn) {
 		m_climbMotor = m_climbMotorIn;
 		setMotor = true;
 		return setMotor;
@@ -38,7 +39,7 @@ public class Climbing {
 		//Spins motor forward (Speed = +)
 		
 		topSensorpressed = topSwitch.getstate(); 
-		
+
 		if (!setMotor) {
 			System.out.println("ERROR: Climb Motor Not Initiated!");
 		}		
