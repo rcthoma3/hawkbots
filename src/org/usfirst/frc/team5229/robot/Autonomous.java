@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
+	
 	private String gameData;//String obatin that is used to tell ownership of the scales and switches for the alliance
 	private int startpos = 0;//Determine the start position of the robot
 	private SendableChooser<Integer> autoChooser;//Created a method that allowed driver to input position
@@ -24,12 +25,13 @@ public class Autonomous {
 	//out:setAutoChooser
    public boolean setAutoChooser() {
 	   autoChooser = new SendableChooser<Integer>();
-		autoChooser.addDefault("Left", 0);//0 show that the robot is on the left side
-		autoChooser.addObject("Center", 1);//1 show that the robot is in the center
-		autoChooser.addObject("Right", 2);//2 show that the robot is on the right side
-		SmartDashboard.putData("Autonomous Mode Chooser", autoChooser);
-		setAutoChooser = true; 
-		return setAutoChooser;
+	   autoChooser.addDefault("Left", 0);//0 show that the robot is on the left side
+	   autoChooser.addObject("Center", 1);//1 show that the robot is in the center
+	   autoChooser.addObject("Right", 2);//2 show that the robot is on the right side
+	   SmartDashboard.putData("Autonomous Mode Chooser", autoChooser);
+	   setAutoChooser = true; 
+	   
+	   return setAutoChooser;
    }
 	
    //Obtain position of the function
@@ -69,67 +71,6 @@ public class Autonomous {
 		return secondSwitch;
 	}
 	
-		
+	//TODO: Function to pick path
 	
-	
-	
-	
-	
-	/*if (StartPosition = "Left") 
-	 
-	if (OurSwitchSide = "L")
-			
-	else if (OurSwitchSide = "R")
-	
-	
-else if (StartPosition = "Center")
-	if  (OurSwitchSide = "L")
-	
-	else if (OurSwitchSide = "R")
-else if (StartPosition = "Right")
-	if (OurSwitchSide = "L")
-	
-	else if (OurSwitchSide = "R")
-	
-(Cross line and deliver to switch or scale if switch is on the opposite side)
-if (StartPosition = "Left")
-	if (OurSwitchSide = "R" && ScaleSide = "R")
-	
-	else if (OurSwitchSide = "R" && ScaleSide = "L")
-	
-	else if (OurSwitchSide = "L")
-	
-else if (StartPosition = "Center")
-	if (OurSwitchSide = "L")
-	
-	else if (OurSwitchSide = "R")
-	
-else if (StartPosition = "Left")
-	if (OurSwitchSide = "L" && ScaleSide = "L")
-	
-	else if (OurSwitchSide = "L" && ScaleSide = "R")
-	
-	else if (OurSwitchSide = "R") 
-(Crossing line and delivering to Switch if Switch is handled by the center)
-if (StartPosition = "Left")
-	if (ScaleSide = "R" && OurSwitchSide = "R")
-	
-	else if (ScaleSide = "R" && OurSwitchSide = "L")
-	
-	else if (ScaleSide = "L")
-	
-else if (StartPosition = "Center")
-	
-	if (OurSwitchSide = "L")
-	
-	else if (OurSwitchSide = "R") 
-else if (StartPosition = "Right")
-	
-	if (ScaleSide = "L" && OurSwitchSide = "L")
-	
-	else if (ScaleSide = "L" && OurSwitchSide = "R")
-	
-	else if (ScaleSide = "R")*/
-	 
-
 }
