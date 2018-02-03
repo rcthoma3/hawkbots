@@ -10,6 +10,8 @@ public class Climbing {
 	private boolean setMotor = false;
 	private Sensors topSwitch = new Sensors();
 	private Sensors bottomSwitch = new Sensors();
+	private boolean topSensorpressed = false;
+	private boolean bottomSensorpressed = false;
 	
 	//Initialize switch with DIO
 	//IN:DIO Switch is plugged in
@@ -35,13 +37,13 @@ public class Climbing {
 		//Raises elevator to hook bar 
 		//Spins motor forward (Speed = +)
 		
-		boolean sensorpressed = topSwitch.getstate(); 
+		topSensorpressed = topSwitch.getstate(); 
 		
 		if (!setMotor) {
 			System.out.println("ERROR: Climb Motor Not Initiated!");
 		}		
 		else {
-			if(!sensorpressed) { 
+			if(!topSensorpressed) { 
 				m_climbMotor.setSpeed(speed);
 			} else { m_climbMotor.setSpeed(0); }
 		}
@@ -53,14 +55,22 @@ public class Climbing {
 	public void lowerElavator (double speed) {
 		//pull up robot using hook attached to bar
 		//Spins motor backwards (Speed = -)
-		boolean sensorpressed = bottomSwitch.getstate(); 
+		bottomSensorpressed = bottomSwitch.getstate(); 
 		if (!setMotor) {
 			System.out.println("ERROR: Climb Motor Not Initiated!");
 		}
 		else {
-			if(!sensorpressed) {
+			if(!bottomSensorpressed) {
 				m_climbMotor.setSpeed(-speed);
 			} else { m_climbMotor.setSpeed(0); }
+		}
+	}
+	public void checkSwitches(boolean switchOverride) {
+		if (topSensorpressed || switchOverride) {
+			m_climbMotor.setSpeed(0);
+		}
+		if (bottomSensorpressed || switchOverride) {
+			 m_climbMotor.setSpeed(0);
 		}
 	}
 }
