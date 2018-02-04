@@ -47,7 +47,7 @@ public class Elevator {
 	//Set the side motors of the elevator
 	//in:_leftMoterIn, _rightMoterIn
 	//out:setMoters
-	public boolean setMoters(int _leftMoterIn, int _rightMoterIn) {
+	public boolean setGrabMotors(int _leftMoterIn, int _rightMoterIn) {
 		_leftMoter = new VictorSP(_leftMoterIn);
 		_rightMoter = new VictorSP(_rightMoterIn);
 		setMoters = true;
@@ -202,7 +202,7 @@ public class Elevator {
     	}else if(!setSwitches){
     		System.err.println("Error: Grab Switch not set up");
     	}else {
-    		if(!grabSensorPressed) {
+    		if(!grabSensorPressed) { //TODO: Remove this. We want to be able to eject the block if the switch is pressed
     			_leftMoter.setSpeed(-speed);
     			_rightMoter.setSpeed(speed);
     		}else {
@@ -212,9 +212,10 @@ public class Elevator {
     	}
     }  
     
-    public void checkElevatorSwitches(boolean switchOverride) {
+    // TODO: Make this match climb function
+    public void checkSwitches(boolean switchOverride) {
     	if (upperSensorPressed || switchOverride) {
-    		_elevatorMoter.set(ContolMode.Velocity, 0);
+    		_elevatorMoter.set(ControlMode.Velocity, 0);
     	}
     	if(lowerSensorPressed || switchOverride) {
     		_elevatorMoter.set(ControlMode.Velocity, 0);

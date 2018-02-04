@@ -31,7 +31,7 @@ public class Robot extends IterativeRobot {
 		
 	MecanumDrive _drive;
 	
-	// Motor Declerations 
+	// Motor Declarations 
 	WPI_TalonSRX _frontLeftMotor; 
 	WPI_TalonSRX _rearLeftMotor;
 	WPI_TalonSRX _frontRightMotor;
@@ -40,25 +40,29 @@ public class Robot extends IterativeRobot {
 	VictorSP _climbMotor;
 	VictorSP _leftClawMotor;
 	VictorSP _rightClawMotor;
+	// Switch Declarations
 	DigitalInput topClimbSwitch;
 	DigitalInput bottomClimbSwitch;
+	// TODO: Declare topElevatorSwitch
+	// TODO: Declare bottomElevatorSwitch
+	// TODO: Declare grabSwitch
 
 	// These values correspond to roboRIO ports
-	//Can
+	//Talons - CAN
 	int frontLeftMotorPort = 6;
 	int rearLeftMotorPort = 8;
 	int frontRightMotorPort = 5;
 	int rearRightMotorPort = 7;
 	int elevatorMotorPort = 9;
-	//DIO
+	//Switches - DIO
 	int topElevatorPort = 0;
 	int bottomElevatorPort = 1;
-	int topClimbPort = 0;
+	int topClimbPort =2;
 	int bottomClimbPort = 3;
-	//PWM
-	int leftClawPort = 2;
+	//Victors - PWM
+	int leftClawPort = 0;
 	int rightClawPort = 1;
-	int climbMotorPort = 0;
+	int climbMotorPort = 2;
 		
 	double whlSize = 8; // Wheel diameter in inches
 	double roboDim = 30; // Diagonal distance between wheels in inches
@@ -85,6 +89,23 @@ public class Robot extends IterativeRobot {
 		_rearRightMotor.set(0);
 		
 		myAutonRobot.setAutoChooser();
+		
+		_climbMotor = new VictorSP(climbMotorPort);
+		_leftClawMotor = new VictorSP(leftClawPort);
+		_rightClawMotor = new VictorSP(rightClawPort);
+		// TODO: Init elevatorMotor
+		
+		topClimbSwitch = new DigitalInput(topClimbPort);
+		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
+		// TODO: Init topElevatorSwitch
+		// TODO: Init bottomElevatorSwitch
+		// TODO: Init grabSwitch
+		
+		myClimber.setClimbMotor(_climbMotor);
+		myClimber.setSwitches(topClimbSwitch, topClimbSwitch);
+		// TODO: Set Elevator Motor
+		// TODO: Set Elevator/Grab Switches
+		// TODO: Set Grab Motors
 	}
 	
 
@@ -98,8 +119,12 @@ public class Robot extends IterativeRobot {
 		myRobot.setWheelSize(whlSize);
 		myRobot.setChassisSize(roboDim);	
 		myRobot.initEncoders();
+		
 		String gameMsg = myAutonRobot.getGameMsg();
 		int pos = myAutonRobot.getPositoin();
+		
+		//TODO: Put gameMsg on SmartDashboard
+		//TODO: Put pos on SmartDashboard
 	}
 
 	/**
@@ -129,12 +154,6 @@ public class Robot extends IterativeRobot {
 		
 		// Set Max output
 		_drive.setMaxOutput(0.6);	
-		
-		_climbMotor = new VictorSP(climbMotorPort);
-		topClimbSwitch = new DigitalInput(topClimbPort);
-		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
-		myClimber.setClimbMotor(_climbMotor);
-		myClimber.setSwitches(topClimbSwitch, bottomClimbSwitch);	
 	}
 
 	/**
@@ -145,18 +164,21 @@ public class Robot extends IterativeRobot {
 		
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);
 		
-		System.out.println("Y: " + myController.getButtonY());
-		System.out.println("A: " + myController.getButtonA());
+		myClimber.checkSwitches(false);
+		myElevator.checkSwitches(false);
 		
 		if (myController.getButtonY()) { myClimber.raiseElevator(.3); }
 		if (myController.getButtonA()) { myClimber.lowerElavator(.3); }
 		if (myController.getButtonX()) { myElevator.raiseElevator(.3); }
 		if (myController.getButtonB()) { myElevator.lowerElevator(.3); }
-		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevatorDis(0); }
-		if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(0); } 
-		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(.3); }
-		if (myController.getButtonRightBumber()) { myElevator.ejectBlock(.3); }
-		myClimber.checkSwitches(false);
+		
+		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*0.3); }
+		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(myController.getRightTrigger()*0.3); }
+		else { myElevator.raiseElevator(0); }
+		
+		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
+		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
+		else { myElevator.ejectBlock(0); }
 		
 		Timer.delay(0.005);
 	}
