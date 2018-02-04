@@ -15,6 +15,8 @@ public class Climbing {
 	private boolean bottomSensorpressed = false;
 	private boolean raise = false;
 	private boolean lower = false;
+	private double lowerSpd = 0;
+	private double raiseSpd = 0;
 	
 	//Initialize switch with DIO
 	//IN:DIO Switch is plugged in
@@ -49,6 +51,7 @@ public class Climbing {
 			if(!topSensorpressed) { 
 				m_climbMotor.setSpeed(speed);
 				raise = true;
+				raiseSpd = speed;
 			} else { m_climbMotor.setSpeed(0); }
 		}
 	}
@@ -67,26 +70,26 @@ public class Climbing {
 			if(!bottomSensorpressed) {
 				m_climbMotor.setSpeed(-speed);
 				lower = true;
+				lowerSpd = speed;
 			} else { m_climbMotor.setSpeed(0); }
 		}
 	}
 	public void checkSwitches(boolean switchOverride) {
-		System.out.println(topSensorpressed);
 		
 		bottomSensorpressed = bottomSwitch.getstate(); 
 		topSensorpressed = topSwitch.getstate();
 		
-		if ((topSensorpressed || switchOverride) && raise) {
+		if ((topSensorpressed || switchOverride)) {
 			m_climbMotor.setSpeed(0);
 			raise = false;
 		}
-		else if(!lower && raise){m_climbMotor.setSpeed(0.3);}
+		else if(!lower && raise){ m_climbMotor.setSpeed(raiseSpd); }
 		
-		if ((bottomSensorpressed || switchOverride) && lower) {
+		if ((bottomSensorpressed || switchOverride)) {
 			 m_climbMotor.setSpeed(0);
 			 lower = false;
 		}
-		else if(!raise && lower) {m_climbMotor.setSpeed(-0.3);}
+		else if(!raise && lower) { m_climbMotor.setSpeed(-lowerSpd); }
 	}
 }
 	
