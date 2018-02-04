@@ -2,11 +2,13 @@ package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class Elevator {
-	private WPI_TalonSRX _elevatorMoter=0;
+	private WPI_TalonSRX _elevatorMoter;
 	private boolean setElevator = false;
 	private boolean initElevator = false; 
 	private Sensors upperSwitch;
@@ -18,6 +20,9 @@ public class Elevator {
 	private Sensors grabSwitch;
 	private int timeoutMs = 10;
 	private int pidIdx = 0;
+	private boolean upperSensorPressed = false;
+	private boolean lowerSensorPressed = false;
+	private boolean grabSensorPressed = false;
 	
 	//Set up Elevator motor
 	//in:elevatorMoterIn
@@ -31,7 +36,7 @@ public class Elevator {
 	//Set up Switches
 	//in:uppperSwitchIn, lowerSwitchIn, grabSwitchIn
 	//out:setSwitches
-	public boolean setSwitches(int upperSwitchIn, int lowerSwitchIn, int grabSwitchIn) {
+	public boolean setSwitches(DigitalInput upperSwitchIn, DigitalInput lowerSwitchIn, DigitalInput grabSwitchIn) {
 		upperSwitch.limitswitch(upperSwitchIn);
 		lowerSwitch.limitswitch(lowerSwitchIn);
 		grabSwitch.limitswitch(grabSwitchIn);
@@ -42,7 +47,7 @@ public class Elevator {
 	//Set the side motors of the elevator
 	//in:_leftMoterIn, _rightMoterIn
 	//out:setMoters
-	public boolean setMoters(int _leftMoterIn, int _rightMoterIn) {
+	public boolean setGrabMotors(int _leftMoterIn, int _rightMoterIn) {
 		_leftMoter = new VictorSP(_leftMoterIn);
 		_rightMoter = new VictorSP(_rightMoterIn);
 		setMoters = true;
@@ -88,7 +93,7 @@ public class Elevator {
 	//in:speed
 	//out:Nothing
     public void raiseElevator(double speed) {
-    	boolean sensorpressed = upperSwitch.getstate();
+    	upperSensorPressed = upperSwitch.getstate();
     	
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
@@ -97,7 +102,7 @@ public class Elevator {
     	}else if(!initElevator){
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
-    		if(!sensorpressed) {
+    		if(!upperSensorPressed) {
     			_elevatorMoter.set(ControlMode.Velocity, speed);
     		} else {
     			_elevatorMoter.set(ControlMode.Velocity, speed);
@@ -111,7 +116,7 @@ public class Elevator {
     //in:Distance
     //out:nothing
     public void raiseElevatorDis(double dis) {
-    	boolean sensorpressed = upperSwitch.getstate();
+    	upperSensorPressed = upperSwitch.getstate();
     	
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
@@ -120,7 +125,7 @@ public class Elevator {
     	}else if(!initElevator){
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
-    		if(!sensorpressed) {
+    		if(!upperSensorPressed) {
     			_elevatorMoter.set(ControlMode.Position, dis);
     		}
     		
@@ -131,7 +136,7 @@ public class Elevator {
     //in:speed
     //out:nothing
     public void lowerElevator (double speed) {
-    	boolean sensorpressed = lowerSwitch.getstate();
+    	lowerSensorPressed = lowerSwitch.getstate();
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
     	}else if(!setElevator){
@@ -139,7 +144,7 @@ public class Elevator {
     	}else if(!initElevator) {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
-    		if(!sensorpressed) {
+    		if(!lowerSensorPressed) {
     			_elevatorMoter.set(ControlMode.Velocity, -speed);
     			
     		} else {
@@ -152,7 +157,7 @@ public class Elevator {
     //in:nothing
     //out:nothing
     public void lowerElevatorDis(double dis) {
-    	boolean sensorpressed = lowerSwitch.getstate();
+    	lowerSensorPressed = lowerSwitch.getstate();
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
     	}else if(!setElevator){
@@ -160,7 +165,7 @@ public class Elevator {
     	}else if(!initElevator) {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
-    		if(!sensorpressed) {
+    		if(!grabSensorPressed) {
     			_elevatorMoter.set(ControlMode.Position, dis);
     			
     		}
@@ -171,13 +176,13 @@ public class Elevator {
     //in:speed
     //out:nothing
     public void grabBlock(double speed) {
-    	boolean sensorpressed = grabSwitch.getstate();
+    	grabSensorPressed = grabSwitch.getstate();
     	if(!setMoters) {
     		System.err.println("Error: Grabbing moters are not set up");
     	}else if(!setSwitches){
     		System.err.println("Error: Grab Switch not set up");
     	}else {
-    		if(!sensorpressed){
+    		if(!grabSensorPressed){
     			_leftMoter.setSpeed(speed);
     			_rightMoter.setSpeed(-speed);		
     		}else {
@@ -191,13 +196,13 @@ public class Elevator {
     //in:speed
     //out:nothing
     public void ejectBlock(double speed) {
-    	boolean sensorpressed = grabSwitch.getstate();
+    	grabSensorPressed = grabSwitch.getstate();
     	if(!setMoters) {
     		System.err.println("Error: Grabbing moters are not set up.");
     	}else if(!setSwitches){
     		System.err.println("Error: Grab Switch not set up");
     	}else {
-    		if(!sensorpressed) {
+    		if(!grabSensorPressed) { //TODO: Remove this. We want to be able to eject the block if the switch is pressed
     			_leftMoter.setSpeed(-speed);
     			_rightMoter.setSpeed(speed);
     		}else {
@@ -205,5 +210,27 @@ public class Elevator {
     			_rightMoter.setSpeed(0);
     		}
     	}
-    }    
+    }  
+    
+    // TODO: Make this match climb function
+    public void checkSwitches(boolean switchOverride) {
+    	if (upperSensorPressed || switchOverride) {
+    		_elevatorMoter.set(ControlMode.Velocity, 0);
+    	}
+    	if(lowerSensorPressed || switchOverride) {
+    		_elevatorMoter.set(ControlMode.Velocity, 0);
+    	}
+    	if (grabSensorPressed || switchOverride) {
+    		_leftMoter.setSpeed(0);
+    		_rightMoter.setSpeed(0);
+    	}
+               
+    }
+    
+    
+    
+    
+    
+    
+    
 }

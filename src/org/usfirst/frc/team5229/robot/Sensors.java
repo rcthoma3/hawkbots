@@ -82,6 +82,12 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Set");
 		}
 		else {
+			//Resetting the encoderValid statements to true
+			frontRightValid = true;
+			frontLeftValid = true;
+			rearRightValid = true;
+			rearLeftValid = true;
+			
 			// Inverts Motors
 			_frontRightMotor.setInverted(true);
 			_rearRightMotor.setInverted(true);
@@ -227,10 +233,11 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Initalized");
 		}
 		else {
-			_frontLeftMotor.set(ControlMode.MotionMagic, enc);
-			_frontRightMotor.set(ControlMode.MotionMagic, enc);
-			_rearLeftMotor.set(ControlMode.MotionMagic, enc);
-			_rearRightMotor.set(ControlMode.MotionMagic, enc);
+			if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
+			if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
+			if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
+			if (rearRightValid) { _rearRightMotor.set(ControlMode.MotionMagic, enc); }
+			checkEncoders();
 		}
 		
 		SmartDashboard.putNumber("Front Left Pos: ", _frontLeftMotor.getSelectedSensorPosition(0));
@@ -243,6 +250,11 @@ public class Sensors {
 		SmartDashboard.putNumber("Rear Left Vel: ", _rearLeftMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Rear Right Vel: ", _rearRightMotor.getSelectedSensorVelocity(0));
 		
+		//Prints whether encoders are valid to smartDashboard\
+		SmartDashboard.putBoolean("Front Right Valid: ", frontRightValid);
+		SmartDashboard.putBoolean("Front Left Valid: ", frontLeftValid);
+		SmartDashboard.putBoolean("Rear Right Valid: ", rearRightValid);
+		SmartDashboard.putBoolean("Rear Left Valid: ", rearLeftValid);
 		
 	}
 	
@@ -320,9 +332,9 @@ public class Sensors {
 	// Set up the limit switch
 	//in:input
 	//out:limswitch
-	public DigitalInput limitswitch (int input) {
+	public DigitalInput limitswitch (DigitalInput input) {
 		
-		limSwitch = new DigitalInput(1);
+		limSwitch = input;
 		
 		return limSwitch;
 	}
@@ -347,10 +359,10 @@ public class Sensors {
 		
 		//"Stationary" range, must move beyond this position to check
 		final int CheckPos = 100;
+		//Error value to check difference against for each encoder pair
+		final int ErrorVal = 200;
 		
-		 while (frontLeft > CheckPos || frontRight > CheckPos || rearLeft > CheckPos || rearRight > CheckPos) {
-			//Error value to check difference against for each encoder pair
-			final int ErrorVal = 115;
+		 if (frontLeft > CheckPos || frontRight > CheckPos || rearLeft > CheckPos || rearRight > CheckPos) {
 			
 			//Differences between encoders
 			int frontDiff = Math.abs(_frontRightMotor.getSelectedSensorPosition(0) - _frontLeftMotor.getSelectedSensorPosition(0));
@@ -375,7 +387,7 @@ public class Sensors {
 				int rearRightTotalDiff = 0;//rearDiff + rightDiff + frontLeftRearRightDiff;
 				
 				//Add totals (including only valid encoders)
-				if (frontLeftValid)
+				if (frontLeftValid || frontRightValid || rearLeftValid || rearRightValid)
 				{
 					if (frontRightValid) {
 						frontLeftTotalDiff += frontDiff;
@@ -423,13 +435,23 @@ public class Sensors {
 						rearRightTotalDiff += rearDiff;
 					}
 				}
+				System.out.println("flt " + frontLeftTotalDiff);
+				System.out.println("frt " + frontRightTotalDiff);
+				System.out.println("rlt " + rearLeftTotalDiff);
+				System.out.println("rrt " + rearRightTotalDiff);
+				System.out.println("fd " + frontDiff);
+				System.out.println("rd " + rearDiff);
+				System.out.println("ld " + leftDiff);
+				System.out.println("rd " + rightDiff);
+				System.out.println("flrrd " + frontLeftRearRightDiff);
+				System.out.println("frrld " + frontRightRearLeftDiff);
 				
 				//Find Greatest
 				//1 - 4 Values
 				//1 gives frontLeft, 2 gives frontRight, 3 gives rearLeft, 4 gives rearRight
 				int badPosition = 0;
 				int currentLargest = 0;
-				if (frontLeftTotalDiff > currentLargest)
+				if (frontLeftTotalDiff > currentLargest && frontLeftValid)
 				{
 					badPosition = 1;
 					currentLargest = frontLeftTotalDiff;
@@ -451,24 +473,34 @@ public class Sensors {
 				}
 				
 				//For the greatest value, set that motor to follow and assign it to not be valid
-				switch (badPosition)
-				{
-					case 1:
-						_frontLeftMotor.follow(_frontRightMotor);
-						frontLeftValid = false;
-						break;
-					case 2:
-						_frontRightMotor.follow(_rearLeftMotor);
-						frontRightValid = false;
-						break;
-					case 3:
-						_rearLeftMotor.follow(_rearRightMotor);
-						rearLeftValid = false;
-						break;
-					case 4:
-						_rearRightMotor.follow(_frontLeftMotor); 
-						rearRightValid = false;
-						break;
+				if (badPosition == 1) {
+					
+					if (rearLeftValid) { _frontLeftMotor.follow(_rearLeftMotor); }
+					else if (rearRightValid) { _frontLeftMotor.follow(_rearRightMotor); }
+					else { _frontLeftMotor.follow(_frontRightMotor); }
+					frontLeftValid = false;
+					System.out.println("frontLeftError");
+				}
+				if (badPosition == 2) {
+					if (rearRightValid) { _frontRightMotor.follow(_rearRightMotor); }
+					else if (rearLeftValid) { _frontRightMotor.follow(_rearLeftMotor); }
+					else { _frontRightMotor.follow(_frontLeftMotor); }
+					frontRightValid = false;
+					System.out.println("frontRightError");
+				}
+				if (badPosition == 3) {
+					if (frontLeftValid) {  _rearLeftMotor.follow(_frontLeftMotor); }
+					else if (frontRightValid) { _rearLeftMotor.follow(_frontRightMotor); }
+					else { _rearLeftMotor.follow(_rearRightMotor); }
+					rearLeftValid = false;
+					System.out.println("rearLeftError");
+				}
+				if (badPosition == 4) {
+					if (frontRightValid) { _rearRightMotor.follow(_frontRightMotor); }
+					else if (frontLeftValid) { _rearRightMotor.follow(_frontLeftMotor); }
+					else { _rearRightMotor.follow(_rearLeftMotor); }
+					rearRightValid = false;
+					System.out.println("rearRightError");
 				}
 			}
 		}
