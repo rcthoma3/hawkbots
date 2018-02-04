@@ -33,6 +33,12 @@ public class Sensors {
 	private boolean frontRightValid = true;
 	private boolean rearLeftValid = true;
 	private boolean rearRightValid = true;
+	private boolean noInvert = _frontRightMotor.getSelectedSensorPosition(0) < 0 && _frontLeftMotor.getSelectedSensorPosition(0) < 0 
+			|| _frontRightMotor.getSelectedSensorPosition(0) < 0 && _rearRightMotor.getSelectedSensorPosition(0) < 0
+			|| _frontRightMotor.getSelectedSensorPosition(0) < 0 && _rearLeftMotor.getSelectedSensorPosition(0) < 0
+			|| _frontLeftMotor.getSelectedSensorPosition(0) < 0 && _rearRightMotor.getSelectedSensorPosition(0) < 0
+			|| _frontLeftMotor.getSelectedSensorPosition(0) < 0 && _rearLeftMotor.getSelectedSensorPosition(0) < 0
+			|| _rearRightMotor.getSelectedSensorPosition(0) < 0 && _rearLeftMotor.getSelectedSensorPosition(0) < 0;
 	
 	private DigitalInput limSwitch;
 	
@@ -474,7 +480,14 @@ public class Sensors {
 				
 				//For the greatest value, set that motor to follow and assign it to not be valid
 				if (badPosition == 1) {
+
+					/*Enables motor invert on said wheel to keep direction from changing if robot is turning.
+					 *FUNCTION IS ONLY ACTIVE IF ROBOT IS TURNING (when two motors have a negative position)*/
+					if (noInvert) {
+						_frontLeftMotor.setInverted(true);
+					}
 					
+					//Tells that wheel what motor to follow
 					if (rearLeftValid) { _frontLeftMotor.follow(_rearLeftMotor); }
 					else if (rearRightValid) { _frontLeftMotor.follow(_rearRightMotor); }
 					else { _frontLeftMotor.follow(_frontRightMotor); }
@@ -482,6 +495,14 @@ public class Sensors {
 					System.out.println("frontLeftError");
 				}
 				if (badPosition == 2) {
+
+					/*Enables motor invert on said wheel to keep direction from changing if robot is turning.
+					 *FUNCTION IS ONLY ACTIVE IF ROBOT IS TURNING (when two motors have a negative position)*/
+					if (noInvert) {
+						_frontRightMotor.setInverted(false);
+					}
+					
+					//Tells that wheel what motor to follow
 					if (rearRightValid) { _frontRightMotor.follow(_rearRightMotor); }
 					else if (rearLeftValid) { _frontRightMotor.follow(_rearLeftMotor); }
 					else { _frontRightMotor.follow(_frontLeftMotor); }
@@ -489,6 +510,14 @@ public class Sensors {
 					System.out.println("frontRightError");
 				}
 				if (badPosition == 3) {
+
+					/*Enables motor invert on said wheel to keep direction from changing if robot is turning.
+					 *FUNCTION IS ONLY ACTIVE IF ROBOT IS TURNING (when two motors have a negative position)*/
+					if (noInvert) {
+						_rearLeftMotor.setInverted(true);
+					}
+					
+					//Tells that wheel what motor to follow
 					if (frontLeftValid) {  _rearLeftMotor.follow(_frontLeftMotor); }
 					else if (frontRightValid) { _rearLeftMotor.follow(_frontRightMotor); }
 					else { _rearLeftMotor.follow(_rearRightMotor); }
@@ -496,6 +525,14 @@ public class Sensors {
 					System.out.println("rearLeftError");
 				}
 				if (badPosition == 4) {
+
+					/*Enables motor invert on said wheel to keep direction from changing if robot is turning.
+					 *FUNCTION IS ONLY ACTIVE IF ROBOT IS TURNING (when two motors have a negative position)*/
+					if (noInvert) {
+						_rearRightMotor.setInverted(false);
+					}
+          
+					//Tells that wheel what motor to follow
 					if (frontRightValid) { _rearRightMotor.follow(_frontRightMotor); }
 					else if (frontLeftValid) { _rearRightMotor.follow(_frontLeftMotor); }
 					else { _rearRightMotor.follow(_rearLeftMotor); }
