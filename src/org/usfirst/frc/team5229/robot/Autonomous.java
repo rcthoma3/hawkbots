@@ -76,22 +76,22 @@ public class Autonomous {
 	}
 	
 	public void followPath() {
-		char MySwitch = getMySwitch();
+		char mySwitch = getMySwitch();
 		int myPosition = getPositoin();
 		if(myPosition == 0) {
-			if(MySwitch == 'L') {
+			if(mySwitch == 'L') {
 				sensor.driveFowardAuto(168);
 				sensor.turnRobotRight(90);
 				elevator.raiseElevatorDis(autoDis);
 				elevator.ejectBlock(autoSpeed);
-			}else if (MySwitch == 'R') {
+			}else if (mySwitch == 'R') {
 				sensor.driveFowardAuto(140);
 				sensor.turnRobotRight(90);
 				sensor.driveFowardAuto(5);
 				sensor.turnRobotRight(75);
 			}
 		}else if(myPosition == 1) {
-			if(MySwitch == 'L') {
+			if(mySwitch == 'L') {
 				sensor.driveFowardAuto(125);
 				sensor.turnRobotLeft(90);
 				sensor.driveFowardAuto(3);
@@ -99,7 +99,7 @@ public class Autonomous {
 				sensor.driveFowardAuto(15);
 				elevator.raiseElevatorDis(autoDis);
 				elevator.ejectBlock(autoSpeed);
-			}else if(MySwitch == 'R') {
+			}else if(mySwitch == 'R') {
 				sensor.driveFowardAuto(125);
 				sensor.turnRobotRight(90);
 				sensor.driveFowardAuto(3);
@@ -109,11 +109,11 @@ public class Autonomous {
 				elevator.ejectBlock(autoSpeed);
 			}
 		}else if(myPosition == 2) {
-			if(MySwitch == 'L') {
+			if(mySwitch == 'L') {
 			sensor.driveFowardAuto(140);
 			sensor.turnRobotLeft(75);
 			
-			}else if(MySwitch == 'R') {
+			}else if(mySwitch == 'R') {
 				sensor.driveFowardAuto(125);
 				sensor.turnRobotRight(90);
 				sensor.driveFowardAuto(8);
