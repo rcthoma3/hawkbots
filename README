@@ -44,5 +44,6 @@ LINKS:
 	  Added code to init and read encoders
 	
 	2/3/2018 
-	  Added and revised function for telling one motor to follow another during auton (both going straight and turning). -Ethan
+	  Added and revised function for telling one motor to follow another during auton(going straight). -Ethan
+	  Added and revised function for telling one motor to follow another during auton(turning, in sensors branch). -Ethan
 	 
