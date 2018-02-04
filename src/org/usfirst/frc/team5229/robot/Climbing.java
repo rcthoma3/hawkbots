@@ -1,5 +1,6 @@
 package org.usfirst.frc.team5229.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -10,19 +11,25 @@ public class Climbing {
 	private boolean setMotor = false;
 	private Sensors topSwitch = new Sensors();
 	private Sensors bottomSwitch = new Sensors();
+	private boolean topSensorpressed = false;
+	private boolean bottomSensorpressed = false;
+	private boolean raise = false;
+	private boolean lower = false;
+	private double lowerSpd = 0;
+	private double raiseSpd = 0;
 	
 	//Initialize switch with DIO
 	//IN:DIO Switch is plugged in
 	//Out:None
-	public void setSwitches(int dio) {
-		topSwitch.limitswitch(dio);
-		bottomSwitch.limitswitch(dio);
+	public void setSwitches(DigitalInput topSwitchIn, DigitalInput bottomSwitchIn) {
+		topSwitch.limitswitch(topSwitchIn);
+		bottomSwitch.limitswitch(bottomSwitchIn);
 	}
 	
 	//Initialize climb motor with PWM
 	//IN:PWM the motor is connected to
 	//OUT:setMotor is true
-	public boolean setClimbMotor (PWM m_climbMotorIn) {
+	public boolean setClimbMotor (VictorSP m_climbMotorIn) {
 		m_climbMotor = m_climbMotorIn;
 		setMotor = true;
 		return setMotor;
@@ -35,14 +42,16 @@ public class Climbing {
 		//Raises elevator to hook bar 
 		//Spins motor forward (Speed = +)
 		
-		boolean sensorpressed = topSwitch.getstate(); 
-		
+		//topSensorpressed = topSwitch.getstate(); 
+
 		if (!setMotor) {
 			System.out.println("ERROR: Climb Motor Not Initiated!");
 		}		
 		else {
-			if(!sensorpressed) { 
+			if(!topSensorpressed) { 
 				m_climbMotor.setSpeed(speed);
+				raise = true;
+				raiseSpd = speed;
 			} else { m_climbMotor.setSpeed(0); }
 		}
 	}
@@ -53,15 +62,34 @@ public class Climbing {
 	public void lowerElavator (double speed) {
 		//pull up robot using hook attached to bar
 		//Spins motor backwards (Speed = -)
-		boolean sensorpressed = bottomSwitch.getstate(); 
+		//bottomSensorpressed = bottomSwitch.getstate(); 
 		if (!setMotor) {
 			System.out.println("ERROR: Climb Motor Not Initiated!");
 		}
 		else {
-			if(!sensorpressed) {
+			if(!bottomSensorpressed) {
 				m_climbMotor.setSpeed(-speed);
+				lower = true;
+				lowerSpd = speed;
 			} else { m_climbMotor.setSpeed(0); }
 		}
+	}
+	public void checkSwitches(boolean switchOverride) {
+		
+		bottomSensorpressed = bottomSwitch.getstate(); 
+		topSensorpressed = topSwitch.getstate();
+		
+		if ((topSensorpressed || switchOverride)) {
+			m_climbMotor.setSpeed(0);
+			raise = false;
+		}
+		else if(!lower && raise){ m_climbMotor.setSpeed(raiseSpd); }
+		
+		if ((bottomSensorpressed || switchOverride)) {
+			 m_climbMotor.setSpeed(0);
+			 lower = false;
+		}
+		else if(!raise && lower) { m_climbMotor.setSpeed(-lowerSpd); }
 	}
 }
 	
