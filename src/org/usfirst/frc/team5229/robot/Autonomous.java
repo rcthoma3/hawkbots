@@ -75,6 +75,8 @@ public class Autonomous {
 		return secondSwitch;
 	}
 	
+	// TODO: Add Comments
+	// TODO: Modify commands based on new sensor functions
 	public void followPath() {
 		char mySwitch = getMySwitch();
 		int myPosition = getPositoin();

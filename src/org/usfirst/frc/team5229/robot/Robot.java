@@ -19,6 +19,9 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	
+	boolean forward = true;
+	boolean backward = true;
 
 	ControllerLogitech myController = new ControllerLogitech();
 	Climbing myClimber = new Climbing();
@@ -133,7 +136,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		myRobot.driveFowardAuto(120);
+		if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(120); System.out.println("Done Going Forward");}
+		if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward");}
+		myRobot.stopRobot();
 		
 		Timer.delay(0.005);
 	}
@@ -167,6 +172,7 @@ public class Robot extends IterativeRobot {
 		myClimber.checkSwitches(false);
 		myElevator.checkSwitches(false);
 		
+		// TODO: Test all controller components and mark verified 
 		if (myController.getButtonY()) { myClimber.raiseElevator(.3); }
 		if (myController.getButtonA()) { myClimber.lowerElavator(.3); }
 		if (myController.getButtonX()) { myElevator.raiseElevator(.3); }
