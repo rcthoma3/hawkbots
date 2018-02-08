@@ -452,7 +452,7 @@ public class Sensors {
 	//out:limSwitch.get()
 	public boolean getstate () {
 		
-		return limSwitch.get();
+		return !limSwitch.get();
 	}
 	
 	// Check the Encoders to see if they work properly
