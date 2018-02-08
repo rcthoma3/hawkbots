@@ -25,6 +25,13 @@ public class Elevator {
 	private boolean lowerSensorPressed = false;
 	private boolean grabSensorPressed = false;
 	
+	private boolean raise = false;
+	private boolean lower = false;
+	private double raiseSpd = 0;
+	private double lowerSpd = 0;
+	
+			
+	
 	//Set up Elevator motor
 	//in:elevatorMoterIn
 	//out:setElevator
@@ -98,6 +105,7 @@ public class Elevator {
 	//out:Nothing
     public void raiseElevator(double speed) {
     	upperSensorPressed = upperSwitch.getstate();
+    	raiseSpd = speed;
     	
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
@@ -121,7 +129,6 @@ public class Elevator {
     //out:nothing
     public void raiseElevatorDis(double dis) {
     	upperSensorPressed = upperSwitch.getstate();
-    	
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
     	}else if(!setElevator){
@@ -141,6 +148,8 @@ public class Elevator {
     //out:nothing
     public void lowerElevator (double speed) {
     	lowerSensorPressed = lowerSwitch.getstate();
+    	lowerSpd = speed;
+    	
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
     	}else if(!setElevator){
@@ -213,17 +222,29 @@ public class Elevator {
     
     // TODO: Make this match climb function
     public void checkSwitches(boolean switchOverride) {
+    	lowerSensorPressed = lowerSwitch.getstate(); 
+		upperSensorPressed = upperSwitch.getstate();
+    	
     	if (upperSensorPressed || switchOverride) {
     		_elevatorMoter.set(ControlMode.Velocity, 0);
+    		raise = false;
     	}
+    	
+    	else if (!lower && raise) {
+    		 _elevatorMoter.set (ControlMode.Velocity, raiseSpd);
+    	}
+    	
     	if(lowerSensorPressed || switchOverride) {
-    		_elevatorMoter.set(ControlMode.Velocity, 0);
+    		_elevatorMoter.set (ControlMode.Velocity, 0);
+    		lower = false;
+    		
     	}
-    	if (grabSensorPressed || switchOverride) {
-    		_leftMoter.setSpeed(0);
-    		_rightMoter.setSpeed(0);
+    	
+    	else if (!lower && raise) {
+       		 _elevatorMoter.set (ControlMode.Velocity, -lowerSpd);
+       	
     	}
-               
+    	
     }
     
     

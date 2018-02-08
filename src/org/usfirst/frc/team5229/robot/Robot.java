@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -128,8 +129,14 @@ public class Robot extends IterativeRobot {
 		String gameMsg = myAutonRobot.getGameMsg();
 		int pos = myAutonRobot.getPositoin();
 		
-		//TODO: Put gameMsg on SmartDashboard
-		//TODO: Put pos on SmartDashboard
+		SmartDashboard.putString("Game message", gameMsg);
+		if(pos == 0) {
+			SmartDashboard.putString("Position", "Left");
+		}else if(pos == 1) {
+			SmartDashboard.putString("Position", "Center");
+		}else if(pos == 2) {
+			SmartDashboard.putString("Position", "Right");
+		}
 	}
 
 	/**
