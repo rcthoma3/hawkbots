@@ -51,6 +51,7 @@ public class Climbing {
 			if(!topSensorpressed) { 
 				m_climbMotor.setSpeed(speed);
 				raise = true;
+				lower = false;
 				raiseSpd = speed;
 			} else { m_climbMotor.setSpeed(0); }
 		}
@@ -70,6 +71,7 @@ public class Climbing {
 			if(!bottomSensorpressed) {
 				m_climbMotor.setSpeed(-speed);
 				lower = true;
+				raise = false;
 				lowerSpd = speed;
 			} else { m_climbMotor.setSpeed(0); }
 		}
@@ -79,17 +81,17 @@ public class Climbing {
 		bottomSensorpressed = bottomSwitch.getstate(); 
 		topSensorpressed = topSwitch.getstate();
 		
-		if ((topSensorpressed || switchOverride)) {
+		if ((topSensorpressed || switchOverride) && raise) {
 			m_climbMotor.setSpeed(0);
 			raise = false;
 		}
 		else if(!lower && raise){ m_climbMotor.setSpeed(raiseSpd); }
 		
-		if ((bottomSensorpressed || switchOverride)) {
-			 m_climbMotor.setSpeed(0);
-			 lower = false;
+		if ((bottomSensorpressed || switchOverride) && lower) {
+			m_climbMotor.setSpeed(0);
+			lower = false;
 		}
-		else if(!raise && lower) { m_climbMotor.setSpeed(-lowerSpd); }
+		else if(!raise && lower) {  m_climbMotor.setSpeed(-lowerSpd); }
 	}
 }
 	

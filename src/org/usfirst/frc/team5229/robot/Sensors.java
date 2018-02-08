@@ -16,6 +16,7 @@ public class Sensors {
 	private int encTicksPerRot = 1440;
 	private int acc = 150; // Acceleration
 	private int cruiseVel = 300; // Cruise Velocity 
+	public int threshold = 100;
 	
 	private boolean setEnc = false;
 	private boolean initEnc = false;
@@ -113,10 +114,10 @@ public class Sensors {
 			
 			//Sets closed loop error range
 			// TODO: Reevaluate these
-			//_frontLeftMotor.configAllowableClosedloopError(0, 100, timeoutMs);
-			//_frontRightMotor.configAllowableClosedloopError(0, 100, timeoutMs);
-			//_rearLeftMotor.configAllowableClosedloopError(0, 100, timeoutMs);
-			//_rearRightMotor.configAllowableClosedloopError(0, 100, timeoutMs);
+			//_frontLeftMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
+			//_frontRightMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
+			//_rearLeftMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
+			//_rearRightMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
 			
 			// Set the peak and nominal outputs, 12V means full 
 			_frontLeftMotor.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
@@ -233,24 +234,29 @@ public class Sensors {
 		return 0;
 	}
 	
-	// TODO: Added Comment
+	//Stops robot at the end of whatever movements it is set to make during auton
 	public boolean stopRobot() {
-		// TODO: Added if/else to check setEnc and initEnc
-		_frontLeftMotor.set(0);
-		_rearLeftMotor.set(0);
-		_frontRightMotor.set(0);
-		_rearRightMotor.set(0);
+		if (!setEnc) {
+			System.err.println("ERROR: Encoders Not Set");
+		}
+		else if(!initEnc) {
+			System.err.println("ERROR: Encoders Not Initalized");
+		}
+		else {
+			_frontLeftMotor.set(0);
+			_rearLeftMotor.set(0);
+			_frontRightMotor.set(0);
+			_rearRightMotor.set(0);
 		
-		return true;
+			return true;
+		}
+		return false;
 	}
 	
-	// TODO: Update Comment
 	//Make a robot move forward during autonomous
 	//in:Distance, 4 motor controllers
 	//out:nothing
 	public boolean driveFowardAuto(int dis) {
-		// TODO: Move enc inside else
-		int enc = disToEnc(dis);
 		
 		if (!setEnc) {
 			System.err.println("ERROR: Encoders Not Set");
@@ -260,23 +266,25 @@ public class Sensors {
 		}
 		else {
 			
-			int cur = 0;		
+			int enc = disToEnc(dis);
+			int cur = 0;	
 			
-			// TODO: Make the threshold (100) a global variable 
-			while(!(cur < enc + 100 && cur > enc - 100)) {
-				// TODO: Move Sets out of while loop
-				_frontRightMotor.setInverted(true);
-				_rearRightMotor.setInverted(true);
-				_frontLeftMotor.setInverted(false);
-				_rearLeftMotor.setInverted(false);
-				_frontLeftMotor.setSensorPhase(false);
-				_rearLeftMotor.setSensorPhase(false);
-				_frontRightMotor.setSensorPhase(false);
-				_rearRightMotor.setSensorPhase(false);
+			_frontRightMotor.setInverted(true);
+			_rearRightMotor.setInverted(true);
+			_frontLeftMotor.setInverted(false);
+			_rearLeftMotor.setInverted(false);
+			_frontLeftMotor.setSensorPhase(false);
+			_rearLeftMotor.setSensorPhase(false);
+			_frontRightMotor.setSensorPhase(false);
+			_rearRightMotor.setSensorPhase(false);
+			
+			while(!(cur < enc + threshold && cur > enc - threshold)) {
+				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
 				if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (rearRightValid) { _rearRightMotor.set(ControlMode.MotionMagic, enc); }
+				
 				checkEncoders();
 				updateDashboard();
 				
@@ -297,13 +305,10 @@ public class Sensors {
 		return false;
 	}
 	
-	// TODO: Update Comment
 	//Make a robot move backwards
 	//in:Distance 4 motor controller
 	//out:nothing
 	public boolean driveBackwardAuto(int dis){
-		// TODO: Move enc inside else
-		int enc = disToEnc(dis) * -1;//Robot move backwards
 		
 		if (!setEnc) {
 			System.err.println("ERROR: Encoders Not Set");
@@ -312,28 +317,30 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Initalized");
 		}
 		else {
+			int enc = disToEnc(dis);//Robot move backwards
 			int cur = 0;
 			
-			// TODO: Make the threshold (100) a global variable 
-			while(!(cur < enc + 100 && cur > enc - 100)) {
-				// TODO: Move Sets out of while loop
-				_frontRightMotor.setInverted(true);
-				_rearRightMotor.setInverted(true);
-				_frontLeftMotor.setInverted(false);
-				_rearLeftMotor.setInverted(false);
-				_frontLeftMotor.setSensorPhase(false);
-				_rearLeftMotor.setSensorPhase(false);
-				_frontRightMotor.setSensorPhase(false);
-				_rearRightMotor.setSensorPhase(false);
+			_frontRightMotor.setInverted(false);
+			_rearRightMotor.setInverted(false);
+			_frontLeftMotor.setInverted(true);
+			_rearLeftMotor.setInverted(true);
+			_frontLeftMotor.setSensorPhase(true);
+			_rearLeftMotor.setSensorPhase(true);
+			_frontRightMotor.setSensorPhase(true);
+			_rearRightMotor.setSensorPhase(true);
+			
+			while(!(cur < enc + threshold && cur > enc - threshold)) {
+				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
 				if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (rearRightValid) { _rearRightMotor.set(ControlMode.MotionMagic, enc); }
+				
 				checkEncoders();
 				updateDashboard();
 				
-				cur = Math.min(Math.min(_frontLeftMotor.getSelectedSensorPosition(0), _frontRightMotor.getSelectedSensorPosition(0)),
-						Math.min(_rearLeftMotor.getSelectedSensorPosition(0), _rearRightMotor.getSelectedSensorPosition(0)));
+				cur = Math.max(Math.max(_frontLeftMotor.getSelectedSensorPosition(0), _frontRightMotor.getSelectedSensorPosition(0)),
+						Math.max(_rearLeftMotor.getSelectedSensorPosition(0), _rearRightMotor.getSelectedSensorPosition(0)));
 				
 				Timer.delay(0.005);
 			}
@@ -349,11 +356,10 @@ public class Sensors {
 		return false;
 	}
 	
-	// TODO: Change output to boolean and update comment
 	// This allows the robot to turn right
 	//In: Distance 4 motor controller
 	//out:Nothing
-	public void turnRobotRight (double deg) {
+	public boolean turnRobotRight (double deg) {
 		
 		if(!setChsSize) {
 			System.err.println("ERROR: Chassis Size Not Set");
@@ -367,6 +373,7 @@ public class Sensors {
 		else {	
 			double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360);
 			int enc = disToEnc(dis);
+			int cur = 0;
 			
 			_frontRightMotor.setInverted(false);
 			_rearRightMotor.setInverted(false);
@@ -376,28 +383,38 @@ public class Sensors {
 			_rearLeftMotor.setSensorPhase(false);
 			_frontRightMotor.setSensorPhase(true);
 			_rearRightMotor.setSensorPhase(true);
-			// TODO: Add while loop and Timer delay
+			
+			while ((cur < enc + threshold && cur > enc - threshold)) {
+				
 			if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 			if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
 			if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
 			if (rearRightValid) { _rearRightMotor.set(ControlMode.MotionMagic, enc); }
+			
 			checkEncoders();
 			updateDashboard();
-			// TODO: Add cur calculation 
+			
+			cur = Math.max(Math.max(_frontLeftMotor.getSelectedSensorPosition(0), _frontRightMotor.getSelectedSensorPosition(0)),
+					Math.max(_rearLeftMotor.getSelectedSensorPosition(0), _rearRightMotor.getSelectedSensorPosition(0)));
+			
+			Timer.delay(0.005);
+			}
 			
 			// Reset Sensor to zero
 			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
 			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			
+			return true;
 		}
+		return false;
 	}
 		
-	// TODO: Change output to boolean and update comment
 	//This allows the robot to turn left
 	//In: Distance 4 motor controller
 	//out:Nothing
-	public void turnRobotLeft (double deg) {
+	public boolean turnRobotLeft (double deg) {
 		
 		if(!setChsSize) {
 			System.err.println("ERROR: Chassis Size Not Set");
@@ -411,6 +428,7 @@ public class Sensors {
 		else {
 			double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360);
 			int enc = disToEnc(dis);
+			int cur = 0;
 			
 			_frontRightMotor.setInverted(true);
 			_rearRightMotor.setInverted(true);
@@ -420,21 +438,32 @@ public class Sensors {
 			_rearLeftMotor.setSensorPhase(true);
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
-			// TODO: Add while loop and Timer delay
+			
+			while ((cur < enc + threshold && cur > enc - threshold)) {
+			
 			if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 			if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
 			if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
 			if (rearRightValid) { _rearRightMotor.set(ControlMode.MotionMagic, enc); }
+			
 			checkEncoders();
 			updateDashboard();
-			// TODO: Add cur calculation
+			
+			cur = Math.max(Math.max(_frontLeftMotor.getSelectedSensorPosition(0), _frontRightMotor.getSelectedSensorPosition(0)),
+					Math.max(_rearLeftMotor.getSelectedSensorPosition(0), _rearRightMotor.getSelectedSensorPosition(0)));
+			
+			Timer.delay(0.005);
+			}
 			
 			// Reset Sensor to zero
 			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
 			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			
+			return true;
 		}
+		return false;
 	}
 	
 	// Set up the limit switch
@@ -452,7 +481,7 @@ public class Sensors {
 	//out:limSwitch.get()
 	public boolean getstate () {
 		
-		return limSwitch.get();
+		return !limSwitch.get();
 	}
 	
 	// Check the Encoders to see if they work properly
@@ -573,12 +602,6 @@ public class Sensors {
 				
 				//For the greatest value, set that motor to follow and assign it to not be valid
 				if (badPosition == 1) {
-
-					/*Enables motor invert on said wheel to keep direction from changing if robot is turning.
-					 *FUNCTION IS ONLY ACTIVE IF ROBOT IS TURNING (when two motors have a negative position)*/
-					/*if (noInvert) {
-						_frontLeftMotor.setInverted(true);
-					}*/
 					
 					//Tells that wheel what motor to follow
 					if (rearLeftValid) { _frontLeftMotor.follow(_rearLeftMotor); }
@@ -588,12 +611,6 @@ public class Sensors {
 					System.out.println("frontLeftError");
 				}
 				if (badPosition == 2) {
-
-					/*Enables motor invert on said wheel to keep direction from changing if robot is turning.
-					 *FUNCTION IS ONLY ACTIVE IF ROBOT IS TURNING (when two motors have a negative position)*/
-					/*if (noInvert) {
-						_frontRightMotor.setInverted(false);
-					}*/
 					
 					//Tells that wheel what motor to follow
 					if (rearRightValid) { _frontRightMotor.follow(_rearRightMotor); }
@@ -603,12 +620,6 @@ public class Sensors {
 					System.out.println("frontRightError");
 				}
 				if (badPosition == 3) {
-
-					/*Enables motor invert on said wheel to keep direction from changing if robot is turning.
-					 *FUNCTION IS ONLY ACTIVE IF ROBOT IS TURNING (when two motors have a negative position)*/
-					/*if (noInvert) {
-						_rearLeftMotor.setInverted(true);
-					}*/
 					
 					//Tells that wheel what motor to follow
 					if (frontLeftValid) {  _rearLeftMotor.follow(_frontLeftMotor); }
@@ -618,12 +629,6 @@ public class Sensors {
 					System.out.println("rearLeftError");
 				}
 				if (badPosition == 4) {
-
-					/*Enables motor invert on said wheel to keep direction from changing if robot is turning.
-					 *FUNCTION IS ONLY ACTIVE IF ROBOT IS TURNING (when two motors have a negative position)*/
-					/*if (noInvert) {
-						_rearRightMotor.setInverted(false);
-					}*/
           
 					//Tells that wheel what motor to follow
 					if (frontRightValid) { _rearRightMotor.follow(_frontRightMotor); }
@@ -636,19 +641,22 @@ public class Sensors {
 		}
 	}
 	
-	// TODO: Add Comments
+	//Updates SmartDashboard with wheel position, velocity, and whether or not the encoder for a certain wheel is valid
 	public void updateDashboard() {
+		
+		//Updates wheel position
 		SmartDashboard.putNumber("Front Left Pos: ", _frontLeftMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Front Right Pos: ", _frontRightMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Rear Left Pos: ", _rearLeftMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Rear Right Pos: ", _rearRightMotor.getSelectedSensorPosition(0));
 		
+		//Updates wheel velocity
 		SmartDashboard.putNumber("Front Left Vel: ", _frontLeftMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Front Right Vel: ", _frontRightMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Rear Left Vel: ", _rearLeftMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Rear Right Vel: ", _rearRightMotor.getSelectedSensorVelocity(0));
 		
-		//Prints whether encoders are valid to smartDashboard\
+		//Updates whether or not the wheel encoders are valid
 		SmartDashboard.putBoolean("Front Right Valid", frontRightValid);
 		SmartDashboard.putBoolean("Front Left Valid", frontLeftValid);
 		SmartDashboard.putBoolean("Rear Right Valid", rearRightValid);

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -46,9 +47,9 @@ public class Robot extends IterativeRobot {
 	// Switch Declarations
 	DigitalInput topClimbSwitch;
 	DigitalInput bottomClimbSwitch;
-	// TODO: Declare topElevatorSwitch
-	// TODO: Declare bottomElevatorSwitch
-	// TODO: Declare grabSwitch
+	DigitalInput topElevatorSwitch;
+	DigitalInput bottomElevatorSwitch;
+	DigitalInput grabSwitch;
 
 	// These values correspond to roboRIO ports
 	//Talons - CAN
@@ -62,6 +63,7 @@ public class Robot extends IterativeRobot {
 	int bottomElevatorPort = 1;
 	int topClimbPort =2;
 	int bottomClimbPort = 3;
+	int grabSwitchPort = 4;
 	//Victors - PWM
 	int leftClawPort = 0;
 	int rightClawPort = 1;
@@ -96,19 +98,20 @@ public class Robot extends IterativeRobot {
 		_climbMotor = new VictorSP(climbMotorPort);
 		_leftClawMotor = new VictorSP(leftClawPort);
 		_rightClawMotor = new VictorSP(rightClawPort);
-		// TODO: Init elevatorMotor
+		_elevatorMotor = new WPI_TalonSRX(elevatorMotorPort);
 		
 		topClimbSwitch = new DigitalInput(topClimbPort);
 		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
-		// TODO: Init topElevatorSwitch
-		// TODO: Init bottomElevatorSwitch
-		// TODO: Init grabSwitch
+		topElevatorSwitch = new DigitalInput(topElevatorPort);
+		bottomElevatorSwitch = new DigitalInput(bottomElevatorPort);
+		grabSwitch = new DigitalInput(grabSwitchPort);
 		
 		myClimber.setClimbMotor(_climbMotor);
-		myClimber.setSwitches(topClimbSwitch, topClimbSwitch);
-		// TODO: Set Elevator Motor
-		// TODO: Set Elevator/Grab Switches
-		// TODO: Set Grab Motors
+		myClimber.setSwitches(topClimbSwitch, bottomClimbSwitch);
+		myElevator.setElevator(_elevatorMotor);
+		//myElevator.initElevator();
+		myElevator.setSwitches(topElevatorSwitch, bottomElevatorSwitch, grabSwitch);
+		myElevator.setGrabMotors(_leftClawMotor, _rightClawMotor);
 	}
 	
 
@@ -126,8 +129,14 @@ public class Robot extends IterativeRobot {
 		String gameMsg = myAutonRobot.getGameMsg();
 		int pos = myAutonRobot.getPositoin();
 		
-		//TODO: Put gameMsg on SmartDashboard
-		//TODO: Put pos on SmartDashboard
+		SmartDashboard.putString("Game message", gameMsg);
+		if(pos == 0) {
+			SmartDashboard.putString("Position", "Left");
+		}else if(pos == 1) {
+			SmartDashboard.putString("Position", "Center");
+		}else if(pos == 2) {
+			SmartDashboard.putString("Position", "Right");
+		}
 	}
 
 	/**
