@@ -75,9 +75,11 @@ public class Autonomous {
 		return secondSwitch;
 	}
 	
-	// TODO: Add Comments
-	// TODO: Modify commands based on new sensor functions
-	public void followPath() {
+	// Do autonomous 
+	//in:nothing
+	//out:exitd
+	public boolean followPath() {
+		boolean exit = false;
 		char mySwitch = getMySwitch();
 		int myPosition = getPositoin();
 		if(myPosition == 0) {
@@ -86,11 +88,13 @@ public class Autonomous {
 				sensor.turnRobotRight(90);
 				elevator.raiseElevatorDis(autoDis);
 				elevator.ejectBlock(autoSpeed);
+				exit = true;
 			}else if (mySwitch == 'R') {
 				sensor.driveFowardAuto(140);
 				sensor.turnRobotRight(90);
 				sensor.driveFowardAuto(5);
 				sensor.turnRobotRight(75);
+				exit = true;
 			}
 		}else if(myPosition == 1) {
 			if(mySwitch == 'L') {
@@ -101,6 +105,7 @@ public class Autonomous {
 				sensor.driveFowardAuto(15);
 				elevator.raiseElevatorDis(autoDis);
 				elevator.ejectBlock(autoSpeed);
+				exit = true;
 			}else if(mySwitch == 'R') {
 				sensor.driveFowardAuto(125);
 				sensor.turnRobotRight(90);
@@ -109,12 +114,13 @@ public class Autonomous {
 				sensor.driveFowardAuto(15);
 				elevator.raiseElevatorDis(autoDis);
 				elevator.ejectBlock(autoSpeed);
+				exit = true;
 			}
 		}else if(myPosition == 2) {
 			if(mySwitch == 'L') {
-			sensor.driveFowardAuto(140);
-			sensor.turnRobotLeft(75);
-			
+				sensor.driveFowardAuto(140);
+				sensor.turnRobotLeft(75);
+				exit = true;
 			}else if(mySwitch == 'R') {
 				sensor.driveFowardAuto(125);
 				sensor.turnRobotRight(90);
@@ -123,9 +129,11 @@ public class Autonomous {
 				sensor.driveFowardAuto(30);
 				elevator.raiseElevatorDis(autoDis);
 				elevator.ejectBlock(autoSpeed);
+				exit = true;
 			}
 			
 		}
+		return exit;
 	}
 	
 }
