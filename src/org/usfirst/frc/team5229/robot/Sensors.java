@@ -35,13 +35,7 @@ public class Sensors {
 	private boolean frontRightValid = true;
 	private boolean rearLeftValid = true;
 	private boolean rearRightValid = true;
-	/*private boolean noInvert = _frontRightMotor.getSelectedSensorPosition(0) < 0 && _frontLeftMotor.getSelectedSensorPosition(0) < 0 
-			|| _frontRightMotor.getSelectedSensorPosition(0) < 0 && _rearRightMotor.getSelectedSensorPosition(0) < 0
-			|| _frontRightMotor.getSelectedSensorPosition(0) < 0 && _rearLeftMotor.getSelectedSensorPosition(0) < 0
-			|| _frontLeftMotor.getSelectedSensorPosition(0) < 0 && _rearRightMotor.getSelectedSensorPosition(0) < 0
-			|| _frontLeftMotor.getSelectedSensorPosition(0) < 0 && _rearLeftMotor.getSelectedSensorPosition(0) < 0
-			|| _rearRightMotor.getSelectedSensorPosition(0) < 0 && _rearLeftMotor.getSelectedSensorPosition(0) < 0;
-	*/
+	
 	private DigitalInput limSwitch;
 	
 	// Set Encoders/Talons 
@@ -374,6 +368,7 @@ public class Sensors {
 			double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360);
 			int enc = disToEnc(dis);
 			int cur = 0;
+			System.out.println(enc);
 			
 			_frontRightMotor.setInverted(false);
 			_rearRightMotor.setInverted(false);
@@ -384,20 +379,21 @@ public class Sensors {
 			_frontRightMotor.setSensorPhase(true);
 			_rearRightMotor.setSensorPhase(true);
 			
-			while ((cur < enc + threshold && cur > enc - threshold)) {
+			while (!(cur < enc + threshold && cur > enc - threshold)) {
 				
-			if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
-			if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
-			if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
-			if (rearRightValid) { _rearRightMotor.set(ControlMode.MotionMagic, enc); }
-			
-			checkEncoders();
-			updateDashboard();
-			
-			cur = Math.max(Math.max(_frontLeftMotor.getSelectedSensorPosition(0), _frontRightMotor.getSelectedSensorPosition(0)),
-					Math.max(_rearLeftMotor.getSelectedSensorPosition(0), _rearRightMotor.getSelectedSensorPosition(0)));
-			
-			Timer.delay(0.005);
+				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
+				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
+				if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
+				if (rearRightValid) { _rearRightMotor.set(ControlMode.MotionMagic, enc); }
+				
+				checkEncoders();
+				updateDashboard();
+				
+				cur = Math.max(Math.max(_frontLeftMotor.getSelectedSensorPosition(0), _frontRightMotor.getSelectedSensorPosition(0)),
+						Math.max(_rearLeftMotor.getSelectedSensorPosition(0), _rearRightMotor.getSelectedSensorPosition(0)));
+				
+				System.out.println(cur);
+				Timer.delay(0.005);
 			}
 			
 			// Reset Sensor to zero
@@ -439,20 +435,20 @@ public class Sensors {
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
-			while ((cur < enc + threshold && cur > enc - threshold)) {
+			while (!(cur < enc + threshold && cur > enc - threshold)) {
 			
-			if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
-			if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
-			if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
-			if (rearRightValid) { _rearRightMotor.set(ControlMode.MotionMagic, enc); }
-			
-			checkEncoders();
-			updateDashboard();
-			
-			cur = Math.max(Math.max(_frontLeftMotor.getSelectedSensorPosition(0), _frontRightMotor.getSelectedSensorPosition(0)),
-					Math.max(_rearLeftMotor.getSelectedSensorPosition(0), _rearRightMotor.getSelectedSensorPosition(0)));
-			
-			Timer.delay(0.005);
+				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
+				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
+				if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
+				if (rearRightValid) { _rearRightMotor.set(ControlMode.MotionMagic, enc); }
+				
+				checkEncoders();
+				updateDashboard();
+				
+				cur = Math.max(Math.max(_frontLeftMotor.getSelectedSensorPosition(0), _frontRightMotor.getSelectedSensorPosition(0)),
+						Math.max(_rearLeftMotor.getSelectedSensorPosition(0), _rearRightMotor.getSelectedSensorPosition(0)));
+				
+				Timer.delay(0.005);
 			}
 			
 			// Reset Sensor to zero

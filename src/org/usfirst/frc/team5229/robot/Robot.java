@@ -23,6 +23,7 @@ public class Robot extends IterativeRobot {
 	
 	boolean forward = true;
 	boolean backward = true;
+	boolean turn = true;
 
 	ControllerLogitech myController = new ControllerLogitech();
 	Climbing myClimber = new Climbing();
@@ -137,6 +138,7 @@ public class Robot extends IterativeRobot {
 		}else if(pos == 2) {
 			SmartDashboard.putString("Position", "Right");
 		}
+		turn = true;
 	}
 
 	/**
@@ -145,8 +147,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(120); System.out.println("Done Going Forward");}
-		if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward");}
+		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(120); System.out.println("Done Going Forward");}
+		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward");}
+		if (turn) {System.out.println("Doing Turn"); turn = !myRobot.turnRobotRight(90); System.out.println("Done Turning");}
 		myRobot.stopRobot();
 		
 		Timer.delay(0.005);

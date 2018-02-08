@@ -46,7 +46,6 @@ public class Autonomous {
 			System.err.println("Error: Auto Chooser not set up");
 		}else {
 			startpos = (int) autoChooser.getSelected();
-			System.out.println("Starting Pos: " + startpos);
 		}
 		return startpos;
 	}
