@@ -46,9 +46,9 @@ public class Robot extends IterativeRobot {
 	// Switch Declarations
 	DigitalInput topClimbSwitch;
 	DigitalInput bottomClimbSwitch;
-	// TODO: Declare topElevatorSwitch
-	// TODO: Declare bottomElevatorSwitch
-	// TODO: Declare grabSwitch
+	DigitalInput topElevatorSwitch;
+	DigitalInput bottomElevatorSwitch;
+	DigitalInput grabSwitch;
 
 	// These values correspond to roboRIO ports
 	//Talons - CAN
@@ -62,6 +62,7 @@ public class Robot extends IterativeRobot {
 	int bottomElevatorPort = 1;
 	int topClimbPort =2;
 	int bottomClimbPort = 3;
+	int grabSwitchPort = 4;
 	//Victors - PWM
 	int leftClawPort = 0;
 	int rightClawPort = 1;
@@ -96,19 +97,20 @@ public class Robot extends IterativeRobot {
 		_climbMotor = new VictorSP(climbMotorPort);
 		_leftClawMotor = new VictorSP(leftClawPort);
 		_rightClawMotor = new VictorSP(rightClawPort);
-		// TODO: Init elevatorMotor
+		_elevatorMotor = new WPI_TalonSRX(elevatorMotorPort);
 		
 		topClimbSwitch = new DigitalInput(topClimbPort);
 		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
-		// TODO: Init topElevatorSwitch
-		// TODO: Init bottomElevatorSwitch
-		// TODO: Init grabSwitch
+		topElevatorSwitch = new DigitalInput(topElevatorPort);
+		bottomElevatorSwitch = new DigitalInput(bottomElevatorPort);
+		grabSwitch = new DigitalInput(grabSwitchPort);
 		
 		myClimber.setClimbMotor(_climbMotor);
-		myClimber.setSwitches(topClimbSwitch, topClimbSwitch);
-		// TODO: Set Elevator Motor
-		// TODO: Set Elevator/Grab Switches
-		// TODO: Set Grab Motors
+		myClimber.setSwitches(topClimbSwitch, bottomClimbSwitch);
+		myElevator.setElevator(_elevatorMotor);
+		//myElevator.initElevator();
+		myElevator.setSwitches(topElevatorSwitch, bottomElevatorSwitch, grabSwitch);
+		myElevator.setGrabMotors(_leftClawMotor, _rightClawMotor);
 	}
 	
 

@@ -13,11 +13,12 @@ public class Elevator {
 	private boolean initElevator = false; 
 	private Sensors upperSwitch;
 	private Sensors lowerSwitch;
-	private boolean setSwitches = false;
-	private PWM _leftMoter;
-	private PWM _rightMoter;
-	private boolean  setMoters;
 	private Sensors grabSwitch;
+	private boolean setSwitches = false;
+	private VictorSP _leftMoter;
+	private VictorSP _rightMoter;
+	private boolean  setMoters;
+	
 	private int timeoutMs = 10;
 	private int pidIdx = 0;
 	private boolean upperSensorPressed = false;
@@ -37,6 +38,9 @@ public class Elevator {
 	//in:uppperSwitchIn, lowerSwitchIn, grabSwitchIn
 	//out:setSwitches
 	public boolean setSwitches(DigitalInput upperSwitchIn, DigitalInput lowerSwitchIn, DigitalInput grabSwitchIn) {
+		upperSwitch = new Sensors();
+		lowerSwitch = new Sensors();
+		grabSwitch = new Sensors();
 		upperSwitch.limitswitch(upperSwitchIn);
 		lowerSwitch.limitswitch(lowerSwitchIn);
 		grabSwitch.limitswitch(grabSwitchIn);
@@ -47,9 +51,9 @@ public class Elevator {
 	//Set the side motors of the elevator
 	//in:_leftMoterIn, _rightMoterIn
 	//out:setMoters
-	public boolean setGrabMotors(int _leftMoterIn, int _rightMoterIn) {
-		_leftMoter = new VictorSP(_leftMoterIn);
-		_rightMoter = new VictorSP(_rightMoterIn);
+	public boolean setGrabMotors(VictorSP _leftMoterIn, VictorSP _rightMoterIn) {
+		_leftMoter =_leftMoterIn;
+		_rightMoter =_rightMoterIn;
 		setMoters = true;
 		return setMoters;
 	}
@@ -196,19 +200,14 @@ public class Elevator {
     //in:speed
     //out:nothing
     public void ejectBlock(double speed) {
-    	grabSensorPressed = grabSwitch.getstate();
+    	
     	if(!setMoters) {
     		System.err.println("Error: Grabbing moters are not set up.");
     	}else if(!setSwitches){
     		System.err.println("Error: Grab Switch not set up");
-    	}else {
-    		if(!grabSensorPressed) { //TODO: Remove this. We want to be able to eject the block if the switch is pressed
-    			_leftMoter.setSpeed(-speed);
-    			_rightMoter.setSpeed(speed);
-    		}else {
-    			_leftMoter.setSpeed(0);
-    			_rightMoter.setSpeed(0);
-    		}
+    	}else {    		
+			_leftMoter.setSpeed(-speed);
+			_rightMoter.setSpeed(speed);
     	}
     }  
     
