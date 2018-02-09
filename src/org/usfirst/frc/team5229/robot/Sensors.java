@@ -318,10 +318,10 @@ public class Sensors {
 			_rearRightMotor.setInverted(false);
 			_frontLeftMotor.setInverted(true);
 			_rearLeftMotor.setInverted(true);
-			_frontLeftMotor.setSensorPhase(true);
-			_rearLeftMotor.setSensorPhase(true);
-			_frontRightMotor.setSensorPhase(true);
-			_rearRightMotor.setSensorPhase(true);
+			_frontLeftMotor.setSensorPhase(false);
+			_rearLeftMotor.setSensorPhase(false);
+			_frontRightMotor.setSensorPhase(false);
+			_rearRightMotor.setSensorPhase(false);
 			
 			while(!(cur < enc + threshold && cur > enc - threshold)) {
 				
@@ -365,10 +365,9 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Initalized");
 		}
 		else {	
-			double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360);
+			double dis = (2 * Math.PI *(roboDim / 2) * (deg / 360))*1.5;
 			int enc = disToEnc(dis);
 			int cur = 0;
-			System.out.println(enc);
 			
 			_frontRightMotor.setInverted(false);
 			_rearRightMotor.setInverted(false);
@@ -376,9 +375,10 @@ public class Sensors {
 			_rearLeftMotor.setInverted(false);
 			_frontLeftMotor.setSensorPhase(false);
 			_rearLeftMotor.setSensorPhase(false);
-			_frontRightMotor.setSensorPhase(true);
-			_rearRightMotor.setSensorPhase(true);
+			_frontRightMotor.setSensorPhase(false);
+			_rearRightMotor.setSensorPhase(false);
 			
+					
 			while (!(cur < enc + threshold && cur > enc - threshold)) {
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
@@ -392,7 +392,6 @@ public class Sensors {
 				cur = Math.max(Math.max(_frontLeftMotor.getSelectedSensorPosition(0), _frontRightMotor.getSelectedSensorPosition(0)),
 						Math.max(_rearLeftMotor.getSelectedSensorPosition(0), _rearRightMotor.getSelectedSensorPosition(0)));
 				
-				System.out.println(cur);
 				Timer.delay(0.005);
 			}
 			
@@ -422,7 +421,7 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Initalized");
 		}
 		else {
-			double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360);
+			double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360)*1.5;
 			int enc = disToEnc(dis);
 			int cur = 0;
 			
@@ -430,8 +429,8 @@ public class Sensors {
 			_rearRightMotor.setInverted(true);
 			_frontLeftMotor.setInverted(true);
 			_rearLeftMotor.setInverted(true);
-			_frontLeftMotor.setSensorPhase(true);
-			_rearLeftMotor.setSensorPhase(true);
+			_frontLeftMotor.setSensorPhase(false);
+			_rearLeftMotor.setSensorPhase(false);
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			

@@ -23,7 +23,8 @@ public class Robot extends IterativeRobot {
 	
 	boolean forward = true;
 	boolean backward = true;
-	boolean turn = true;
+	boolean turnRight = true;
+	boolean turnLeft = true;
 
 	ControllerLogitech myController = new ControllerLogitech();
 	Climbing myClimber = new Climbing();
@@ -138,7 +139,10 @@ public class Robot extends IterativeRobot {
 		}else if(pos == 2) {
 			SmartDashboard.putString("Position", "Right");
 		}
-		turn = true;
+		forward = true;
+		backward = true;
+		turnRight = true;
+		turnLeft = true;
 	}
 
 	/**
@@ -147,9 +151,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(120); System.out.println("Done Going Forward");}
-		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward");}
-		if (turn) {System.out.println("Doing Turn"); turn = !myRobot.turnRobotRight(90); System.out.println("Done Turning");}
+		if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(120); System.out.println("Done Going Forward");}
+		if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward");}
+		if (turnRight) {System.out.println("Doing Rigt Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right");}
+		if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeft(90); System.out.println("Done Turning Left");}
 		myRobot.stopRobot();
 		
 		Timer.delay(0.005);
@@ -166,7 +171,7 @@ public class Robot extends IterativeRobot {
 		_drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);		
 		
 		// Something to do with safety 
-		_drive.setSafetyEnabled(true);
+		_drive.setSafetyEnabled(false);
 		_drive.setExpiration(0.1);
 		
 		// Set Max output
