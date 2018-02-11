@@ -2,6 +2,7 @@ package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,12 +17,14 @@ public class Sensors {
 	private int encTicksPerRot = 1440;
 	private int acc = 150; // Acceleration
 	private int cruiseVel = 300; // Cruise Velocity 
-	public int threshold = 100;
+	public int threshold = 50;
+	private boolean override = false;
 	
 	private boolean setEnc = false;
 	private boolean initEnc = false;
 	private boolean setWhlSize = false;
 	private boolean setChsSize = false;
+	private boolean setGyro = false;
 	
 	private double whlSize; // Robot wheel size
 	private double roboDim; // Robot diagonal distance between wheels
@@ -30,14 +33,25 @@ public class Sensors {
 	private  WPI_TalonSRX _rearLeftMotor;
 	private  WPI_TalonSRX _frontRightMotor;
 	private  WPI_TalonSRX _rearRightMotor;
+	ADXRS450_Gyro gyro;
 	
-	private boolean frontLeftValid = true;
+	private boolean frontLeftValid = false;
 	private boolean frontRightValid = true;
 	private boolean rearLeftValid = true;
 	private boolean rearRightValid = true;
 	
 	private DigitalInput limSwitch;
 	
+	public boolean setGyro (ADXRS450_Gyro gyroIn) {
+		gyro = gyroIn;
+		setGyro = true;
+		return setGyro;
+	}
+	
+	public boolean setOverride(boolean input) {
+		override = input;
+		return true;
+	}
 	// Set Encoders/Talons 
 	//in:All 4 Encoders or Motor Controllers
 	//out:setEnc
@@ -108,10 +122,10 @@ public class Sensors {
 			
 			//Sets closed loop error range
 			// TODO: Reevaluate these
-			//_frontLeftMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
-			//_frontRightMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
-			//_rearLeftMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
-			//_rearRightMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
+			_frontLeftMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
+			_frontRightMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
+			_rearLeftMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
+			_rearRightMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
 			
 			// Set the peak and nominal outputs, 12V means full 
 			_frontLeftMotor.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
@@ -140,6 +154,28 @@ public class Sensors {
 			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			
+			setPID();
+
+			// Init acceleration and cruise velocity - MotionMagic
+			_frontLeftMotor.configMotionCruiseVelocity(cruiseVel, timeoutMs); //(int sensorUnitsPer100ms, int timeoutMs)
+			_frontLeftMotor.configMotionAcceleration(acc, timeoutMs); //(int sensorUnitsPer100msPerSec, int timeoutMs)
+			_rearLeftMotor.configMotionCruiseVelocity(cruiseVel, timeoutMs);
+			_rearLeftMotor.configMotionAcceleration(acc, timeoutMs);
+			_frontRightMotor.configMotionCruiseVelocity(cruiseVel, timeoutMs);
+			_frontRightMotor.configMotionAcceleration(acc, timeoutMs);
+			_rearRightMotor.configMotionCruiseVelocity(cruiseVel, timeoutMs);
+			_rearRightMotor.configMotionAcceleration(acc, timeoutMs);	
+			
+			initEnc = true;
+		}
+		return initEnc;
+	}
+	
+	public boolean setPID() {
+		if (!setEnc) {
+			System.err.println("ERROR: Encoders Not Set");
+		}
+		else {
 			// PID controls Front Left Motor
 			_frontLeftMotor.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
 			_frontLeftMotor.config_kF(0, 0.45, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
@@ -168,19 +204,9 @@ public class Sensors {
 			_rearRightMotor.config_kI(0, 0.02, timeoutMs);
 			_rearRightMotor.config_kD(0, 32, timeoutMs);
 
-			// Init acceleration and cruise velocity - MotionMagic
-			_frontLeftMotor.configMotionCruiseVelocity(cruiseVel, timeoutMs); //(int sensorUnitsPer100ms, int timeoutMs)
-			_frontLeftMotor.configMotionAcceleration(acc, timeoutMs); //(int sensorUnitsPer100msPerSec, int timeoutMs)
-			_rearLeftMotor.configMotionCruiseVelocity(cruiseVel, timeoutMs);
-			_rearLeftMotor.configMotionAcceleration(acc, timeoutMs);
-			_frontRightMotor.configMotionCruiseVelocity(cruiseVel, timeoutMs);
-			_frontRightMotor.configMotionAcceleration(acc, timeoutMs);
-			_rearRightMotor.configMotionCruiseVelocity(cruiseVel, timeoutMs);
-			_rearRightMotor.configMotionAcceleration(acc, timeoutMs);	
-			
-			initEnc = true;
+			return true; 
 		}
-		return initEnc;
+		return false;
 	}
 
 	//Converts Encoder variable to distance
@@ -241,6 +267,8 @@ public class Sensors {
 			_rearLeftMotor.set(0);
 			_frontRightMotor.set(0);
 			_rearRightMotor.set(0);
+			
+			Timer.delay(0.010);
 		
 			return true;
 		}
@@ -272,7 +300,7 @@ public class Sensors {
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
-			while(!(cur < enc + threshold && cur > enc - threshold)) {
+			while(!(cur < enc + threshold && cur > enc - threshold) && !override) {
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -323,7 +351,7 @@ public class Sensors {
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
-			while(!(cur < enc + threshold && cur > enc - threshold)) {
+			while(!(cur < enc + threshold && cur > enc - threshold) && !override) {
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -350,6 +378,59 @@ public class Sensors {
 		return false;
 	}
 	
+	public boolean turnRobotRightGyro(double deg) {
+		if(!setChsSize) {
+			System.err.println("ERROR: Chassis Size Not Set");
+		}
+		else if (!setEnc) {
+			System.err.println("ERROR: Encoders Not Set");
+		}
+		else if(!initEnc) {
+			System.err.println("ERROR: Encoders Not Initalized");
+		}
+		else {
+			gyro.reset();
+			double cur = gyro.getAngle();
+			double target = cur + deg -4 ;
+			
+			_frontRightMotor.setInverted(false);
+			_rearRightMotor.setInverted(false);
+			_frontLeftMotor.setInverted(false);
+			_rearLeftMotor.setInverted(false);
+			_frontLeftMotor.setSensorPhase(false);
+			_rearLeftMotor.setSensorPhase(false);
+			_frontRightMotor.setSensorPhase(false);
+			_rearRightMotor.setSensorPhase(false);
+			
+			int enc = 175;
+			
+			while (!(cur < target + 2 && cur > target - 2) && !override ) {
+				
+				//enc = enc + 20;
+				
+				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.Velocity, enc); }
+				if (frontRightValid) { _frontRightMotor.set(ControlMode.Velocity, enc); }
+				if (rearLeftValid) { _rearLeftMotor.set(ControlMode.Velocity, enc); }
+				if (rearRightValid) { _rearRightMotor.set(ControlMode.Velocity, enc); }
+				
+				checkEncoders();
+				updateDashboard();
+				
+				cur = gyro.getAngle();
+				Timer.delay(0.005);
+			}
+			
+			// Reset Sensor to zero
+			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
+			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			System.out.println("Turned Right: " + cur);
+			return true;
+		}
+		return false;
+	}
+	
 	// This allows the robot to turn right
 	//In: Distance 4 motor controller
 	//out:Nothing
@@ -365,7 +446,7 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Initalized");
 		}
 		else {	
-			double dis = (2 * Math.PI *(roboDim / 2) * (deg / 360))*1.5;
+			double dis = (2 * Math.PI *(roboDim / 2) * (deg / 360))*1.85;
 			int enc = disToEnc(dis);
 			int cur = 0;
 			
@@ -379,7 +460,7 @@ public class Sensors {
 			_rearRightMotor.setSensorPhase(false);
 			
 					
-			while (!(cur < enc + threshold && cur > enc - threshold)) {
+			while (!(cur < enc + threshold && cur > enc - threshold) && !override) {
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -400,7 +481,7 @@ public class Sensors {
 			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			
+			System.out.println("Turned Right: " + cur);
 			return true;
 		}
 		return false;
@@ -421,7 +502,7 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Initalized");
 		}
 		else {
-			double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360)*1.5;
+			double dis = 2 * Math.PI *(roboDim / 2) * (deg / 360)*1.9;
 			int enc = disToEnc(dis);
 			int cur = 0;
 			
@@ -434,7 +515,7 @@ public class Sensors {
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
-			while (!(cur < enc + threshold && cur > enc - threshold)) {
+			while (!(cur < enc + threshold && cur > enc - threshold) && !override) {
 			
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -461,6 +542,58 @@ public class Sensors {
 		return false;
 	}
 	
+	public boolean turnRobotLeftGyro(double deg) {
+		if(!setChsSize) {
+			System.err.println("ERROR: Chassis Size Not Set");
+		}
+		else if (!setEnc) {
+			System.err.println("ERROR: Encoders Not Set");
+		}
+		else if(!initEnc) {
+			System.err.println("ERROR: Encoders Not Initalized");
+		}
+		else {
+			gyro.reset();
+			double cur = gyro.getAngle();
+			double target = -cur + deg -4 ;
+			
+			_frontRightMotor.setInverted(true);
+			_rearRightMotor.setInverted(true);
+			_frontLeftMotor.setInverted(true);
+			_rearLeftMotor.setInverted(true);
+			_frontLeftMotor.setSensorPhase(false);
+			_rearLeftMotor.setSensorPhase(false);
+			_frontRightMotor.setSensorPhase(false);
+			_rearRightMotor.setSensorPhase(false);
+			
+			int enc = 175;
+			
+			while (!(-cur < target + 2 && -cur > target - 2) && !override ) {
+				
+				//enc = enc + 20;
+				
+				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.Velocity, enc); }
+				if (frontRightValid) { _frontRightMotor.set(ControlMode.Velocity, enc); }
+				if (rearLeftValid) { _rearLeftMotor.set(ControlMode.Velocity, enc); }
+				if (rearRightValid) { _rearRightMotor.set(ControlMode.Velocity, enc); }
+				
+				checkEncoders();
+				updateDashboard();
+				
+				cur = gyro.getAngle();
+				Timer.delay(0.005);
+			}
+			
+			// Reset Sensor to zero
+			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
+			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			System.out.println("Turned left: " + cur);
+			return true;
+		}
+		return false;
+	}
 	// Set up the limit switch
 	//in:input
 	//out:limswitch
@@ -493,7 +626,7 @@ public class Sensors {
 		final int CheckPos = 100;
 		//Error value to check difference against for each encoder pair
 		// TODO: Evaluate various ErrorVals
-		final int ErrorVal = 200;
+		final int ErrorVal = 350;
 		
 		 if (frontLeft > CheckPos || frontRight > CheckPos || rearLeft > CheckPos || rearRight > CheckPos) {
 			

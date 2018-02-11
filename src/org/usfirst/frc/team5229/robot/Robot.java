@@ -1,7 +1,9 @@
 package org.usfirst.frc.team5229.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,15 +27,17 @@ public class Robot extends IterativeRobot {
 	boolean backward = true;
 	boolean turnRight = true;
 	boolean turnLeft = true;
+	boolean follow = true;
 
 	ControllerLogitech myController = new ControllerLogitech();
 	Climbing myClimber = new Climbing();
 	Elevator myElevator = new Elevator();
 	Sensors myRobot = new Sensors();
 	Autonomous myAutonRobot = new Autonomous();
+	ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	
-	//UsbCamera Camera1;
-	//UsbCamera Camera2;
+	UsbCamera Camera1;
+	UsbCamera Camera2;
 		
 	MecanumDrive _drive;
 	
@@ -86,14 +90,16 @@ public class Robot extends IterativeRobot {
 		_frontRightMotor = new WPI_TalonSRX(frontRightMotorPort);
 		_rearRightMotor = new WPI_TalonSRX(rearRightMotorPort);
 		
-		//Camera1 = CameraServer.getInstance().startAutomaticCapture();
-		//Camera2 = CameraServer.getInstance().startAutomaticCapture();
+		Camera1 = CameraServer.getInstance().startAutomaticCapture();
+		Camera2 = CameraServer.getInstance().startAutomaticCapture();
 		
 		// Initialize to zero
 		_frontLeftMotor.set(0);
 		_rearLeftMotor.set(0);
 		_frontRightMotor.set(0);
 		_rearRightMotor.set(0);
+		
+		gyro.calibrate();
 		
 		myAutonRobot.setAutoChooser();
 		
@@ -114,6 +120,8 @@ public class Robot extends IterativeRobot {
 		//myElevator.initElevator();
 		myElevator.setSwitches(topElevatorSwitch, bottomElevatorSwitch, grabSwitch);
 		myElevator.setGrabMotors(_leftClawMotor, _rightClawMotor);
+		
+
 	}
 	
 
@@ -127,7 +135,9 @@ public class Robot extends IterativeRobot {
 		myRobot.setWheelSize(whlSize);
 		myRobot.setChassisSize(roboDim);	
 		myRobot.initEncoders();
-		
+		myRobot.setOverride(false);
+		myRobot.setGyro(gyro);
+		myAutonRobot.setSensor(myRobot);
 		String gameMsg = myAutonRobot.getGameMsg();
 		int pos = myAutonRobot.getPositoin();
 		
@@ -143,6 +153,7 @@ public class Robot extends IterativeRobot {
 		backward = true;
 		turnRight = true;
 		turnLeft = true;
+		follow = true;
 	}
 
 	/**
@@ -151,10 +162,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(120); System.out.println("Done Going Forward");}
-		if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward");}
-		if (turnRight) {System.out.println("Doing Rigt Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right");}
-		if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeft(90); System.out.println("Done Turning Left");}
+		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(120); System.out.println("Done Going Forward"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if (turnRight) {System.out.println("Doing Rigt Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeft(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
+		if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
 		myRobot.stopRobot();
 		
 		Timer.delay(0.005);
@@ -176,29 +189,36 @@ public class Robot extends IterativeRobot {
 		
 		// Set Max output
 		_drive.setMaxOutput(0.6);	
+		
+		_frontRightMotor.setInverted(false);
+		_rearRightMotor.setInverted(false);
+		_frontLeftMotor.setInverted(false);
+		_rearLeftMotor.setInverted(false);
+		
 	}
 
 	/**
 	 * This function is called periodically during operator control
 	 */
 	@Override
-	public void teleopPeriodic() {	
-		
+	public void teleopPeriodic() {
+			
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);
-		
-		myClimber.checkSwitches(false);
+
+		//myClimber.checkSwitches(false);
 		myElevator.checkSwitches(false);
 		
-		// TODO: Test all controller components and mark verified 
-		if (myController.getButtonY()) { myClimber.raiseElevator(.3); }
-		if (myController.getButtonA()) { myClimber.lowerElavator(.3); }
+		if (myController.getButtonY()) { myClimber.raiseElevator(.6); }
+		else {myClimber.raiseElevator(0);}
+		if (myController.getButtonA()) { myClimber.lowerElavator(.6); }
+		else { myClimber.lowerElavator(0); }
 		if (myController.getButtonX()) { myElevator.raiseElevator(.3); }
 		if (myController.getButtonB()) { myElevator.lowerElevator(.3); }
-		
+		/*
 		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*0.3); }
 		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(myController.getRightTrigger()*0.3); }
 		else { myElevator.raiseElevator(0); }
-		
+		*/
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 		else { myElevator.ejectBlock(0); }
@@ -213,6 +233,12 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		
 		
+	}
+	
+	@Override
+	public void disabledInit() {
+		myRobot.setOverride(true);
+		myRobot.stopRobot();
 	}
 	
 	/* Ethans thoughts on TeleOp
