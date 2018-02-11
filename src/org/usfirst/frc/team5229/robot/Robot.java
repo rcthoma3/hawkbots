@@ -198,7 +198,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	/**
-	 * This function is called periodically during operator control
+	 * This function is called periodically during operator control 
 	 */
 	@Override
 	public void teleopPeriodic() {
@@ -208,9 +208,8 @@ public class Robot extends IterativeRobot {
 		//myClimber.checkSwitches(false);
 		myElevator.checkSwitches(false);
 		
-		if (myController.getButtonY()) { myClimber.raiseElevator(.6); }
-		else {myClimber.raiseElevator(0);}
-		if (myController.getButtonA()) { myClimber.lowerElavator(.6); }
+		if (myController.getButtonY()) { myClimber.raiseElevator(1); }
+		else if (myController.getButtonA()) { myClimber.lowerElavator(1); }
 		else { myClimber.lowerElavator(0); }
 		if (myController.getButtonX()) { myElevator.raiseElevator(.3); }
 		if (myController.getButtonB()) { myElevator.lowerElevator(.3); }
