@@ -10,12 +10,15 @@ public class Autonomous {
 	private int startpos = 0;//Determine the start position of the robot
 	private SendableChooser<Integer> autoChooser;//Created a method that allowed driver to input position
 	private boolean setAutoChooser = false;//Check if AutoChooser is set up
-	Sensors sensor = new Sensors();
+	Sensors sensor;
 	Elevator elevator = new Elevator();
 	public double autoSpeed = 0.3;
 	public int autoDis = 0;
    
-	
+	public boolean setSensor(Sensors sensorIn) {
+		sensor = sensorIn;
+		return true;
+	}
 	//Return game string
 	//in:nothing
 	//out:gameData
@@ -46,7 +49,6 @@ public class Autonomous {
 			System.err.println("Error: Auto Chooser not set up");
 		}else {
 			startpos = (int) autoChooser.getSelected();
-			System.out.println("Starting Pos: " + startpos);
 		}
 		return startpos;
 	}
@@ -85,50 +87,81 @@ public class Autonomous {
 		if(myPosition == 0) {
 			if(mySwitch == 'L') {
 				sensor.driveFowardAuto(168);
-				sensor.turnRobotRight(90);
-				elevator.raiseElevatorDis(autoDis);
-				elevator.ejectBlock(autoSpeed);
+				sensor.stopRobot();
+				sensor.turnRobotRightGyro(90);
+				sensor.stopRobot();
+				//elevator.raiseElevatorDis(autoDis);
+				sensor.stopRobot();
+				//elevator.ejectBlock(autoSpeed);
+				sensor.stopRobot();
 				exit = true;
 			}else if (mySwitch == 'R') {
 				sensor.driveFowardAuto(140);
-				sensor.turnRobotRight(90);
+				sensor.stopRobot();
+				sensor.turnRobotRightGyro(90);
+				sensor.stopRobot();
 				sensor.driveFowardAuto(5);
-				sensor.turnRobotRight(75);
+				sensor.stopRobot();
+				sensor.turnRobotRightGyro(75);
+				sensor.stopRobot();
 				exit = true;
 			}
 		}else if(myPosition == 1) {
 			if(mySwitch == 'L') {
 				sensor.driveFowardAuto(125);
-				sensor.turnRobotLeft(90);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
 				sensor.driveFowardAuto(3);
-				sensor.turnRobotRight(90);
+				sensor.stopRobot();
+				sensor.turnRobotRightGyro(90);
+				sensor.stopRobot();
 				sensor.driveFowardAuto(15);
-				elevator.raiseElevatorDis(autoDis);
-				elevator.ejectBlock(autoSpeed);
+				sensor.stopRobot();
+				//elevator.raiseElevatorDis(autoDis);
+				//sensor.stopRobot();
+				//elevator.ejectBlock(autoSpeed);
+				//sensor.stopRobot();
 				exit = true;
 			}else if(mySwitch == 'R') {
 				sensor.driveFowardAuto(125);
-				sensor.turnRobotRight(90);
+				sensor.stopRobot();
+				sensor.turnRobotRightGyro(90);
+				sensor.stopRobot();
 				sensor.driveFowardAuto(3);
-				sensor.turnRobotLeft(90);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
 				sensor.driveFowardAuto(15);
-				elevator.raiseElevatorDis(autoDis);
-				elevator.ejectBlock(autoSpeed);
+				sensor.stopRobot();
+				//elevator.raiseElevatorDis(autoDis);
+				//sensor.stopRobot();
+				//elevator.ejectBlock(autoSpeed);
+				//sensor.stopRobot();
 				exit = true;
 			}
 		}else if(myPosition == 2) {
 			if(mySwitch == 'L') {
 				sensor.driveFowardAuto(140);
-				sensor.turnRobotLeft(75);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(75);
+				sensor.stopRobot();
 				exit = true;
 			}else if(mySwitch == 'R') {
 				sensor.driveFowardAuto(125);
-				sensor.turnRobotRight(90);
+				sensor.stopRobot();
+				sensor.turnRobotRightGyro(90);
+				sensor.stopRobot();
 				sensor.driveFowardAuto(8);
-				sensor.turnRobotLeft(90);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
 				sensor.driveFowardAuto(30);
-				elevator.raiseElevatorDis(autoDis);
-				elevator.ejectBlock(autoSpeed);
+				sensor.stopRobot();
+				//elevator.raiseElevatorDis(autoDis);
+				//sensor.stopRobot();
+				//elevator.ejectBlock(autoSpeed);
+				//sensor.stopRobot();
 				exit = true;
 			}
 			
