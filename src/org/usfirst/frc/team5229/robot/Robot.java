@@ -36,8 +36,8 @@ public class Robot extends IterativeRobot {
 	Autonomous myAutonRobot = new Autonomous();
 	ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	
-	UsbCamera Camera1;
-	UsbCamera Camera2;
+	//UsbCamera Camera1;
+	//UsbCamera Camera2;
 		
 	MecanumDrive _drive;
 	
@@ -59,11 +59,11 @@ public class Robot extends IterativeRobot {
 
 	// These values correspond to roboRIO ports
 	//Talons - CAN
-	int frontLeftMotorPort = 6;
-	int rearLeftMotorPort = 8;
-	int frontRightMotorPort = 5;
-	int rearRightMotorPort = 7;
-	int elevatorMotorPort = 9;
+	int frontLeftMotorPort = 5;
+	int rearLeftMotorPort = 6;
+	int frontRightMotorPort = 2;
+	int rearRightMotorPort = 3;
+	int elevatorMotorPort = 1;
 	//Switches - DIO
 	int topElevatorPort = 0;
 	int bottomElevatorPort = 1;
@@ -90,8 +90,8 @@ public class Robot extends IterativeRobot {
 		_frontRightMotor = new WPI_TalonSRX(frontRightMotorPort);
 		_rearRightMotor = new WPI_TalonSRX(rearRightMotorPort);
 		
-		Camera1 = CameraServer.getInstance().startAutomaticCapture();
-		Camera2 = CameraServer.getInstance().startAutomaticCapture();
+		//Camera1 = CameraServer.getInstance().startAutomaticCapture();
+		//Camera2 = CameraServer.getInstance().startAutomaticCapture();
 		
 		// Initialize to zero
 		_frontLeftMotor.set(0);
