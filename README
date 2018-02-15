@@ -12,6 +12,23 @@ LINKS:
   CTR Phoenix Framework JavaDoc (TalonSRX Motor Controllers)
   http://www.ctr-electronics.com/downloads/api/java/html/index.html
   
+  CTR 2018 Software Documentation
+  Download from http://www.ctr-electronics.com/talon-srx.html#product_tabs_technical_resources
+  
+  PID Help
+  http://frc-pdr.readthedocs.io/en/latest/control/pid_control.html#
+  https://www.simbotics.org/files/pdf/programming-pid.pdf
+  https://wpilib.screenstepslive.com/s/3120/m/7932/l/81113-pid-tuning-with-smartdashboard
+  https://wpilib.screenstepslive.com/s/3120/m/7912/l/79828?data-resolve=true&data-manual-id=7912
+  https://wpilib.screenstepslive.com/s/currentCS/m/shuffleboard/l/831044-testing-and-tuning-pid-loops
+  CTR SW Doc page 63
+  
+  SmartDashboard
+  https://wpilib.screenstepslive.com/s/currentCS/m/smartdashboard/l/255407-getting-started-with-the-smartdashboard
+  https://wpilib.screenstepslive.com/s/currentCS/m/26401/l/255412-displaying-expressions-from-within-the-robot-program
+  https://wpilib.screenstepslive.com/s/currentCS/m/26401/l/255415-changing-the-display-properties-of-a-value
+  https://wpilib.screenstepslive.com/s/currentCS/m/26401/l/255417-changing-the-display-widget-type-for-a-value
+  
  IMPORTANT UPDATES:
 	1/11/2018
 	  Updated FRC Plugins, due to deprecated RobotDrive functionality.
