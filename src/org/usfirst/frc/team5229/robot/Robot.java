@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 	boolean turnLeft = true;
 	boolean follow = true;
 
-	ControllerLogitech myController = new ControllerLogitech();
+	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
 	Climbing myClimber = new Climbing();
 	Elevator myElevator = new Elevator();
 	Sensors myRobot = new Sensors();
