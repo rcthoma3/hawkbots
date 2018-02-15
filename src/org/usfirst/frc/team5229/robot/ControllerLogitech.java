@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj.Joystick;
 //Logitec Gamepad F310
 public class ControllerLogitech 
 {
-	private int joyStick;
-	public ControllerLogitech (int joyStick) {
-		this.joyStick = joyStick;
+	private Joystick stick;
+	
+	public ControllerLogitech (int joyStickIn) {
+		stick = new Joystick(joyStickIn);
 	}
-	private Joystick stick = new Joystick(joyStick);
 	
 	// Initializing buttons 
 	private int kButtonA = 1;

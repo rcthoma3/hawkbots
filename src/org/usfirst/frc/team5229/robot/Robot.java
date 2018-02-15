@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 	
+	// For Testing - Remove in final code
 	boolean forward = true;
 	boolean backward = true;
 	boolean turnRight = true;
@@ -29,6 +30,7 @@ public class Robot extends IterativeRobot {
 	boolean follow = true;
 
 	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
+	//ControllerLogitech myDriveController = new ControllerLogitech(2);
 	Climbing myClimber = new Climbing();
 	Elevator myElevator = new Elevator();
 	Sensors myRobot = new Sensors();
@@ -63,6 +65,7 @@ public class Robot extends IterativeRobot {
 	int frontRightMotorPort = 2;
 	int rearRightMotorPort = 3;
 	int elevatorMotorPort = 1;
+	int climbMotorPort = 4;
 	//Switches - DIO
 	int topElevatorPort = 0;
 	int bottomElevatorPort = 1;
@@ -72,10 +75,12 @@ public class Robot extends IterativeRobot {
 	//Victors - PWM
 	int leftClawPort = 0;
 	int rightClawPort = 1;
-	int climbMotorPort = 2;
 		
-	double whlSize = 8; // Wheel diameter in inches
-	double roboDim = 30; // Diagonal distance between wheels in inches
+	double whlSize = 8; // Wheel diameter in inches (Test Robot)
+	double roboDim = 30; // Diagonal distance between wheels in inches (Test Robot)
+	
+	//double whlSize = 8; // Wheel diameter in inches (Final Robot)
+	//double roboDim = 30; // Diagonal distance between wheels in inches (Final Robot)
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -119,8 +124,6 @@ public class Robot extends IterativeRobot {
 		//myElevator.initElevator();
 		myElevator.setSwitches(topElevatorSwitch, bottomElevatorSwitch, grabSwitch);
 		myElevator.setGrabMotors(_leftClawMotor, _rightClawMotor);
-		
-
 	}
 	
 
@@ -148,6 +151,8 @@ public class Robot extends IterativeRobot {
 		}else if(pos == 2) {
 			SmartDashboard.putString("Position", "Right");
 		}
+		
+		// For Testing - Remove in final code
 		forward = true;
 		backward = true;
 		turnRight = true;
@@ -189,11 +194,11 @@ public class Robot extends IterativeRobot {
 		// Set Max output
 		_drive.setMaxOutput(0.6);	
 		
+		// Motors should not be inverted for WPILib MecanumDrive Function
 		_frontRightMotor.setInverted(false);
 		_rearRightMotor.setInverted(false);
 		_frontLeftMotor.setInverted(false);
-		_rearLeftMotor.setInverted(false);
-		
+		_rearLeftMotor.setInverted(false);		
 	}
 
 	/**
@@ -202,20 +207,21 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 			
-		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);
-
-		//myClimber.checkSwitches(false);
-		myElevator.checkSwitches(false);
+		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);	
 		
-		if (myController.getButtonY()) { myClimber.raiseElevator(1); }
-		else if (myController.getButtonA()) { myClimber.lowerElavator(1); }
-		else { myClimber.lowerElavator(0); }
-		if (myController.getButtonX()) { myElevator.raiseElevator(.3); }
-		if (myController.getButtonB()) { myElevator.lowerElevator(.3); }
+		if (myController.getButtonY()) { myClimber.raiseElevator(1, true); }
+		if (myController.getButtonA()) { myClimber.lowerElavator(1, true); }
+		
+		if (myController.getButtonUpD() ) { myClimber.raiseElevator(1, false); }
+		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(1, false); }
+		else { myClimber.checkSwitches(false); }
+		
+		if (myController.getButtonX()) { myElevator.raiseElevator(0.3, true); }
+		if (myController.getButtonB()) { myElevator.lowerElevator(0.3, true); }
 		/*
-		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*0.3); }
-		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(myController.getRightTrigger()*0.3); }
-		else { myElevator.raiseElevator(0); }
+		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*0.3, false); }
+		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(myController.getRightTrigger()*0.3, false); }
+		else { myElevator.checkSwitches(false); }
 		*/
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
@@ -238,16 +244,4 @@ public class Robot extends IterativeRobot {
 		myRobot.setOverride(true);
 		myRobot.stopRobot();
 	}
-	
-	/* Ethans thoughts on TeleOp
-	 * function to keep robot from curving when driving forward
-	 * function to act as gateway between controller and any items the controller is activating if needed
-	 * function to set robot to starting and/or ending configuration using a button on the controller
-	 * function that activates the controller when auton ends so there is no chance of the controller interfering with auton
-	 * function to disable any blocks black on the movement range of robot pieces to keep robot within allowed height/length/width/etc
-	 * function that allows you to press a button on the controller and let go while the part activated keeps moving to allow for more things to be done at once if needed. EX: press a button versus hold for an evelvator to go up or down
-	 * function that disables controller at end of teleop for a set amount of time so there's no chance of continuing to move the robot after time is up
-	 * function to override auton and skip to teleop for testing or any other purpose using the controller or something else
-	 * any other functions that fit best inside the TeleOp class 
-	 * */
 }

@@ -2,9 +2,7 @@ package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class Elevator {
@@ -103,9 +101,8 @@ public class Elevator {
 	//Raises the Elevator based on speed
 	//in:speed
 	//out:Nothing
-    public void raiseElevator(double speed) {
+    public void raiseElevator(double speed, boolean button) {
     	upperSensorPressed = upperSwitch.getstate();
-    	raiseSpd = speed;
     	
     	if(!setSwitches) {
     		System.err.println("Error: Switches not set up.");
@@ -116,8 +113,19 @@ public class Elevator {
     	}else {
     		if(!upperSensorPressed) {
     			_elevatorMoter.set(ControlMode.Velocity, speed);
+    			if(button) {
+					raise = true;
+					lower = false;
+					raiseSpd = speed;
+				}
+    			else {
+    				raise = false;
+    				lower = false;
+    				raiseSpd = 0;
+    				lowerSpd = 0;
+    			}
     		} else {
-    			_elevatorMoter.set(ControlMode.Velocity, speed);
+    			_elevatorMoter.set(ControlMode.Velocity, 0);
     		}
     		
     	}
@@ -146,7 +154,7 @@ public class Elevator {
     //Lower Elevator based on speed
     //in:speed
     //out:nothing
-    public void lowerElevator (double speed) {
+    public void lowerElevator (double speed, boolean button) {
     	lowerSensorPressed = lowerSwitch.getstate();
     	lowerSpd = speed;
     	
@@ -159,7 +167,17 @@ public class Elevator {
     	}else {
     		if(!lowerSensorPressed) {
     			_elevatorMoter.set(ControlMode.Velocity, -speed);
-    			
+    			if(button) {
+					lower = true;
+					raise = false;
+					lowerSpd = speed;
+				}
+    			else {
+    				raise = false;
+    				lower = false;
+    				raiseSpd = 0;
+    				lowerSpd = 0;
+    			}
     		} else {
     			_elevatorMoter.set(ControlMode.Velocity, 0);
     		}

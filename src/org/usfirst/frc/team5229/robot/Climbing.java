@@ -39,11 +39,9 @@ public class Climbing {
 	//Allows the elevator to go up
 	//IN:Speed of the elevator
 	//OUT:None
-	public void raiseElevator (double speed) {
-		//Raises elevator to hook bar 
-		//Spins motor forward (Speed = +)
+	public void raiseElevator (double speed, boolean button) {
 		
-		//topSensorpressed = topSwitch.getstate(); 
+		topSensorpressed = topSwitch.getstate(); 
 
 		if (!setMotor) {
 			System.out.println("ERROR: Climb Motor Not Initiated!");
@@ -51,9 +49,17 @@ public class Climbing {
 		else {
 			if(!topSensorpressed) { 
 				m_climbMotor.set(ControlMode.Velocity, speed);
-				raise = true;
-				lower = false;
-				raiseSpd = speed;
+				if(button) {
+					raise = true;
+					lower = false;
+					raiseSpd = speed;
+				}
+				else {
+    				raise = false;
+    				lower = false;
+    				raiseSpd = 0;
+    				lowerSpd = 0;
+    			}
 			} else { m_climbMotor.set(ControlMode.Velocity, 0); }
 		}
 	}
@@ -61,22 +67,31 @@ public class Climbing {
 	//Lowers the elevator allowing the bot to climb the tower
 	//IN:Speed of the elevator
 	//OUT:None
-	public void lowerElavator (double speed) {
-		//pull up robot using hook attached to bar
-		//Spins motor backwards (Speed = -)
-		//bottomSensorpressed = bottomSwitch.getstate(); 
+	public void lowerElavator (double speed, boolean button) {
+
+		bottomSensorpressed = bottomSwitch.getstate(); 
+		
 		if (!setMotor) {
 			System.out.println("ERROR: Climb Motor Not Initiated!");
 		}
 		else {
 			if(!bottomSensorpressed) {
 				m_climbMotor.set(ControlMode.Velocity, -speed);
-				lower = true;
-				raise = false;
-				lowerSpd = speed;
+				if(button) {
+					lower = true;
+					raise = false;
+					lowerSpd = speed;
+				}
+				else {
+    				raise = false;
+    				lower = false;
+    				raiseSpd = 0;
+    				lowerSpd = 0;
+    			}
 			} else { m_climbMotor.set(ControlMode.Velocity, 0); }
 		}
 	}
+	
 	public void checkSwitches(boolean switchOverride) {
 		
 		bottomSensorpressed = bottomSwitch.getstate(); 

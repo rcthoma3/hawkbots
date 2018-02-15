@@ -1,14 +1,11 @@
 package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 
 public class Sensors {
 	
@@ -29,11 +26,11 @@ public class Sensors {
 	private double whlSize; // Robot wheel size
 	private double roboDim; // Robot diagonal distance between wheels
 	
-	private  WPI_TalonSRX _frontLeftMotor;
-	private  WPI_TalonSRX _rearLeftMotor;
-	private  WPI_TalonSRX _frontRightMotor;
-	private  WPI_TalonSRX _rearRightMotor;
-	ADXRS450_Gyro gyro;
+	private WPI_TalonSRX _frontLeftMotor;
+	private WPI_TalonSRX _rearLeftMotor;
+	private WPI_TalonSRX _frontRightMotor;
+	private WPI_TalonSRX _rearRightMotor;
+	private ADXRS450_Gyro gyro;
 	
 	private boolean frontLeftValid = false;
 	private boolean frontRightValid = true;
