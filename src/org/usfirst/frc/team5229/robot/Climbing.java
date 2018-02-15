@@ -1,13 +1,14 @@
 package org.usfirst.frc.team5229.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.VictorSP;
+
 
 
 public class Climbing {
 	
-	private VictorSP m_climbMotor; 
+	private WPI_TalonSRX m_climbMotor; 
 	private boolean setMotor = false;
 	private Sensors topSwitch = new Sensors();
 	private Sensors bottomSwitch = new Sensors();
@@ -29,7 +30,7 @@ public class Climbing {
 	//Initialize climb motor with PWM
 	//IN:PWM the motor is connected to
 	//OUT:setMotor is true
-	public boolean setClimbMotor (VictorSP m_climbMotorIn) {
+	public boolean setClimbMotor (WPI_TalonSRX m_climbMotorIn) {
 		m_climbMotor = m_climbMotorIn;
 		setMotor = true;
 		return setMotor;
@@ -49,11 +50,11 @@ public class Climbing {
 		}		
 		else {
 			if(!topSensorpressed) { 
-				m_climbMotor.setSpeed(speed);
+				m_climbMotor.set(ControlMode.Velocity, speed);
 				raise = true;
 				lower = false;
 				raiseSpd = speed;
-			} else { m_climbMotor.setSpeed(0); }
+			} else { m_climbMotor.set(ControlMode.Velocity, 0); }
 		}
 	}
 	
@@ -69,11 +70,11 @@ public class Climbing {
 		}
 		else {
 			if(!bottomSensorpressed) {
-				m_climbMotor.setSpeed(-speed);
+				m_climbMotor.set(ControlMode.Velocity, -speed);
 				lower = true;
 				raise = false;
 				lowerSpd = speed;
-			} else { m_climbMotor.setSpeed(0); }
+			} else { m_climbMotor.set(ControlMode.Velocity, 0); }
 		}
 	}
 	public void checkSwitches(boolean switchOverride) {
@@ -82,16 +83,16 @@ public class Climbing {
 		topSensorpressed = topSwitch.getstate();
 		
 		if ((topSensorpressed || switchOverride) && raise) {
-			m_climbMotor.setSpeed(0);
+			m_climbMotor.set(ControlMode.Velocity, 0);
 			raise = false;
 		}
-		else if(!lower && raise){ m_climbMotor.setSpeed(raiseSpd); }
+		else if(!lower && raise){ m_climbMotor.set(ControlMode.Velocity, raiseSpd); }
 		
 		if ((bottomSensorpressed || switchOverride) && lower) {
-			m_climbMotor.setSpeed(0);
+			m_climbMotor.set(ControlMode.Velocity, 0);
 			lower = false;
 		}
-		else if(!raise && lower) {  m_climbMotor.setSpeed(-lowerSpd); }
+		else if(!raise && lower) {  m_climbMotor.set(ControlMode.Velocity, -lowerSpd); }
 	}
 }
 	
