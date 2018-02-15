@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -47,7 +46,7 @@ public class Robot extends IterativeRobot {
 	WPI_TalonSRX _frontRightMotor;
 	WPI_TalonSRX _rearRightMotor;
 	WPI_TalonSRX _elevatorMotor;
-	VictorSP _climbMotor;
+	WPI_TalonSRX _climbMotor;
 	VictorSP _leftClawMotor;
 	VictorSP _rightClawMotor;
 	// Switch Declarations
@@ -103,7 +102,7 @@ public class Robot extends IterativeRobot {
 		
 		myAutonRobot.setAutoChooser();
 		
-		_climbMotor = new VictorSP(climbMotorPort);
+		_climbMotor = new WPI_TalonSRX(climbMotorPort);
 		_leftClawMotor = new VictorSP(leftClawPort);
 		_rightClawMotor = new VictorSP(rightClawPort);
 		_elevatorMotor = new WPI_TalonSRX(elevatorMotorPort);
