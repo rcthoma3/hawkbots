@@ -3,6 +3,7 @@ package org.usfirst.frc.team5229.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -60,7 +61,7 @@ public class Climbing {
     				raiseSpd = 0;
     				lowerSpd = 0;
     			}
-			} else { m_climbMotor.set(ControlMode.Velocity, 0); }
+			} else { m_climbMotor.set(ControlMode.Velocity, 0); SmartDashboard.putBoolean("Climb Max", true); }
 		}
 	}
 	
@@ -88,7 +89,7 @@ public class Climbing {
     				raiseSpd = 0;
     				lowerSpd = 0;
     			}
-			} else { m_climbMotor.set(ControlMode.Velocity, 0); }
+			} else { m_climbMotor.set(ControlMode.Velocity, 0);  SmartDashboard.putBoolean("Climb Min", true); }
 		}
 	}
 	
@@ -100,12 +101,14 @@ public class Climbing {
 		if ((topSensorpressed || switchOverride) && raise) {
 			m_climbMotor.set(ControlMode.Velocity, 0);
 			raise = false;
+			SmartDashboard.putBoolean("Climb Max", true); 
 		}
 		else if(!lower && raise){ m_climbMotor.set(ControlMode.Velocity, raiseSpd); }
 		
 		if ((bottomSensorpressed || switchOverride) && lower) {
 			m_climbMotor.set(ControlMode.Velocity, 0);
 			lower = false;
+			SmartDashboard.putBoolean("Climb Min", true);
 		}
 		else if(!raise && lower) {  m_climbMotor.set(ControlMode.Velocity, -lowerSpd); }
 	}

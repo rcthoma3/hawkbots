@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator {
 	private WPI_TalonSRX _elevatorMoter;
@@ -126,6 +127,7 @@ public class Elevator {
     			}
     		} else {
     			_elevatorMoter.set(ControlMode.Velocity, 0);
+    			SmartDashboard.putBoolean("Elevator Max", true);
     		}
     		
     	}
@@ -147,6 +149,7 @@ public class Elevator {
     		if(!upperSensorPressed) {
     			_elevatorMoter.set(ControlMode.Position, dis);
     		}
+    		else {SmartDashboard.putBoolean("Elevator Max", true);}
     		
     	}
     }
@@ -180,6 +183,7 @@ public class Elevator {
     			}
     		} else {
     			_elevatorMoter.set(ControlMode.Velocity, 0);
+    			SmartDashboard.putBoolean("Elevator Min", true);
     		}
     	}
     }
@@ -197,9 +201,9 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		if(!grabSensorPressed) {
-    			_elevatorMoter.set(ControlMode.Position, dis);
-    			
+    			_elevatorMoter.set(ControlMode.Position, dis);			
     		}
+    		else { SmartDashboard.putBoolean("Elevator Min", true); }
     	}
     }
     
@@ -219,6 +223,7 @@ public class Elevator {
     		}else {
     			_leftMoter.setSpeed(0);
     			_rightMoter.setSpeed(0);
+    			SmartDashboard.putBoolean("Block Grabbed", true);
     		}
     	}
     }
@@ -238,7 +243,6 @@ public class Elevator {
     	}
     }  
     
-    // TODO: Make this match climb function
     public void checkSwitches(boolean switchOverride) {
     	lowerSensorPressed = lowerSwitch.getstate(); 
 		upperSensorPressed = upperSwitch.getstate();

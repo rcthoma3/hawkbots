@@ -118,7 +118,6 @@ public class Sensors {
 			_rearRightMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
 			
 			//Sets closed loop error range
-			// TODO: Reevaluate these
 			_frontLeftMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
 			_frontRightMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
 			_rearLeftMotor.configAllowableClosedloopError(0, threshold, timeoutMs);
@@ -622,7 +621,6 @@ public class Sensors {
 		//"Stationary" range, must move beyond this position to check
 		final int CheckPos = 100;
 		//Error value to check difference against for each encoder pair
-		// TODO: Evaluate various ErrorVals
 		final int ErrorVal = 350;
 		
 		 if (frontLeft > CheckPos || frontRight > CheckPos || rearLeft > CheckPos || rearRight > CheckPos) {
