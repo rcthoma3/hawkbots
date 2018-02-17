@@ -72,7 +72,7 @@ public class Elevator {
 			System.err.println("Error: Elevator Moter not set up yet.");
 		}else {
 			//Invert Motor
-			_elevatorMoter.setInverted(false);
+			_elevatorMoter.setInverted(true);
 			_elevatorMoter.setSensorPhase(false);
 			
 			//Init Encoders

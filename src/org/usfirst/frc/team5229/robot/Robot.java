@@ -76,11 +76,11 @@ public class Robot extends IterativeRobot {
 	int leftClawPort = 0;
 	int rightClawPort = 1;
 		
-	double whlSize = 8; // Wheel diameter in inches (Test Robot)
-	double roboDim = 30; // Diagonal distance between wheels in inches (Test Robot)
+	//double whlSize = 8; // Wheel diameter in inches (Test Robot)
+	//double roboDim = 30; // Diagonal distance between wheels in inches (Test Robot)
 	
-	//double whlSize = 8; // Wheel diameter in inches (Final Robot)
-	//double roboDim = 30; // Diagonal distance between wheels in inches (Final Robot)
+	double whlSize = 6; // Wheel diameter in inches (Final Robot)
+	double roboDim = 30; // Diagonal distance between wheels in inches (Final Robot)
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -166,12 +166,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(120); System.out.println("Done Going Forward"); myRobot.stopRobot(); Timer.delay(0.010);}
+		if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(240); System.out.println("Done Going Forward"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward"); myRobot.stopRobot(); Timer.delay(0.010);}
-		//if (turnRight) {System.out.println("Doing Rigt Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if (turnRight) {System.out.println("Doing Right Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeft(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
-		if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
 		myRobot.stopRobot();
 		
 		Timer.delay(0.005);
@@ -198,7 +198,7 @@ public class Robot extends IterativeRobot {
 		_frontRightMotor.setInverted(false);
 		_rearRightMotor.setInverted(false);
 		_frontLeftMotor.setInverted(false);
-		_rearLeftMotor.setInverted(false);		
+		_rearLeftMotor.setInverted(false);
 	}
 
 	/**
@@ -227,6 +227,13 @@ public class Robot extends IterativeRobot {
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 		else { myElevator.ejectBlock(0); }
 		
+		if (myController.getButtonUpD()) { _climbMotor.set(0.3); }
+		else if (myController.getButtonDownD()) { _climbMotor.set(-0.3); }
+		else { _climbMotor.set(0); }
+		
+		if (myController.getButtonLeftD()) { _elevatorMotor.set(-1); }
+		else if (myController.getButtonRightD()) {_elevatorMotor.set(0.3); }
+		else { _elevatorMotor.set(0); }
 		Timer.delay(0.005);
 	}
 
