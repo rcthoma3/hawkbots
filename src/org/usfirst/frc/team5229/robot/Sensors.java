@@ -400,7 +400,12 @@ public class Sensors {
 			_frontLeftMotor.setSensorPhase(false);
 			_rearLeftMotor.setSensorPhase(false);
 			_frontRightMotor.setSensorPhase(false);
-			_rearRightMotor.setSensorPhase(false);
+			_rearRightMotor.setSensorPhase(false);			
+			
+			frontLeftValid = true;
+			frontRightValid = true;
+			rearLeftValid = true;
+			rearRightValid = true;
 			
 			int enc = 175;
 			
@@ -413,7 +418,7 @@ public class Sensors {
 				if (rearLeftValid) { _rearLeftMotor.set(ControlMode.Velocity, enc); }
 				if (rearRightValid) { _rearRightMotor.set(ControlMode.Velocity, enc); }
 				
-				checkEncoders();
+				//checkEncoders();
 				updateDashboard();
 				
 				cur = gyro.getAngle();
@@ -566,6 +571,11 @@ public class Sensors {
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
+			frontLeftValid = true;
+			frontRightValid = true;
+			rearLeftValid = true;
+			rearRightValid = true;
+			
 			int enc = 175;
 			
 			while (!(-cur < target + 2 && -cur > target - 2) && !override ) {
@@ -577,7 +587,7 @@ public class Sensors {
 				if (rearLeftValid) { _rearLeftMotor.set(ControlMode.Velocity, enc); }
 				if (rearRightValid) { _rearRightMotor.set(ControlMode.Velocity, enc); }
 				
-				checkEncoders();
+				//checkEncoders();
 				updateDashboard();
 				
 				cur = gyro.getAngle();

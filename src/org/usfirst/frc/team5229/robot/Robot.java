@@ -30,6 +30,7 @@ public class Robot extends IterativeRobot {
 	boolean follow = true;
 
 	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
+	//TODO: Uncomment the second controller once it is ready
 	//ControllerLogitech myDriveController = new ControllerLogitech(2);
 	Climbing myClimber = new Climbing();
 	Elevator myElevator = new Elevator();
@@ -60,10 +61,10 @@ public class Robot extends IterativeRobot {
 
 	// These values correspond to roboRIO ports
 	//Talons - CAN
-	int frontLeftMotorPort = 5;
-	int rearLeftMotorPort = 6;
-	int frontRightMotorPort = 2;
-	int rearRightMotorPort = 3;
+	int frontLeftMotorPort = 6;
+	int rearLeftMotorPort = 5;
+	int frontRightMotorPort = 3;
+	int rearRightMotorPort = 2;
 	int elevatorMotorPort = 1;
 	int climbMotorPort = 4;
 	//Switches - DIO
@@ -119,9 +120,10 @@ public class Robot extends IterativeRobot {
 		grabSwitch = new DigitalInput(grabSwitchPort);
 		
 		myClimber.setClimbMotor(_climbMotor);
+		myClimber.initElevator();
 		myClimber.setSwitches(topClimbSwitch, bottomClimbSwitch);
 		myElevator.setElevator(_elevatorMotor);
-		//myElevator.initElevator();
+		myElevator.initElevator();
 		myElevator.setSwitches(topElevatorSwitch, bottomElevatorSwitch, grabSwitch);
 		myElevator.setGrabMotors(_leftClawMotor, _rightClawMotor);
 	}
@@ -166,11 +168,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(240); System.out.println("Done Going Forward"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(240); System.out.println("Done Going Forward"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnRight) {System.out.println("Doing Right Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeft(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
-		//if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
+		if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
 		myRobot.stopRobot();
 		
@@ -192,7 +194,7 @@ public class Robot extends IterativeRobot {
 		_drive.setExpiration(0.1);
 		
 		// Set Max output
-		_drive.setMaxOutput(0.6);	
+		_drive.setMaxOutput(1.0);	
 		
 		// Motors should not be inverted for WPILib MecanumDrive Function
 		_frontRightMotor.setInverted(false);
@@ -206,35 +208,46 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-			
+	    //TODO: Change all myController to myDriveController
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);	
 		
 		if (myController.getButtonY()) { myClimber.raiseElevator(1, true); }
 		if (myController.getButtonA()) { myClimber.lowerElavator(1, true); }
-		
-		if (myController.getButtonUpD() ) { myClimber.raiseElevator(1, false); }
-		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(1, false); }
-		else { myClimber.checkSwitches(false); }
-		
-		if (myController.getButtonX()) { myElevator.raiseElevator(0.3, true); }
-		if (myController.getButtonB()) { myElevator.lowerElevator(0.3, true); }
 		/*
-		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*0.3, false); }
-		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(myController.getRightTrigger()*0.3, false); }
-		else { myElevator.checkSwitches(false); }
+		if (myController.getButtonUpD() ) { myClimber.raiseElevator(0.85, false); }
+		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(-0.85, false); }
+		else { myClimber.checkSwitches(false); }
 		*/
+		
+		if (myController.getButtonUpD() ) { _climbMotor.set(0.60); }
+		else if (myController.getButtonDownD() ) { _climbMotor.set(-0.60); }
+		else { _climbMotor.set(0); }
+		
+		if (myController.getButtonX()) { myElevator.raiseElevator(0.8, true); }
+		if (myController.getButtonB()) { myElevator.lowerElevator(0.5, true); }
+		
+		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger(), false); }
+		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevator(myController.getRightTrigger(), false); }
+		else { myElevator.checkSwitches(false); }
+		
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 		else { myElevator.ejectBlock(0); }
-		
-		if (myController.getButtonUpD()) { _climbMotor.set(0.3); }
-		else if (myController.getButtonDownD()) { _climbMotor.set(-0.3); }
-		else { _climbMotor.set(0); }
-		
-		if (myController.getButtonLeftD()) { _elevatorMotor.set(-1); }
+			
+		if (myController.getButtonLeftD()) { _elevatorMotor.set(-0.8); }
 		else if (myController.getButtonRightD()) {_elevatorMotor.set(0.3); }
 		else { _elevatorMotor.set(0); }
+		
+		SmartDashboard.putNumber("Climb Motor Current", _climbMotor.getOutputCurrent());
+		SmartDashboard.putNumber("Climb Motor Voltage", _climbMotor.getMotorOutputVoltage());
+		SmartDashboard.putNumber("Climb Motor Percent Output", _climbMotor.getMotorOutputPercent());
+		
+		SmartDashboard.putNumber("Elevator Motor Current", _elevatorMotor.getOutputCurrent());
+		SmartDashboard.putNumber("Elevator Motor Voltage", _elevatorMotor.getMotorOutputVoltage());
+		SmartDashboard.putNumber("Elevator Motor Percent Output", _elevatorMotor.getMotorOutputPercent());
+		
 		Timer.delay(0.005);
+
 	}
 
 	/**

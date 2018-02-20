@@ -141,28 +141,34 @@ public class Autonomous {
 				exit = true;
 			}
 		}else if(myPosition == 2) {
-			if(mySwitch == 'L') {
-				sensor.driveFowardAuto(140);
-				sensor.stopRobot();
-				sensor.turnRobotLeftGyro(75);
-				sensor.stopRobot();
-				exit = true;
-			}else if(mySwitch == 'R') {
-				sensor.driveFowardAuto(125);
-				sensor.stopRobot();
-				sensor.turnRobotRightGyro(90);
-				sensor.stopRobot();
-				sensor.driveFowardAuto(8);
+			if(mySwitch == 'R') {
+				sensor.driveFowardAuto(149);
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(30);
+				sensor.driveFowardAuto(22);
 				sensor.stopRobot();
 				//elevator.raiseElevatorDis(autoDis);
 				//sensor.stopRobot();
 				//elevator.ejectBlock(autoSpeed);
-				//sensor.stopRobot();
+				//sensor.stopRobot()
 				exit = true;
+			}else if(mySwitch == 'L') {
+				sensor.driveFowardAuto(218);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
+				sensor.driveFowardAuto(168);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
+				sensor.driveFowardAuto(24);
+				sensor.stopRobot();
+				//elevator.raiseElevatorDis(autoDis);
+				//sensor.stopRobot();
+				//elevator.ejectBlock(autoSpeed);
+				//sensor.stopRobot()
+                exit = true;
 			}
 			
 		}
