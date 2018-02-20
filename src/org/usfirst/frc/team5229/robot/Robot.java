@@ -103,6 +103,8 @@ public class Robot extends IterativeRobot {
 		_rearLeftMotor.set(0);
 		_frontRightMotor.set(0);
 		_rearRightMotor.set(0);
+		_climbMotor.set(0);
+		_elevatorMotor.set(0);
 		
 		gyro.calibrate();
 		
@@ -213,21 +215,21 @@ public class Robot extends IterativeRobot {
 		
 		if (myController.getButtonY()) { myClimber.raiseElevator(1, true); }
 		if (myController.getButtonA()) { myClimber.lowerElavator(1, true); }
-		/*
-		if (myController.getButtonUpD() ) { myClimber.raiseElevator(0.85, false); }
-		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(-0.85, false); }
-		else { myClimber.checkSwitches(false); }
-		*/
 		
+		if (myController.getButtonUpD() ) { myClimber.raiseElevator(205, false); }
+		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(-205, false); }
+		else { myClimber.checkSwitches(false); }
+		
+		/*
 		if (myController.getButtonUpD() ) { _climbMotor.set(0.60); }
 		else if (myController.getButtonDownD() ) { _climbMotor.set(-0.60); }
 		else { _climbMotor.set(0); }
-		
+		*/
 		if (myController.getButtonX()) { myElevator.raiseElevator(0.8, true); }
 		if (myController.getButtonB()) { myElevator.lowerElevator(0.5, true); }
 		
-		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger(), false); }
-		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevator(myController.getRightTrigger(), false); }
+		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*205, false); }
+		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevator(myController.getRightTrigger()*205, false); }
 		else { myElevator.checkSwitches(false); }
 		
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
@@ -241,10 +243,15 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Climb Motor Current", _climbMotor.getOutputCurrent());
 		SmartDashboard.putNumber("Climb Motor Voltage", _climbMotor.getMotorOutputVoltage());
 		SmartDashboard.putNumber("Climb Motor Percent Output", _climbMotor.getMotorOutputPercent());
+		SmartDashboard.putNumber("Climb Position", _climbMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Climb Velocity", _climbMotor.getSelectedSensorVelocity(0));
+		
 		
 		SmartDashboard.putNumber("Elevator Motor Current", _elevatorMotor.getOutputCurrent());
 		SmartDashboard.putNumber("Elevator Motor Voltage", _elevatorMotor.getMotorOutputVoltage());
 		SmartDashboard.putNumber("Elevator Motor Percent Output", _elevatorMotor.getMotorOutputPercent());
+		SmartDashboard.putNumber("Elevator Position", _elevatorMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Elevator Veocity", _elevatorMotor.getSelectedSensorVelocity(0));
 		
 		Timer.delay(0.005);
 
