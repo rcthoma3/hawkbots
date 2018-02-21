@@ -56,7 +56,7 @@ public class Climbing {
 			}else {
 				//Invert Motor
 				_climbMotor.setInverted(true);
-				_climbMotor.setSensorPhase(false);
+				_climbMotor.setSensorPhase(true);
 				
 				//Init Encoders
 				_climbMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
@@ -79,11 +79,11 @@ public class Climbing {
 				// PID controls
 				//TODO: Tune these
 				_climbMotor.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-				_climbMotor.config_kF(0, 0.3, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
-				_climbMotor.config_kP(0, 3.0, timeoutMs);
-				_climbMotor.config_kI(0, 0.03, timeoutMs);
-				_climbMotor.config_kD(0, 30, timeoutMs);
-				_climbMotor..config_IntegralZone(0, 20, timeoutMs);
+				_climbMotor.config_kF(0, 1.7, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
+				_climbMotor.config_kP(0, 2, timeoutMs);
+				_climbMotor.config_kI(0, 0.003, timeoutMs);
+				_climbMotor.config_kD(0, 150, timeoutMs);
+				_climbMotor.config_IntegralZone(0, 30, timeoutMs);
 				
 				initMotor = true;
 			}
@@ -103,9 +103,11 @@ public class Climbing {
 			System.err.println("Error: Elevator moter not initialized");
 		}else {
 			topSensorpressed = topSwitch.getstate();
+			System.out.println("Raise top switch " + topSensorpressed);
 			elevatorPos = _climbMotor.getSelectedSensorPosition(0);
 			if(!topSensorpressed) { 
-				_climbMotor.set(ControlMode.Velocity, speed);			
+				_climbMotor.set(ControlMode.Velocity, speed);
+				System.out.println("I set velocity " + speed + "... yay");
 				if(button) {
 					raise = true;
 					lower = false;
@@ -117,7 +119,8 @@ public class Climbing {
 					lowerSpd = 0;
 				}
 			}else { 
-				_climbMotor.set(ControlMode.Velocity, 0); 
+				//_climbMotor.set(ControlMode.Velocity, 0); 
+				System.out.println("oh no it's set to 0 (re)");
 				SmartDashboard.putBoolean("Climb Max", true); 
 			}
 		}
@@ -151,7 +154,7 @@ public class Climbing {
 					lowerSpd = 0;
 				}
 			} else { 
-				_climbMotor.set(ControlMode.Velocity, 0);  
+				//_climbMotor.set(ControlMode.Velocity, 0);  
 				SmartDashboard.putBoolean("Climb Min", true); 
 			}
 		}
@@ -166,22 +169,29 @@ public class Climbing {
 		}else if(!initMotor){
 			System.err.println("Error: Elevator moter not initialized");
 		}else {
-			bottomSensorpressed = bottomSwitch.getstate(); 
+			bottomSensorpressed = bottomSwitch.getstate();
+			System.out.println("Bottom " + bottomSensorpressed);
 			topSensorpressed = topSwitch.getstate();
+			System.out.println("Top " + topSensorpressed);
 			
 			//TODO: Determine encoder count for max elevator position
-			if(topSensorpressed) { SmartDashboard.putBoolean("Climb Max", true); raise = false; elevatorPos = 1000; }
-			if(bottomSensorpressed ) { SmartDashboard.putBoolean("Climb Min", true); lower = false; elevatorPos = 0; }
+			if(topSensorpressed) { SmartDashboard.putBoolean("Climb Max", true); raise = false; lower = false; elevatorPos = 16240; }
+			if(bottomSensorpressed) { SmartDashboard.putBoolean("Climb Min", true); lower = false; raise = false; elevatorPos = 0; }
 
 			if ((!topSensorpressed && !switchOverride) && (raise && !lower)) { 
 				_climbMotor.set(ControlMode.Velocity, raiseSpd); 
 				elevatorPos = _climbMotor.getSelectedSensorPosition(0); 
+				SmartDashboard.putBoolean("Climb Max", false);
+				SmartDashboard.putBoolean("Climb Min", false);
 			}else if((!bottomSensorpressed && !switchOverride) && (lower && !raise)) { 
 				_climbMotor.set(ControlMode.Velocity, -lowerSpd); 
 				elevatorPos = _climbMotor.getSelectedSensorPosition(0); 
+				SmartDashboard.putBoolean("Climb Max", false);
+				SmartDashboard.putBoolean("Climb Min", false);
 			}else {
 				_climbMotor.set(ControlMode.Velocity, 0);
-				_climbMotor.set(ControlMode.Position, elevatorPos);
+				System.out.println("somethings wrong... i dont feel good im set to 0");
+				//_climbMotor.set(ControlMode.Position, elevatorPos);
 				raise = false;
 				lower = false;		
 			}

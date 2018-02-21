@@ -28,6 +28,7 @@ public class Robot extends IterativeRobot {
 	boolean turnRight = true;
 	boolean turnLeft = true;
 	boolean follow = true;
+	int pos;
 
 	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
 	//TODO: Uncomment the second controller once it is ready
@@ -68,9 +69,9 @@ public class Robot extends IterativeRobot {
 	int elevatorMotorPort = 1;
 	int climbMotorPort = 4;
 	//Switches - DIO
-	int topElevatorPort = 0;
+	int topElevatorPort = 2;
 	int bottomElevatorPort = 1;
-	int topClimbPort =2;
+	int topClimbPort =0;
 	int bottomClimbPort = 3;
 	int grabSwitchPort = 4;
 	//Victors - PWM
@@ -80,7 +81,7 @@ public class Robot extends IterativeRobot {
 	//double whlSize = 8; // Wheel diameter in inches (Test Robot)
 	//double roboDim = 30; // Diagonal distance between wheels in inches (Test Robot)
 	
-	double whlSize = 6; // Wheel diameter in inches (Final Robot)
+	double whlSize = 8; // Wheel diameter in inches (Final Robot)
 	double roboDim = 30; // Diagonal distance between wheels in inches (Final Robot)
 	
 	/**
@@ -94,6 +95,11 @@ public class Robot extends IterativeRobot {
 		_rearLeftMotor = new WPI_TalonSRX(rearLeftMotorPort);
 		_frontRightMotor = new WPI_TalonSRX(frontRightMotorPort);
 		_rearRightMotor = new WPI_TalonSRX(rearRightMotorPort);
+		
+		_climbMotor = new WPI_TalonSRX(climbMotorPort);
+		_leftClawMotor = new VictorSP(leftClawPort);
+		_rightClawMotor = new VictorSP(rightClawPort);
+		_elevatorMotor = new WPI_TalonSRX(elevatorMotorPort);
 		
 		//Camera1 = CameraServer.getInstance().startAutomaticCapture();
 		//Camera2 = CameraServer.getInstance().startAutomaticCapture();
@@ -110,11 +116,6 @@ public class Robot extends IterativeRobot {
 		
 		myAutonRobot.setAutoChooser();
 		
-		_climbMotor = new WPI_TalonSRX(climbMotorPort);
-		_leftClawMotor = new VictorSP(leftClawPort);
-		_rightClawMotor = new VictorSP(rightClawPort);
-		_elevatorMotor = new WPI_TalonSRX(elevatorMotorPort);
-		
 		topClimbSwitch = new DigitalInput(topClimbPort);
 		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
 		topElevatorSwitch = new DigitalInput(topElevatorPort);
@@ -128,6 +129,8 @@ public class Robot extends IterativeRobot {
 		myElevator.initElevator();
 		myElevator.setSwitches(topElevatorSwitch, bottomElevatorSwitch, grabSwitch);
 		myElevator.setGrabMotors(_leftClawMotor, _rightClawMotor);
+		
+		pos = myAutonRobot.getPositoin();
 	}
 	
 
@@ -145,7 +148,7 @@ public class Robot extends IterativeRobot {
 		myRobot.setGyro(gyro);
 		myAutonRobot.setSensor(myRobot);
 		String gameMsg = myAutonRobot.getGameMsg();
-		int pos = myAutonRobot.getPositoin();
+		
 		
 		SmartDashboard.putString("Game message", gameMsg);
 		if(pos == 0) {
@@ -172,9 +175,9 @@ public class Robot extends IterativeRobot {
 		
 		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(240); System.out.println("Done Going Forward"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward"); myRobot.stopRobot(); Timer.delay(0.010);}
-		//if (turnRight) {System.out.println("Doing Right Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
+		if (turnRight) {System.out.println("Doing Right Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeft(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
-		if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
+		//if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
 		myRobot.stopRobot();
 		
@@ -216,30 +219,29 @@ public class Robot extends IterativeRobot {
 		if (myController.getButtonY()) { myClimber.raiseElevator(1, true); }
 		if (myController.getButtonA()) { myClimber.lowerElavator(1, true); }
 		
-		if (myController.getButtonUpD() ) { myClimber.raiseElevator(205, false); }
-		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(-205, false); }
-		else { myClimber.checkSwitches(false); }
+		if (myController.getButtonLeftD() ) { myClimber.raiseElevator(300, false); }
+		else if (myController.getButtonRightD() ) { myClimber.lowerElavator(300, false); }
+		else { myClimber.checkSwitches(false); }	
 		
-		/*
 		if (myController.getButtonUpD() ) { _climbMotor.set(0.60); }
 		else if (myController.getButtonDownD() ) { _climbMotor.set(-0.60); }
-		else { _climbMotor.set(0); }
-		*/
+		//else { _climbMotor.set(0); }
+		
 		if (myController.getButtonX()) { myElevator.raiseElevator(0.8, true); }
 		if (myController.getButtonB()) { myElevator.lowerElevator(0.5, true); }
-		
+		/*
 		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*205, false); }
 		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevator(myController.getRightTrigger()*205, false); }
-		else { myElevator.checkSwitches(false); }
-		
+		//else { myElevator.checkSwitches(false); }
+		*/
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 		else { myElevator.ejectBlock(0); }
-			
+		/*	
 		if (myController.getButtonLeftD()) { _elevatorMotor.set(-0.8); }
 		else if (myController.getButtonRightD()) {_elevatorMotor.set(0.3); }
 		else { _elevatorMotor.set(0); }
-		
+		*/
 		SmartDashboard.putNumber("Climb Motor Current", _climbMotor.getOutputCurrent());
 		SmartDashboard.putNumber("Climb Motor Voltage", _climbMotor.getMotorOutputVoltage());
 		SmartDashboard.putNumber("Climb Motor Percent Output", _climbMotor.getMotorOutputPercent());

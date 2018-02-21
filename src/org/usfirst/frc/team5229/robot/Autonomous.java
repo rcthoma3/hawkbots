@@ -86,24 +86,26 @@ public class Autonomous {
 		int myPosition = getPositoin();
 		if(myPosition == 0) {
 			if(mySwitch == 'L') {
-				sensor.driveFowardAuto(168);
+				sensor.driveFowardAuto(149);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
+				sensor.driveFowardAuto(22); 
 				//elevator.raiseElevatorDis(autoDis);
 				sensor.stopRobot();
 				//elevator.ejectBlock(autoSpeed);
 				sensor.stopRobot();
 				exit = true;
 			}else if (mySwitch == 'R') {
-				sensor.driveFowardAuto(140);
+				sensor.driveFowardAuto(218);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(5);
+				sensor.driveFowardAuto(168);
 				sensor.stopRobot();
-				sensor.turnRobotRightGyro(75);
+				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
+				sensor.driveFowardAuto(24);
 				exit = true;
 			}
 		}else if(myPosition == 1) {
@@ -112,7 +114,7 @@ public class Autonomous {
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(3);
+				sensor.driveFowardAuto(30);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
@@ -128,7 +130,7 @@ public class Autonomous {
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(3);
+				sensor.driveFowardAuto(30);
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();

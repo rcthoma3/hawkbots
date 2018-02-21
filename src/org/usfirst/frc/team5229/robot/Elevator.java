@@ -103,7 +103,7 @@ public class Elevator {
 			_elevatorMoter.config_kP(0, 3.0, timeoutMs);
 			_elevatorMoter.config_kI(0, 0.03, timeoutMs);
 			_elevatorMoter.config_kD(0, 30, timeoutMs);
-			_climbMotor..config_IntegralZone(0, 20, timeoutMs);
+			_elevatorMoter.config_IntegralZone(0, 20, timeoutMs);
 			
 			initElevator = true;
 		}
@@ -123,7 +123,7 @@ public class Elevator {
 			System.err.println("Error: Elevator moter not initialized");
 		}else {
 			upperSensorPressed = upperSwitch.getstate();
-			elevatorPos = _climbMotor.getSelectedSensorPosition(0);
+			elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
 			if(!upperSensorPressed) {
 				_elevatorMoter.set(ControlMode.Velocity, speed);
 				if(button) {
@@ -158,7 +158,7 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		upperSensorPressed = upperSwitch.getstate();
-		elevatorPos = _climbMotor.getSelectedSensorPosition(0);
+		elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
     		if(!upperSensorPressed) {
     			_elevatorMoter.set(ControlMode.Position, dis);
     			return true;
@@ -181,7 +181,7 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		lowerSensorPressed = lowerSwitch.getstate();
-		elevatorPos = _climbMotor.getSelectedSensorPosition(0);
+		elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
     		if(!lowerSensorPressed) {
     			_elevatorMoter.set(ControlMode.Velocity, -speed);
     			if(button) {
@@ -215,7 +215,7 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		lowerSensorPressed = lowerSwitch.getstate();
-		elevatorPos = _climbMotor.getSelectedSensorPosition(0);
+		elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
     		if(!lowerSensorPressed) {
     			_elevatorMoter.set(ControlMode.Position, dis);
     			return true;
@@ -237,7 +237,7 @@ public class Elevator {
     	}else {
     		grabSensorPressed = grabSwitch.getstate();
     		if(!grabSensorPressed){
-    			_leftMoter.setSpeed(speed);
+    			_leftMoter.setSpeed(-speed);
     			_rightMoter.setSpeed(-speed);		
     		}else {
     			_leftMoter.setSpeed(0);
@@ -257,7 +257,7 @@ public class Elevator {
     	}else if(!setSwitches){
     		System.err.println("Error: Grab Switch not set up");
     	}else {    		
-		_leftMoter.setSpeed(-speed);
+		_leftMoter.setSpeed(speed);
 		_rightMoter.setSpeed(speed);
     	}
     }  
@@ -275,18 +275,19 @@ public class Elevator {
 		upperSensorPressed = upperSwitch.getstate();
 		
 		//TODO: Determine encoder count for max elevator position
-		if(upperSensorPressed) { SmartDashboard.putBoolean("Elevator Max", true); raise = false; elevatorPos = 1000; }
-		if(lowerSensorPressed ) { SmartDashboard.putBoolean("Elevator Min", true); lower = false; elevatorPos = 0; } 
+		if(upperSensorPressed) { SmartDashboard.putBoolean("Elevator Max", true); raise = false; lower = false; elevatorPos = 1000; }
+		if(lowerSensorPressed) { SmartDashboard.putBoolean("Elevator Min", true); lower = false; raise = false; elevatorPos = 0; } 
 
 		if ((!upperSensorPressed && !switchOverride) && (raise && !lower)) { 
 			_elevatorMoter.set(ControlMode.Velocity, raiseSpd);
-			elevatorPos = _climbMotor.getSelectedSensorPosition(0);
+			elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
 		}else if((!lowerSensorPressed && !switchOverride) && (lower && !raise)) { 
 			_elevatorMoter.set(ControlMode.Velocity, lowerSpd); 
-			elevatorPos = _climbMotor.getSelectedSensorPosition(0);
+			elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
 		}else {
 			_elevatorMoter.set(ControlMode.Velocity, 0);
 			_elevatorMoter.set(ControlMode.Position, elevatorPos);
+			System.out.println(elevatorPos);
 			raise = false;
 			lower = false;		
 		}	  	

@@ -391,7 +391,7 @@ public class Sensors {
 		else {
 			gyro.reset();
 			double cur = gyro.getAngle();
-			double target = cur + deg -4 ;
+			double target = cur + deg -8;
 			
 			_frontRightMotor.setInverted(false);
 			_rearRightMotor.setInverted(false);
