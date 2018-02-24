@@ -31,7 +31,6 @@ public class Elevator {
 	private boolean lower = false;
 	private double raiseSpd = 0;
 	private double lowerSpd = 0;
-	private int elevatorPos = 0;
 			
 	
 	//Set up Elevator motor
@@ -123,7 +122,6 @@ public class Elevator {
 			System.err.println("Error: Elevator moter not initialized");
 		}else {
 			upperSensorPressed = upperSwitch.getstate();
-			elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
 			if(!upperSensorPressed) {
 				_elevatorMoter.set(ControlMode.Velocity, speed);
 				if(button) {
@@ -158,7 +156,6 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		upperSensorPressed = upperSwitch.getstate();
-		elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
     		if(!upperSensorPressed) {
     			_elevatorMoter.set(ControlMode.Position, dis);
     			return true;
@@ -181,7 +178,6 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		lowerSensorPressed = lowerSwitch.getstate();
-		elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
     		if(!lowerSensorPressed) {
     			_elevatorMoter.set(ControlMode.Velocity, -speed);
     			if(button) {
@@ -215,7 +211,6 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		lowerSensorPressed = lowerSwitch.getstate();
-		elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
     		if(!lowerSensorPressed) {
     			_elevatorMoter.set(ControlMode.Position, dis);
     			return true;
@@ -257,8 +252,8 @@ public class Elevator {
     	}else if(!setSwitches){
     		System.err.println("Error: Grab Switch not set up");
     	}else {    		
-		_leftMoter.setSpeed(speed);
-		_rightMoter.setSpeed(speed);
+    		_leftMoter.setSpeed(speed);
+    		_rightMoter.setSpeed(speed);
     	}
     }  
     
@@ -272,25 +267,21 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
 	    	lowerSensorPressed = lowerSwitch.getstate(); 
-		upperSensorPressed = upperSwitch.getstate();
-		
-		//TODO: Determine encoder count for max elevator position
-		if(upperSensorPressed) { SmartDashboard.putBoolean("Elevator Max", true); raise = false; lower = false; elevatorPos = 1000; }
-		if(lowerSensorPressed) { SmartDashboard.putBoolean("Elevator Min", true); lower = false; raise = false; elevatorPos = 0; } 
-
-		if ((!upperSensorPressed && !switchOverride) && (raise && !lower)) { 
-			_elevatorMoter.set(ControlMode.Velocity, raiseSpd);
-			elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
-		}else if((!lowerSensorPressed && !switchOverride) && (lower && !raise)) { 
-			_elevatorMoter.set(ControlMode.Velocity, lowerSpd); 
-			elevatorPos = _elevatorMoter.getSelectedSensorPosition(0);
-		}else {
-			_elevatorMoter.set(ControlMode.Velocity, 0);
-			_elevatorMoter.set(ControlMode.Position, elevatorPos);
-			System.out.println(elevatorPos);
-			raise = false;
-			lower = false;		
-		}	  	
+			upperSensorPressed = upperSwitch.getstate();
+			
+			//TODO: Determine encoder count for max elevator position
+			if(upperSensorPressed) { SmartDashboard.putBoolean("Elevator Max", true); raise = false; lower = false; }
+			if(lowerSensorPressed) { SmartDashboard.putBoolean("Elevator Min", true); lower = false; raise = false; } 
+	
+			if ((!upperSensorPressed && !switchOverride) && (raise && !lower)) { 
+				_elevatorMoter.set(ControlMode.Velocity, raiseSpd);
+			}else if((!lowerSensorPressed && !switchOverride) && (lower && !raise)) { 
+				_elevatorMoter.set(ControlMode.Velocity, lowerSpd); 
+			}else {
+				_elevatorMoter.set(ControlMode.Velocity, 0);
+				raise = false;
+				lower = false;		
+			}	  	
     	}
     }
 }

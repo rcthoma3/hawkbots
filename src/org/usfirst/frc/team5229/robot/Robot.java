@@ -149,7 +149,6 @@ public class Robot extends IterativeRobot {
 		myAutonRobot.setSensor(myRobot);
 		String gameMsg = myAutonRobot.getGameMsg();
 		
-		
 		SmartDashboard.putString("Game message", gameMsg);
 		if(pos == 0) {
 			SmartDashboard.putString("Position", "Left");
@@ -216,20 +215,16 @@ public class Robot extends IterativeRobot {
 	    //TODO: Change all myController to myDriveController
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);	
 		
-		if (myController.getButtonY()) { myClimber.raiseElevator(1, true); }
-		if (myController.getButtonA()) { myClimber.lowerElavator(1, true); }
+		if (myController.getButtonY()) { myClimber.raiseElevator(300, true); }
+		if (myController.getButtonA()) { myClimber.lowerElavator(300, true); }
 		
-		if (myController.getButtonLeftD() ) { myClimber.raiseElevator(300, false); }
-		else if (myController.getButtonRightD() ) { myClimber.lowerElavator(300, false); }
+		if (myController.getButtonUpD() ) { myClimber.raiseElevator(300, false); }
+		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(300, false); }
 		else { myClimber.checkSwitches(false); }	
-		
-		if (myController.getButtonUpD() ) { _climbMotor.set(0.60); }
-		else if (myController.getButtonDownD() ) { _climbMotor.set(-0.60); }
-		//else { _climbMotor.set(0); }
-		
+		/*
 		if (myController.getButtonX()) { myElevator.raiseElevator(0.8, true); }
 		if (myController.getButtonB()) { myElevator.lowerElevator(0.5, true); }
-		/*
+		
 		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*205, false); }
 		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevator(myController.getRightTrigger()*205, false); }
 		//else { myElevator.checkSwitches(false); }
@@ -237,17 +232,12 @@ public class Robot extends IterativeRobot {
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 		else { myElevator.ejectBlock(0); }
-		/*	
-		if (myController.getButtonLeftD()) { _elevatorMotor.set(-0.8); }
-		else if (myController.getButtonRightD()) {_elevatorMotor.set(0.3); }
-		else { _elevatorMotor.set(0); }
-		*/
+	
 		SmartDashboard.putNumber("Climb Motor Current", _climbMotor.getOutputCurrent());
 		SmartDashboard.putNumber("Climb Motor Voltage", _climbMotor.getMotorOutputVoltage());
 		SmartDashboard.putNumber("Climb Motor Percent Output", _climbMotor.getMotorOutputPercent());
 		SmartDashboard.putNumber("Climb Position", _climbMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Climb Velocity", _climbMotor.getSelectedSensorVelocity(0));
-		
 		
 		SmartDashboard.putNumber("Elevator Motor Current", _elevatorMotor.getOutputCurrent());
 		SmartDashboard.putNumber("Elevator Motor Voltage", _elevatorMotor.getMotorOutputVoltage());
