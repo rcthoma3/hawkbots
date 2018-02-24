@@ -37,7 +37,7 @@ public class Robot extends IterativeRobot {
 	Autonomous myAutonRobot = new Autonomous();
 	ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	
-	//UsbCamera Camera1;
+	UsbCamera Camera1;
 	//UsbCamera Camera2;
 		
 	MecanumDrive _drive;
@@ -94,7 +94,7 @@ public class Robot extends IterativeRobot {
 		_frontRightMotor = new WPI_TalonSRX(frontRightMotorPort);
 		_rearRightMotor = new WPI_TalonSRX(rearRightMotorPort);
 		
-		//Camera1 = CameraServer.getInstance().startAutomaticCapture();
+		Camera1 = CameraServer.getInstance().startAutomaticCapture();
 		//Camera2 = CameraServer.getInstance().startAutomaticCapture();
 		
 		// Initialize to zero
@@ -170,8 +170,8 @@ public class Robot extends IterativeRobot {
 		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnRight) {System.out.println("Doing Rigt Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeft(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
-		//if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
-		if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
+		if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
+		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
 		myRobot.stopRobot();
 		
 		Timer.delay(0.005);
