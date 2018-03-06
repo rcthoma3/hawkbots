@@ -8,12 +8,15 @@ public class Autonomous {
 	
 	private String gameData;//String obatin that is used to tell ownership of the scales and switches for the alliance
 	private int startpos = 0;//Determine the start position of the robot
-	private SendableChooser<Integer> autoChooser;//Created a method that allowed driver to input position
+	private int startgoal = 0;//Determine the goal we are trying to reach
+	private SendableChooser<Integer> postionChooser;//Created a method that allowed driver to input position
+	private SendableChooser<Integer> goalChooser;//Created a method that allowed the driver to choose thier goal
 	private boolean setAutoChooser = false;//Check if AutoChooser is set up
 	Sensors sensor;
 	Elevator elevator = new Elevator();
 	public double autoSpeed = 0.3;
 	public int autoDis = 0;
+	
    
 	public boolean setSensor(Sensors sensorIn) {
 		sensor = sensorIn;
@@ -27,15 +30,19 @@ public class Autonomous {
 		return gameData;
 	} 
 	
-	//Set AutoChooser
+	//Set AutoChoosers
 	//in:nothing
 	//out:setAutoChooser
    public boolean setAutoChooser() {
-	   autoChooser = new SendableChooser<Integer>();
-	   autoChooser.addDefault("Left", 0);//0 show that the robot is on the left side
-	   autoChooser.addObject("Center", 1);//1 show that the robot is in the center
-	   autoChooser.addObject("Right", 2);//2 show that the robot is on the right side
-	   SmartDashboard.putData("Autonomous Mode Chooser", autoChooser);
+	   postionChooser = new SendableChooser<Integer>();
+	   postionChooser.addDefault("Left", 0);//0 show that the robot is on the left side
+	   postionChooser.addObject("Center", 1);//1 show that the robot is in the center
+	   postionChooser.addObject("Right", 2);//2 show that the robot is on the right side
+	   SmartDashboard.putData("Autonomous Mode Chooser", postionChooser);
+	   goalChooser = new SendableChooser<Integer>();
+	   goalChooser.addDefault("Switch", 0);//0 show that the robot is going to the switch
+	   goalChooser.addObject("Scale", 1);//1 show that the robot is going to the scale
+	   goalChooser.addObject("Neither", 2);//2 show that the robot is doing neither
 	   setAutoChooser = true; 
 	   
 	   return setAutoChooser;
@@ -48,9 +55,21 @@ public class Autonomous {
 		if(!setAutoChooser) {
 			System.err.println("Error: Auto Chooser not set up");
 		}else {
-			startpos = (int) autoChooser.getSelected();
+			startpos = (int) postionChooser.getSelected();
 		}
 		return startpos;
+	}
+	
+	//Obtain the goal for auton
+	//in:nothing
+	//out:startgoal
+	public int getGoal() {
+		if(!setAutoChooser) {
+			System.err.println("Error: Auto Chooser not set up");
+		}else {
+			startgoal = (int) goalChooser.getSelected();
+		}
+		return startgoal;
 	}
 	
 	//Obtain what side of the switch the alliance have 
@@ -84,6 +103,9 @@ public class Autonomous {
 		boolean exit = false;
 		char mySwitch = getMySwitch();
 		int myPosition = getPositoin();
+		int myGoal = getGoal();
+		char myScale = getScale();
+		if(myGoal == 0) {
 		if(myPosition == 0) {
 			if(mySwitch == 'L') {
 				sensor.driveFowardAuto(149);
@@ -173,6 +195,130 @@ public class Autonomous {
                 exit = true;
 			}
 			
+		}
+		}else if(myGoal == 1) {
+			if(myPosition == 0) {
+				if(myScale == 'L') {
+					sensor.driveFowardAuto(323);
+					sensor.stopRobot();
+					sensor.turnRobotRightGyro(90);
+					sensor.stopRobot();
+					//elevator.raiseElevatorDis(autoDis);
+					//sensor.stopRobot();
+					//elevator.ejectBlock(autoSpeed);
+					//sensor.stopRobot()
+					exit = true;
+				}else if(myScale == 'R') {
+					sensor.driveFowardAuto(218);
+					sensor.stopRobot();
+					sensor.turnRobotRightGyro(90);
+					sensor.stopRobot();
+					sensor.driveFowardAuto(240);
+					sensor.stopRobot();
+					sensor.turnRobotLeftGyro(90);
+					sensor.stopRobot();
+					sensor.driveFowardAuto(68);
+					sensor.stopRobot();
+					sensor.turnRobotLeftGyro(90);
+					sensor.stopRobot();
+					//elevator.raiseElevatorDis(autoDis);
+					//sensor.stopRobot();
+					//elevator.ejectBlock(autoSpeed);
+					//sensor.stopRobot()
+					exit = true;
+				}
+			}else if(myPosition == 1) {
+				if(myScale == 'R') {
+					sensor.turnRobotRightGyro(31);
+					sensor.stopRobot();
+					sensor.driveFowardAuto(140);
+					sensor.stopRobot();
+					sensor.turnRobotLeftGyro(31);
+					sensor.stopRobot();
+					sensor.driveFowardAuto(204);
+					sensor.turnRobotLeftGyro(90);
+					sensor.stopRobot();
+					//elevator.raiseElevatorDis(autoDis);
+					//sensor.stopRobot();
+					//elevator.ejectBlock(autoSpeed);
+					//sensor.stopRobot()
+					exit = true;
+				}else if(myScale == 'L') {
+					sensor.turnRobotLeftGyro(45);
+					sensor.stopRobot();
+					sensor.driveFowardAuto(170);
+					sensor.turnRobotRightGyro(45);
+					sensor.driveFowardAuto(204);
+					sensor.turnRobotRightGyro(90);
+					sensor.stopRobot();
+					//elevator.raiseElevatorDis(autoDis);
+					//sensor.stopRobot();
+					//elevator.ejectBlock(autoSpeed);
+					//sensor.stopRobot();
+					exit = true;
+				}
+			}else if(myPosition == 2) {
+				if(myScale == 'R');
+				sensor.driveFowardAuto(323);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
+				//elevator.raiseElevatorDis(autoDis);
+				//sensor.stopRobot();
+				//elevator.ejectBlock(autoSpeed);
+				//sensor.stopRobot()
+				exit = true;
+			}else if(myScale == 'L') {
+				sensor.driveFowardAuto(218);
+				sensor.stopRobot();
+				sensor.turnRobotRightGyro(90);
+				sensor.stopRobot();
+				sensor.driveFowardAuto(240);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
+				sensor.driveFowardAuto(68);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
+				//elevator.raiseElevatorDis(autoDis);
+				//sensor.stopRobot();
+				//elevator.ejectBlock(autoSpeed);
+				//sensor.stopRobot()
+				exit = true;
+			}
+			
+		}else if(myGoal == 2) {
+			if(myPosition == 0) {
+				sensor.driveFowardAuto(126);
+				sensor.stopRobot();
+				sensor.driveBackwardAuto(78);
+				sensor.stopRobot();
+				sensor.turnRobotRightGyro(90);
+				sensor.stopRobot();
+				sensor.driveFowardAuto(60);
+				sensor.stopRobot();
+				sensor.turnRobotRightGyro(90);
+				exit = true;
+			}else if(myPosition == 1) {
+			   sensor.driveFowardAuto(125);
+			   sensor.stopRobot();
+			   sensor.driveBackwardAuto(78);
+			   sensor.stopRobot();
+			   sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
+				sensor.driveFowardAuto(60);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+			}else if(myPosition == 2) {
+				sensor.driveFowardAuto(126);
+				sensor.stopRobot();
+				sensor.driveBackwardAuto(78);
+				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(72);
+				sensor.driveFowardAuto(120);
+				sensor.turnRobotLeftGyro(90);
+			}
 		}
 		return exit;
 	}
