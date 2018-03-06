@@ -218,7 +218,7 @@ public class Elevator {
     		System.err.println("Error: Grab Switch not set up");
     	}else {
     		if(!grabSensorPressed){
-    			_leftMoter.setSpeed(speed);
+    			_leftMoter.setSpeed(-speed);
     			_rightMoter.setSpeed(-speed);		
     		}else {
     			_leftMoter.setSpeed(0);
@@ -238,7 +238,7 @@ public class Elevator {
     	}else if(!setSwitches){
     		System.err.println("Error: Grab Switch not set up");
     	}else {    		
-			_leftMoter.setSpeed(-speed);
+			_leftMoter.setSpeed(speed);
 			_rightMoter.setSpeed(speed);
     	}
     }  
