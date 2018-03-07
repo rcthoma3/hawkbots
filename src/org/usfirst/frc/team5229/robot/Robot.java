@@ -39,8 +39,8 @@ public class Robot extends IterativeRobot {
 	Autonomous myAutonRobot = new Autonomous();
 	ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	
-	//UsbCamera Camera1;
-	//UsbCamera Camera2;
+	UsbCamera Camera1;
+	UsbCamera Camera2;
 		
 	MecanumDrive _drive;
 	
@@ -101,8 +101,8 @@ public class Robot extends IterativeRobot {
 		_rightClawMotor = new VictorSP(rightClawPort);
 		_elevatorMotor = new WPI_TalonSRX(elevatorMotorPort);
 		
-		//Camera1 = CameraServer.getInstance().startAutomaticCapture();
-		//Camera2 = CameraServer.getInstance().startAutomaticCapture();
+		Camera1 = CameraServer.getInstance().startAutomaticCapture();
+		Camera2 = CameraServer.getInstance().startAutomaticCapture();
 		
 		// Initialize to zero
 		_frontLeftMotor.set(0);
@@ -174,9 +174,9 @@ public class Robot extends IterativeRobot {
 		
 		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(240); System.out.println("Done Going Forward"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward"); myRobot.stopRobot(); Timer.delay(0.010);}
-		if (turnRight) {System.out.println("Doing Right Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
-		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeft(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
-		//if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
+		//if (turnRight) {System.out.println("Doing Right Turn"); turnRight = !myRobot.turnRobotRightGyro(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
+		if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
 		myRobot.stopRobot();
 		
@@ -220,15 +220,20 @@ public class Robot extends IterativeRobot {
 		
 		if (myController.getButtonUpD() ) { myClimber.raiseElevator(300, false); }
 		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(300, false); }
-		else { myClimber.checkSwitches(false); }	
+		else { myClimber.checkSwitches(false); }
+		
+		if (myController.getButtonLeftD() ) { myElevator.raiseElevator(400, false); }
+		else if (myController.getButtonRightD() ) { myElevator.lowerElevator(300, false); }
+		else { myElevator.checkSwitches(false); }
 		/*
 		if (myController.getButtonX()) { myElevator.raiseElevator(0.8, true); }
 		if (myController.getButtonB()) { myElevator.lowerElevator(0.5, true); }
-		
-		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*205, false); }
-		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevator(myController.getRightTrigger()*205, false); }
-		//else { myElevator.checkSwitches(false); }
 		*/
+		//System.out.println("left trigger: " + myController.getLeftTrigger());
+		//if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*300, false); }
+		//else if (myController.getRightTrigger() < 0) { myElevator.lowerElevator(myController.getRightTrigger()*300, false); }
+		//else { myElevator.checkSwitches(false); }
+		
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 		else { myElevator.ejectBlock(0); }

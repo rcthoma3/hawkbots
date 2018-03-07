@@ -14,7 +14,7 @@ public class Autonomous {
 	private boolean setAutoChooser = false;//Check if AutoChooser is set up
 	Sensors sensor;
 	Elevator elevator = new Elevator();
-	public double autoSpeed = 0.3;
+	public double autoSpeed = 1;
 	public int autoDis = 0;
 	
    
@@ -38,11 +38,12 @@ public class Autonomous {
 	   postionChooser.addDefault("Left", 0);//0 show that the robot is on the left side
 	   postionChooser.addObject("Center", 1);//1 show that the robot is in the center
 	   postionChooser.addObject("Right", 2);//2 show that the robot is on the right side
-	   SmartDashboard.putData("Autonomous Mode Chooser", postionChooser);
+	   SmartDashboard.putData("Position Mode Chooser", postionChooser);
 	   goalChooser = new SendableChooser<Integer>();
 	   goalChooser.addDefault("Switch", 0);//0 show that the robot is going to the switch
 	   goalChooser.addObject("Scale", 1);//1 show that the robot is going to the scale
 	   goalChooser.addObject("Neither", 2);//2 show that the robot is doing neither
+	   SmartDashboard.putData("Goal Mode Chooser", goalChooser);
 	   setAutoChooser = true; 
 	   
 	   return setAutoChooser;
@@ -112,10 +113,10 @@ public class Autonomous {
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(22); 
+				sensor.driveFowardAuto(40); 
 				//elevator.raiseElevatorDis(autoDis);
 				sensor.stopRobot();
-				//elevator.ejectBlock(autoSpeed);
+				elevator.ejectBlock(autoSpeed);
 				sensor.stopRobot();
 				exit = true;
 			}else if (mySwitch == 'R') {
@@ -170,12 +171,12 @@ public class Autonomous {
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(22);
+				sensor.driveFowardAuto(40);
 				sensor.stopRobot();
 				//elevator.raiseElevatorDis(autoDis);
 				//sensor.stopRobot();
-				//elevator.ejectBlock(autoSpeed);
-				//sensor.stopRobot()
+				elevator.ejectBlock(autoSpeed);
+				sensor.stopRobot();
 				exit = true;
 			}else if(mySwitch == 'L') {
 				sensor.driveFowardAuto(218);
@@ -292,32 +293,22 @@ public class Autonomous {
 			if(myPosition == 0) {
 				sensor.driveFowardAuto(126);
 				sensor.stopRobot();
-				sensor.driveBackwardAuto(78);
-				sensor.stopRobot();
-				sensor.turnRobotRightGyro(90);
-				sensor.stopRobot();
-				sensor.driveFowardAuto(60);
-				sensor.stopRobot();
-				sensor.turnRobotRightGyro(90);
 				exit = true;
 			}else if(myPosition == 1) {
-			   sensor.driveFowardAuto(125);
+			   sensor.driveFowardAuto(55);
 			   sensor.stopRobot();
-			   sensor.driveBackwardAuto(78);
-			   sensor.stopRobot();
-			   sensor.turnRobotLeftGyro(90);
-				sensor.stopRobot();
-				sensor.driveFowardAuto(60);
-				sensor.stopRobot();
-				sensor.turnRobotLeftGyro(90);
+			   sensor.turnRobotRightGyro(90);
+		       sensor.stopRobot();
+		       sensor.driveFowardAuto(60);
+		       sensor.stopRobot();
+		       sensor.turnRobotLeftGyro(90);
+		       sensor.driveFowardAuto(40);
+		       sensor.stopRobot();
+		       exit = true;
 			}else if(myPosition == 2) {
 				sensor.driveFowardAuto(126);
 				sensor.stopRobot();
-				sensor.driveBackwardAuto(78);
-				sensor.stopRobot();
-				sensor.turnRobotLeftGyro(72);
-				sensor.driveFowardAuto(120);
-				sensor.turnRobotLeftGyro(90);
+				exit = true;
 			}
 		}
 		return exit;

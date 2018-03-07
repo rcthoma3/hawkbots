@@ -74,7 +74,7 @@ public class Elevator {
 			System.err.println("Error: Elevator Moter not set up yet.");
 		}else {
 			//Invert Motor
-			_elevatorMoter.setInverted(true);
+			_elevatorMoter.setInverted(false);
 			_elevatorMoter.setSensorPhase(false);
 			
 			//Init Encoders
@@ -98,11 +98,11 @@ public class Elevator {
 			// PID controls
 			//TODO: Tune these
 			_elevatorMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-			_elevatorMoter.config_kF(0, 0.3, timeoutMs); //(int slotIdx, double value, int timeoutMs)
-			_elevatorMoter.config_kP(0, 3.0, timeoutMs);
-			_elevatorMoter.config_kI(0, 0.03, timeoutMs);
-			_elevatorMoter.config_kD(0, 30, timeoutMs);
-			_elevatorMoter.config_IntegralZone(0, 20, timeoutMs);
+			_elevatorMoter.config_kF(0, 1.7 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
+			_elevatorMoter.config_kP(0, 0, timeoutMs);
+			_elevatorMoter.config_kI(0, 0, timeoutMs);
+			_elevatorMoter.config_kD(0, 0, timeoutMs);
+			_elevatorMoter.config_IntegralZone(0, 0, timeoutMs);
 			
 			initElevator = true;
 		}
@@ -122,8 +122,10 @@ public class Elevator {
 			System.err.println("Error: Elevator moter not initialized");
 		}else {
 			upperSensorPressed = upperSwitch.getstate();
+			System.out.println("ele upper sen: " + upperSensorPressed);
 			if(!upperSensorPressed) {
 				_elevatorMoter.set(ControlMode.Velocity, speed);
+				System.out.println("ele up: " + speed);
 				if(button) {
 					raise = true;
 					lower = false;

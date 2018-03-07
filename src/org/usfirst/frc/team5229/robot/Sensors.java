@@ -32,7 +32,7 @@ public class Sensors {
 	private WPI_TalonSRX _rearRightMotor;
 	private ADXRS450_Gyro gyro;
 	
-	private boolean frontLeftValid = false;
+	private boolean frontLeftValid = true;
 	private boolean frontRightValid = true;
 	private boolean rearLeftValid = true;
 	private boolean rearRightValid = true;
@@ -391,7 +391,7 @@ public class Sensors {
 		else {
 			gyro.reset();
 			double cur = gyro.getAngle();
-			double target = cur + deg -8;
+			double target = cur + deg -4;
 			
 			_frontRightMotor.setInverted(false);
 			_rearRightMotor.setInverted(false);
