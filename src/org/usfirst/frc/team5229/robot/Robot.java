@@ -148,7 +148,8 @@ public class Robot extends IterativeRobot {
 		myRobot.setOverride(false);
 		myRobot.setGyro(gyro);
 		myAutonRobot.setSensor(myRobot);
-		
+		myAutonRobot.setElevator(myElevator);
+
 		String gameMsg = myAutonRobot.getGameMsg();
 		
 		SmartDashboard.putString("Game message", gameMsg);
