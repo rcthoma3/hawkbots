@@ -130,6 +130,9 @@ public class Robot extends IterativeRobot {
 		myElevator.setSwitches(topElevatorSwitch, bottomElevatorSwitch, grabSwitch);
 		myElevator.setGrabMotors(_leftClawMotor, _rightClawMotor);
 		
+		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
+		myRobot.initEncoders();
+
 		pos = myAutonRobot.getPositoin();
 	}
 	
@@ -140,13 +143,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		
-		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
 		myRobot.setWheelSize(whlSize);
 		myRobot.setChassisSize(roboDim);	
-		myRobot.initEncoders();
 		myRobot.setOverride(false);
 		myRobot.setGyro(gyro);
 		myAutonRobot.setSensor(myRobot);
+		
 		String gameMsg = myAutonRobot.getGameMsg();
 		
 		SmartDashboard.putString("Game message", gameMsg);
