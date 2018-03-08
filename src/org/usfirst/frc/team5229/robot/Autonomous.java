@@ -6,20 +6,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
 	
-	private String gameData;//String obatin that is used to tell ownership of the scales and switches for the alliance
+	private String gameData;//String obtain that is used to tell ownership of the scales and switches for the alliance
 	private int startpos = 0;//Determine the start position of the robot
 	private int startgoal = 0;//Determine the goal we are trying to reach
 	private SendableChooser<Integer> postionChooser;//Created a method that allowed driver to input position
 	private SendableChooser<Integer> goalChooser;//Created a method that allowed the driver to choose thier goal
 	private boolean setAutoChooser = false;//Check if AutoChooser is set up
 	Sensors sensor;
-	Elevator elevator = new Elevator();
+	Elevator elevator;
 	public double autoSpeed = 1;
 	public int autoDis = 0;
 	
    
 	public boolean setSensor(Sensors sensorIn) {
 		sensor = sensorIn;
+		return true;
+	}
+	
+	public boolean setElevator(Elevator elevatorIn) {
+		elevator = elevatorIn;
 		return true;
 	}
 	//Return game string
