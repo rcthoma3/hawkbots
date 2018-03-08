@@ -3,11 +3,12 @@ package org.usfirst.frc.team5229.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-public class Sensors {
+public class Sensors extends IterativeRobot{
 	
 	private int timeoutMs = 10;
 	private int pidIdx = 0;
@@ -46,6 +47,7 @@ public class Sensors {
 	}
 	
 	public boolean setOverride(boolean input) {
+		System.out.println("Override set");
 		override = input;
 		return true;
 	}
@@ -302,6 +304,8 @@ public class Sensors {
 			
 			while(!(cur < enc + threshold && cur > enc - threshold) && !override) {
 				
+				override = isDisabled() || isOperatorControl();
+				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
 				if (rearLeftValid) { _rearLeftMotor.set(ControlMode.MotionMagic, enc); }
@@ -352,6 +356,8 @@ public class Sensors {
 			_rearRightMotor.setSensorPhase(false);
 			
 			while(!(cur < enc + threshold && cur > enc - threshold) && !override) {
+				
+				override = isDisabled() || isOperatorControl();
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -412,6 +418,7 @@ public class Sensors {
 			while (!(cur < target + 2 && cur > target - 2) && !override ) {
 				
 				//enc = enc + 20;
+				override = isDisabled() || isOperatorControl();
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.Velocity, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.Velocity, enc); }
@@ -466,6 +473,7 @@ public class Sensors {
 			
 					
 			while (!(cur < enc + threshold && cur > enc - threshold) && !override) {
+				override = isDisabled() || isOperatorControl();
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -521,6 +529,7 @@ public class Sensors {
 			_rearRightMotor.setSensorPhase(false);
 			
 			while (!(cur < enc + threshold && cur > enc - threshold) && !override) {
+				override = isDisabled() || isOperatorControl();
 			
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -581,6 +590,7 @@ public class Sensors {
 			while (!(-cur < target + 2 && -cur > target - 2) && !override ) {
 				
 				//enc = enc + 20;
+				override = isDisabled() || isOperatorControl();
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.Velocity, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.Velocity, enc); }

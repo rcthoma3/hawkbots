@@ -193,6 +193,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {	
 		
+		myRobot.setOverride(true);
+		myRobot.stopRobot();
+		follow = false;
+		
 		// Initialize mecanum drive
 		_drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);		
 		
@@ -270,5 +274,6 @@ public class Robot extends IterativeRobot {
 	public void disabledInit() {
 		myRobot.setOverride(true);
 		myRobot.stopRobot();
+		follow = false;
 	}
 }
