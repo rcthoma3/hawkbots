@@ -27,7 +27,8 @@ public class ControllerLogitech
 	private int kAxisRightJoyY = 5;
 	private int kAxisLeftJoyX = 0;
 	private int kAxisLeftJoyY = 1;
-	private int kAxisTrigger = 3;
+	private int kAxisRightTrigger = 3;
+	private int kAxisLeftTrigger = 2;
 	
 	
 
@@ -64,14 +65,14 @@ public class ControllerLogitech
  //in: nothing
  //out: is a button pressed, double between 0 and -1
  public double getRightTrigger() {    
-	 return stick.getRawAxis(kAxisTrigger);
+	 return stick.getRawAxis(kAxisRightTrigger);
  }
  
  //Is the Left Trigger button pressed or not
  //in: nothing 
  //out: is a button pressed, double between 0 and 1
  public double getLeftTrigger() {
-	 return stick.getRawAxis(kAxisTrigger);
+	 return stick.getRawAxis(kAxisLeftTrigger);
  }
  
  //Is the B button pressed or not

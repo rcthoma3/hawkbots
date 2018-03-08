@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator {
-	private WPI_TalonSRX _elevatorMoter;
+	private WPI_TalonSRX _elevatorMotor;
 	private boolean setElevator = false;
 	private boolean initElevator = false; 
 	private Sensors upperSwitch;
@@ -37,7 +37,7 @@ public class Elevator {
 	//in:elevatorMoterIn
 	//out:setElevator
 	public boolean setElevator(WPI_TalonSRX elevatorMoterIn) {
-		_elevatorMoter = elevatorMoterIn;
+		_elevatorMotor = elevatorMoterIn;
 		setElevator = true;
 		return setElevator;
 	}
@@ -74,35 +74,35 @@ public class Elevator {
 			System.err.println("Error: Elevator Moter not set up yet.");
 		}else {
 			//Invert Motor
-			_elevatorMoter.setInverted(false);
-			_elevatorMoter.setSensorPhase(false);
+			_elevatorMotor.setInverted(false);
+			_elevatorMotor.setSensorPhase(false);
 			
 			//Init Encoders
-			_elevatorMoter.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+			_elevatorMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 			
 			// Set the peak and nominal outputs, 12V means full
-			_elevatorMoter.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
-			_elevatorMoter.configNominalOutputReverse(0, timeoutMs);
-			_elevatorMoter.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
-			_elevatorMoter.configPeakOutputReverse(-1, timeoutMs);
+			_elevatorMotor.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
+			_elevatorMotor.configNominalOutputReverse(0, timeoutMs);
+			_elevatorMotor.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
+			_elevatorMotor.configPeakOutputReverse(-1, timeoutMs);
 			
 			// Current Limiting
-			_elevatorMoter.configPeakCurrentLimit(peakCurrent, timeoutMs); /* 39 A */
-			_elevatorMoter.configPeakCurrentDuration(peakCurrentDur, timeoutMs); /* 0ms */
-			_elevatorMoter.configContinuousCurrentLimit(contCurrent, timeoutMs); /* 37A */
-			_elevatorMoter.enableCurrentLimit(true); /* turn it on */
+			_elevatorMotor.configPeakCurrentLimit(peakCurrent, timeoutMs); /* 39 A */
+			_elevatorMotor.configPeakCurrentDuration(peakCurrentDur, timeoutMs); /* 0ms */
+			_elevatorMotor.configContinuousCurrentLimit(contCurrent, timeoutMs); /* 37A */
+			_elevatorMotor.enableCurrentLimit(true); /* turn it on */
 			
 			// Init Sensor to zero
-			_elevatorMoter.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs)
+			_elevatorMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs)
 			
 			// PID controls
 			//TODO: Tune these
-			_elevatorMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-			_elevatorMoter.config_kF(0, 1.7 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
-			_elevatorMoter.config_kP(0, 0, timeoutMs);
-			_elevatorMoter.config_kI(0, 0, timeoutMs);
-			_elevatorMoter.config_kD(0, 0, timeoutMs);
-			_elevatorMoter.config_IntegralZone(0, 0, timeoutMs);
+			_elevatorMotor.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
+			_elevatorMotor.config_kF(0, 1.7 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
+			_elevatorMotor.config_kP(0, 0, timeoutMs);
+			_elevatorMotor.config_kI(0, 0, timeoutMs);
+			_elevatorMotor.config_kD(0, 0, timeoutMs);
+			_elevatorMotor.config_IntegralZone(0, 0, timeoutMs);
 			
 			initElevator = true;
 		}
@@ -124,7 +124,7 @@ public class Elevator {
 			upperSensorPressed = upperSwitch.getstate();
 			System.out.println("ele upper sen: " + upperSensorPressed);
 			if(!upperSensorPressed) {
-				_elevatorMoter.set(ControlMode.Velocity, speed);
+				_elevatorMotor.set(ControlMode.Velocity, speed);
 				System.out.println("ele up: " + speed);
 				if(button) {
 					raise = true;
@@ -138,7 +138,7 @@ public class Elevator {
 					lowerSpd = 0;
 				}
 			} else {
-				_elevatorMoter.set(ControlMode.Velocity, 0);
+				_elevatorMotor.set(ControlMode.Velocity, 0);
 				SmartDashboard.putBoolean("Elevator Max", true);
 			}
 
@@ -159,7 +159,7 @@ public class Elevator {
     	}else {
     		upperSensorPressed = upperSwitch.getstate();
     		if(!upperSensorPressed) {
-    			_elevatorMoter.set(ControlMode.Position, dis);
+    			_elevatorMotor.set(ControlMode.Position, dis);
     			return true;
     		}
     		else { SmartDashboard.putBoolean("Elevator Max", true); return false; }   		
@@ -181,7 +181,7 @@ public class Elevator {
     	}else {
     		lowerSensorPressed = lowerSwitch.getstate();
     		if(!lowerSensorPressed) {
-    			_elevatorMoter.set(ControlMode.Velocity, -speed);
+    			_elevatorMotor.set(ControlMode.Velocity, -speed);
     			if(button) {
 				lower = true;
 				raise = false;
@@ -194,7 +194,7 @@ public class Elevator {
     				lowerSpd = 0;
     			}
     		} else {
-    			_elevatorMoter.set(ControlMode.Velocity, 0);
+    			_elevatorMotor.set(ControlMode.Velocity, 0);
     			SmartDashboard.putBoolean("Elevator Min", true);
     		}
     	}
@@ -214,7 +214,8 @@ public class Elevator {
     	}else {
     		lowerSensorPressed = lowerSwitch.getstate();
     		if(!lowerSensorPressed) {
-    			_elevatorMoter.set(ControlMode.Position, dis);
+    			if (_elevatorMotor.getSelectedSensorPosition(0) > 0)
+    			_elevatorMotor.set(ControlMode.Position, dis);
     			return true;
     		}
     		else { SmartDashboard.putBoolean("Elevator Min", true); return false;}
@@ -276,11 +277,11 @@ public class Elevator {
 			if(lowerSensorPressed) { SmartDashboard.putBoolean("Elevator Min", true); lower = false; raise = false; } 
 	
 			if ((!upperSensorPressed && !switchOverride) && (raise && !lower)) { 
-				_elevatorMoter.set(ControlMode.Velocity, raiseSpd);
+				_elevatorMotor.set(ControlMode.Velocity, raiseSpd);
 			}else if((!lowerSensorPressed && !switchOverride) && (lower && !raise)) { 
-				_elevatorMoter.set(ControlMode.Velocity, lowerSpd); 
+				_elevatorMotor.set(ControlMode.Velocity, lowerSpd); 
 			}else {
-				_elevatorMoter.set(ControlMode.Velocity, 0);
+				_elevatorMotor.set(ControlMode.Velocity, 0);
 				raise = false;
 				lower = false;		
 			}	  	

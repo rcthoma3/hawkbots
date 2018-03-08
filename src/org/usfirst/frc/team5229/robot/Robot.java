@@ -222,24 +222,22 @@ public class Robot extends IterativeRobot {
 	    //TODO: Change all myController to myDriveController
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);	
 		
-		if (myController.getButtonY()) { myClimber.raiseElevator(300, true); }
-		if (myController.getButtonA()) { myClimber.lowerElavator(300, true); }
+		if (myController.getButtonRightD()) { myClimber.raiseElevator(300, true); }
+		if (myController.getButtonLeftD()) { myClimber.lowerElavator(300, true); }
 		
 		if (myController.getButtonUpD() ) { myClimber.raiseElevator(300, false); }
 		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(300, false); }
 		else { myClimber.checkSwitches(false); }
 		
-		if (myController.getButtonLeftD() ) { myElevator.raiseElevator(400, false); }
-		else if (myController.getButtonRightD() ) { myElevator.lowerElevator(300, false); }
-		else { myElevator.checkSwitches(false); }
 		/*
-		if (myController.getButtonX()) { myElevator.raiseElevator(0.8, true); }
-		if (myController.getButtonB()) { myElevator.lowerElevator(0.5, true); }
+		if (myController.getbuttonA()) { myElevator.lowerElevatorDis() }
+		if (myController.getButtonX()) { myElevator.raiseElevatorDis(0.8, true); }
+		if (myController.getButtonY()) { myElevator.lowerElevatorDis(0.5, true); }
 		*/
 		//System.out.println("left trigger: " + myController.getLeftTrigger());
-		//if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*300, false); }
-		//else if (myController.getRightTrigger() < 0) { myElevator.lowerElevator(myController.getRightTrigger()*300, false); }
-		//else { myElevator.checkSwitches(false); }
+		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*300, false); }
+		else if (myController.getRightTrigger() > 0) { myElevator.lowerElevator(myController.getRightTrigger()*300, false); }
+		else { myElevator.checkSwitches(false); }
 		
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
