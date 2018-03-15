@@ -77,7 +77,7 @@ public class Climbing {
 				
 				// PID controls
 				_climbMotor.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-				_climbMotor.config_kF(0, 1.7, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
+				_climbMotor.config_kF(0, 3, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
 				_climbMotor.config_kP(0, 2, timeoutMs);
 				_climbMotor.config_kI(0, 0.003, timeoutMs);
 				_climbMotor.config_kD(0, 150, timeoutMs);
@@ -167,10 +167,6 @@ public class Climbing {
 		}else {
 			bottomSensorpressed = bottomSwitch.getstate();
 			topSensorpressed = topSwitch.getstate();
-			
-			// Max height 16240
-			if(topSensorpressed) { SmartDashboard.putBoolean("Climb Max", true); raise = false; lower = false; }
-			if(bottomSensorpressed) { SmartDashboard.putBoolean("Climb Min", true); lower = false; raise = false; }
 
 			if ((!topSensorpressed && !switchOverride) && (raise && !lower)) { 
 				_climbMotor.set(ControlMode.Velocity, raiseSpd); 
@@ -186,6 +182,12 @@ public class Climbing {
 				lower = false;		
 			}
 		}
+	}
+	public boolean getTopSwitch() {
+		return topSwitch.getstate();
+	}
+	public boolean getBottomSwitch() {
+		return bottomSwitch.getstate();
 	}
 }
 	

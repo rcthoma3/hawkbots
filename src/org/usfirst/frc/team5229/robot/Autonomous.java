@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5229.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -8,14 +9,17 @@ public class Autonomous {
 	
 	private String gameData;//String obtain that is used to tell ownership of the scales and switches for the alliance
 	private int startpos = 0;//Determine the start position of the robot
-	private int startgoal = 0;//Determine the goal we are trying to reach
+	private int startgoal = 2;//Determine the goal we are trying to reach
 	private SendableChooser<Integer> postionChooser;//Created a method that allowed driver to input position
 	private SendableChooser<Integer> goalChooser;//Created a method that allowed the driver to choose thier goal
 	private boolean setAutoChooser = false;//Check if AutoChooser is set up
 	Sensors sensor;
 	Elevator elevator;
 	public double autoSpeed = 1;
-	public int autoDis = 0;
+	public int autoDis = 20000;
+	boolean validMsg = false;
+	Timer time = new Timer();
+	int globalGoal = 5;
 	
    
 	public boolean setSensor(Sensors sensorIn) {
@@ -31,7 +35,13 @@ public class Autonomous {
 	//in:nothing
 	//out:gameData
 	public String getGameMsg(){
+		time.start();
+		do {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		if (gameData.compareTo("LLL") == 0 || gameData.compareTo("LRL") == 0 || gameData.compareTo("RRR") == 0 || gameData.compareTo("RLR") == 0) {
+			validMsg = true;
+		}
+		} while (!time.hasPeriodPassed(2) && !validMsg);
 		return gameData;
 	} 
 	
@@ -45,9 +55,9 @@ public class Autonomous {
 	   postionChooser.addObject("Right", 2);//2 show that the robot is on the right side
 	   SmartDashboard.putData("Position Mode Chooser", postionChooser);
 	   goalChooser = new SendableChooser<Integer>();
-	   goalChooser.addDefault("Switch", 0);//0 show that the robot is going to the switch
+	   goalChooser.addDefault("Neither", 2);//2 show that the robot is doing neither
 	   goalChooser.addObject("Scale", 1);//1 show that the robot is going to the scale
-	   goalChooser.addObject("Neither", 2);//2 show that the robot is doing neither
+	   goalChooser.addObject("Switch", 0);//0 show that the robot is going to the switch
 	   SmartDashboard.putData("Goal Mode Chooser", goalChooser);
 	   setAutoChooser = true; 
 	   
@@ -75,7 +85,12 @@ public class Autonomous {
 		}else {
 			startgoal = (int) goalChooser.getSelected();
 		}
+		globalGoal = startgoal;
 		return startgoal;
+	}
+	
+	public int getGlobalGoal() {
+		return globalGoal;
 	}
 	
 	//Obtain what side of the switch the alliance have 
@@ -107,23 +122,33 @@ public class Autonomous {
 	//out:exitd
 	public boolean followPath() {
 		boolean exit = false;
-		char mySwitch = getMySwitch();
 		int myPosition = getPositoin();
 		int myGoal = getGoal();
-		char myScale = getScale();
-		if(myGoal == 0) {
-		if(myPosition == 0) {
+		char myScale = 'X';
+		char mySwitch = 'X';
+		if (validMsg) {
+			myScale = getScale();
+			mySwitch = getMySwitch();
+		}
+		else {
+			myGoal = 2;
+		}
+		globalGoal = myGoal;
+		if(myGoal == 0) { //Switch
+		if(myPosition == 0) { //Left
 			if(mySwitch == 'L') {
 				sensor.driveFowardAuto(149);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(40); 
-				//elevator.raiseElevatorDis(autoDis);
+				elevator.raiseElevatorDis(autoDis);
+				sensor.stopRobot();
+				sensor.driveFowardAuto(40);
 				sensor.stopRobot();
 				elevator.ejectBlock(autoSpeed);
 				sensor.stopRobot();
 				exit = true;
+				
 			}else if (mySwitch == 'R') {
 				sensor.driveFowardAuto(218);
 				sensor.stopRobot();
@@ -133,56 +158,62 @@ public class Autonomous {
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
+				elevator.raiseElevatorDis(autoDis);
+				sensor.stopRobot();
 				sensor.driveFowardAuto(24);
+				sensor.stopRobot();
+				elevator.ejectBlock(autoSpeed);
+				sensor.stopRobot();
 				exit = true;
 			}
-		}else if(myPosition == 1) {
+		}else if(myPosition == 1) { //Center
 			if(mySwitch == 'L') {
-				sensor.driveFowardAuto(125);
+				sensor.driveFowardAuto(48);
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(30);
+				sensor.driveFowardAuto(60);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
+				//elevator.raiseElevatorDis(autoDis);
+				//sensor.stopRobot();				
 				sensor.driveFowardAuto(15);
 				sensor.stopRobot();
-				//elevator.raiseElevatorDis(autoDis);
-				//sensor.stopRobot();
 				//elevator.ejectBlock(autoSpeed);
 				//sensor.stopRobot();
 				exit = true;
-			}else if(mySwitch == 'R') {
-				sensor.driveFowardAuto(125);
+			}else if(mySwitch == 'R') { 
+				sensor.driveFowardAuto(48);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(30);
+				sensor.driveFowardAuto(60);
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(15);
-				sensor.stopRobot();
 				//elevator.raiseElevatorDis(autoDis);
-				//sensor.stopRobot();
+				//sensor.stopRobot();		
+				sensor.driveFowardAuto(15);
+				sensor.stopRobot();	
 				//elevator.ejectBlock(autoSpeed);
 				//sensor.stopRobot();
 				exit = true;
 			}
-		}else if(myPosition == 2) {
+		}else if(myPosition == 2) { //Right
 			if(mySwitch == 'R') {
 				sensor.driveFowardAuto(149);
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(40);
+				elevator.raiseElevatorDis(autoDis);
 				sensor.stopRobot();
-				//elevator.raiseElevatorDis(autoDis);
-				//sensor.stopRobot();
+				sensor.driveFowardAuto(40);
+				sensor.stopRobot();	
 				elevator.ejectBlock(autoSpeed);
 				sensor.stopRobot();
 				exit = true;
+				
 			}else if(mySwitch == 'L') {
 				sensor.driveFowardAuto(218);
 				sensor.stopRobot();
@@ -192,26 +223,26 @@ public class Autonomous {
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
+				elevator.raiseElevatorDis(autoDis);
+				sensor.stopRobot();
 				sensor.driveFowardAuto(24);
 				sensor.stopRobot();
-				//elevator.raiseElevatorDis(autoDis);
-				//sensor.stopRobot();
-				//elevator.ejectBlock(autoSpeed);
-				//sensor.stopRobot()
+				elevator.ejectBlock(autoSpeed);
+				sensor.stopRobot();
                 exit = true;
 			}
 			
 		}
-		}else if(myGoal == 1) {
-			if(myPosition == 0) {
+		}else if(myGoal == 1) { //Scale
+			if(myPosition == 0) { //Left
 				if(myScale == 'L') {
 					sensor.driveFowardAuto(323);
 					sensor.stopRobot();
 					sensor.turnRobotRightGyro(90);
 					sensor.stopRobot();
-					//elevator.raiseElevatorDis(autoDis);
-					//sensor.stopRobot();
-					//elevator.ejectBlock(autoSpeed);
+					elevator.raiseElevatorDis(autoDis);
+					sensor.stopRobot();
+					elevator.ejectBlock(autoSpeed);
 					//sensor.stopRobot()
 					exit = true;
 				}else if(myScale == 'R') {
@@ -233,7 +264,7 @@ public class Autonomous {
 					//sensor.stopRobot()
 					exit = true;
 				}
-			}else if(myPosition == 1) {
+			}else if(myPosition == 1) { //Center
 				if(myScale == 'R') {
 					sensor.turnRobotRightGyro(31);
 					sensor.stopRobot();
@@ -263,7 +294,7 @@ public class Autonomous {
 					//sensor.stopRobot();
 					exit = true;
 				}
-			}else if(myPosition == 2) {
+			}else if(myPosition == 2) { //Right
 				if(myScale == 'R');
 				sensor.driveFowardAuto(323);
 				sensor.stopRobot();
@@ -294,12 +325,12 @@ public class Autonomous {
 				exit = true;
 			}
 			
-		}else if(myGoal == 2) {
-			if(myPosition == 0) {
+		}else if(myGoal == 2) { //Neither
+			if(myPosition == 0) { //Left
 				sensor.driveFowardAuto(126);
 				sensor.stopRobot();
 				exit = true;
-			}else if(myPosition == 1) {
+			}else if(myPosition == 1) { //Center
 			   sensor.driveFowardAuto(55);
 			   sensor.stopRobot();
 			   sensor.turnRobotRightGyro(90);
@@ -310,7 +341,7 @@ public class Autonomous {
 		       sensor.driveFowardAuto(40);
 		       sensor.stopRobot();
 		       exit = true;
-			}else if(myPosition == 2) {
+			}else if(myPosition == 2) { //Right
 				sensor.driveFowardAuto(126);
 				sensor.stopRobot();
 				exit = true;

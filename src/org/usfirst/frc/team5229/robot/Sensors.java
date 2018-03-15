@@ -3,12 +3,12 @@ package org.usfirst.frc.team5229.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-public class Sensors extends IterativeRobot{
+public class Sensors {
 	
 	private int timeoutMs = 10;
 	private int pidIdx = 0;
@@ -39,6 +39,13 @@ public class Sensors extends IterativeRobot{
 	private boolean rearRightValid = true;
 	
 	private DigitalInput limSwitch;
+	
+	public void resetEncValid() {
+		frontLeftValid = true;
+		frontRightValid = true;
+		rearLeftValid = true;
+		rearRightValid=true;		
+	}
 	
 	public boolean setGyro (ADXRS450_Gyro gyroIn) {
 		gyro = gyroIn;
@@ -302,9 +309,17 @@ public class Sensors extends IterativeRobot{
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
+			// Reset Sensor to zero
+			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
+			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			
+			resetEncValid();						
+			
 			while(!(cur < enc + threshold && cur > enc - threshold) && !override) {
 				
-				override = isDisabled() || isOperatorControl();
+				override = !RobotState.isAutonomous();
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -320,11 +335,6 @@ public class Sensors extends IterativeRobot{
 				Timer.delay(0.005);
 			}
 			
-			// Reset Sensor to zero
-			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
-			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			
 			return true;
 		}
@@ -355,9 +365,17 @@ public class Sensors extends IterativeRobot{
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
+			// Reset Sensor to zero
+			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
+			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			
+			resetEncValid();
+			
 			while(!(cur < enc + threshold && cur > enc - threshold) && !override) {
 				
-				override = isDisabled() || isOperatorControl();
+				override = !RobotState.isAutonomous();
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -373,11 +391,7 @@ public class Sensors extends IterativeRobot{
 				Timer.delay(0.005);
 			}
 			
-			// Reset Sensor to zero
-			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
-			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			
 						
 			return true;
 		}
@@ -408,17 +422,14 @@ public class Sensors extends IterativeRobot{
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);			
 			
-			frontLeftValid = true;
-			frontRightValid = true;
-			rearLeftValid = true;
-			rearRightValid = true;
+			resetEncValid();
 			
 			int enc = 175;
 			
 			while (!(cur < target + 2 && cur > target - 2) && !override ) {
 				
 				//enc = enc + 20;
-				override = isDisabled() || isOperatorControl();
+				override = !RobotState.isAutonomous();
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.Velocity, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.Velocity, enc); }
@@ -437,7 +448,7 @@ public class Sensors extends IterativeRobot{
 			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			System.out.println("Turned Right: " + cur);
+			
 			return true;
 		}
 		return false;
@@ -471,9 +482,16 @@ public class Sensors extends IterativeRobot{
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
+			// Reset Sensor to zero
+			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
+			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			
+			resetEncValid();			
 					
 			while (!(cur < enc + threshold && cur > enc - threshold) && !override) {
-				override = isDisabled() || isOperatorControl();
+				override = !RobotState.isAutonomous();
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -488,13 +506,7 @@ public class Sensors extends IterativeRobot{
 				
 				Timer.delay(0.005);
 			}
-			
-			// Reset Sensor to zero
-			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
-			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			System.out.println("Turned Right: " + cur);
+		
 			return true;
 		}
 		return false;
@@ -528,8 +540,16 @@ public class Sensors extends IterativeRobot{
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
+			// Reset Sensor to zero
+			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
+			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
+			
+			resetEncValid();
+			
 			while (!(cur < enc + threshold && cur > enc - threshold) && !override) {
-				override = isDisabled() || isOperatorControl();
+				override = !RobotState.isAutonomous();
 			
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.MotionMagic, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.MotionMagic, enc); }
@@ -544,12 +564,6 @@ public class Sensors extends IterativeRobot{
 				
 				Timer.delay(0.005);
 			}
-			
-			// Reset Sensor to zero
-			_frontLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs) 
-			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			
 			return true;
 		}
@@ -580,17 +594,14 @@ public class Sensors extends IterativeRobot{
 			_frontRightMotor.setSensorPhase(false);
 			_rearRightMotor.setSensorPhase(false);
 			
-			frontLeftValid = true;
-			frontRightValid = true;
-			rearLeftValid = true;
-			rearRightValid = true;
+			resetEncValid();
 			
 			int enc = 175;
 			
 			while (!(-cur < target + 2 && -cur > target - 2) && !override ) {
 				
 				//enc = enc + 20;
-				override = isDisabled() || isOperatorControl();
+				override = !RobotState.isAutonomous();
 				
 				if (frontLeftValid) { _frontLeftMotor.set(ControlMode.Velocity, enc); }
 				if (frontRightValid) { _frontRightMotor.set(ControlMode.Velocity, enc); }
@@ -609,7 +620,7 @@ public class Sensors extends IterativeRobot{
 			_rearLeftMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_frontRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
 			_rearRightMotor.setSelectedSensorPosition(0, pidIdx, timeoutMs);
-			System.out.println("Turned left: " + cur);
+			
 			return true;
 		}
 		return false;

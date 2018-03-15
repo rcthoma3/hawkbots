@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
 
 	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
 	//TODO: Uncomment the second controller once it is ready
-	//ControllerLogitech myDriveController = new ControllerLogitech(2);
+	ControllerLogitech myDriveController = new ControllerLogitech(2);
 	Climbing myClimber = new Climbing();
 	Elevator myElevator = new Elevator();
 	Sensors myRobot = new Sensors();
@@ -162,6 +162,16 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putString("Position", "Right");
 		}
 		
+		int goal = myAutonRobot.getGlobalGoal();
+		if(goal == 0) {
+			SmartDashboard.putString("Goal", "Switch");
+		}else if(goal == 1) {
+			SmartDashboard.putString("Goal", "Scale");
+		}else if(goal == 2) {
+			SmartDashboard.putString("Goal", "Neither");
+		}
+		else {SmartDashboard.putString("Goal", "Error");}
+		
 		// For Testing - Remove in final code
 		forward = true;
 		backward = true;
@@ -176,7 +186,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(240); System.out.println("Done Going Forward"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(240); System.out.println("Done Going Forward"); myRobot.stopRobot(); .delay(0.010);}
 		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnRight) {System.out.println("Doing Right Turn"); turnRight = !myRobot.turnRobotRightGyro(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
@@ -221,23 +231,24 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 	    //TODO: Change all myController to myDriveController
-		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);	
+		_drive.driveCartesian(myDriveController.getLeftJoyX(), -myDriveController.getLeftJoyY(), myDriveController.getRightJoyX(), 0);	
 		
-		if (myController.getButtonRightD()) { myClimber.raiseElevator(300, true); }
-		if (myController.getButtonLeftD()) { myClimber.lowerElavator(300, true); }
+		if (myController.getButtonRightD()) { myClimber.raiseElevator(1200, true); }
+		if (myController.getButtonLeftD()) { myClimber.lowerElavator(400, true); }
 		
-		if (myController.getButtonUpD() ) { myClimber.raiseElevator(300, false); }
-		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(300, false); }
+		if (myController.getButtonUpD() ) { myClimber.raiseElevator(1200, false); }
+		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(400, false); }
 		else { myClimber.checkSwitches(false); }
 		
-		/*
-		if (myController.getbuttonA()) { myElevator.lowerElevatorDis() }
-		if (myController.getButtonX()) { myElevator.raiseElevatorDis(0.8, true); }
-		if (myController.getButtonY()) { myElevator.lowerElevatorDis(0.5, true); }
-		*/
-		//System.out.println("left trigger: " + myController.getLeftTrigger());
-		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*300, false); }
-		else if (myController.getRightTrigger() > 0) { myElevator.lowerElevator(myController.getRightTrigger()*300, false); }
+		
+		if (myController.getButtonA()) { myElevator.lowerElevatorDis(0); }
+		if (myController.getButtonX()) { myElevator.raiseElevatorDis(20000); } //Switch height
+		if (myController.getButtonY()) { myElevator.raiseElevatorDis(70000); } //Scale height
+		
+		if (myController.getLeftJoyY() < -0.1) { myElevator.raiseElevator(myController.getLeftJoyY()*-600, false); }
+		else if (myController.getLeftJoyY() > 0.1) { myElevator.lowerElevator(myController.getLeftJoyY()*600, false); }
+		//if (myController.getLeftJoyY() > 0.1) { System.out.println(myController.getLeftJoyY()); }
+		//else if (myController.getLeftJoyY() < -0.1) { System.out.println(myController.getLeftJoyY()); }
 		else { myElevator.checkSwitches(false); }
 		
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
@@ -249,12 +260,16 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Climb Motor Percent Output", _climbMotor.getMotorOutputPercent());
 		SmartDashboard.putNumber("Climb Position", _climbMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Climb Velocity", _climbMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putBoolean("Climb Max Height", myClimber.getTopSwitch());
+		SmartDashboard.putBoolean("Climb Min Height", myClimber.getBottomSwitch());
 		
 		SmartDashboard.putNumber("Elevator Motor Current", _elevatorMotor.getOutputCurrent());
 		SmartDashboard.putNumber("Elevator Motor Voltage", _elevatorMotor.getMotorOutputVoltage());
 		SmartDashboard.putNumber("Elevator Motor Percent Output", _elevatorMotor.getMotorOutputPercent());
 		SmartDashboard.putNumber("Elevator Position", _elevatorMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Elevator Veocity", _elevatorMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putBoolean("Elevator Max Height", myElevator.getElevatorTop());
+		SmartDashboard.putBoolean("Elevator Min Height", myElevator.getElevatorBottom());
 		
 		Timer.delay(0.005);
 

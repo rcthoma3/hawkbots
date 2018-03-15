@@ -29,8 +29,9 @@ public class Elevator {
 	
 	private boolean raise = false;
 	private boolean lower = false;
-	private double raiseSpd = 0;
-	private double lowerSpd = 0;
+	private double raiseDis = 0;
+	private double lowerDis = 0;
+	private int moveRange = 20;
 			
 	
 	//Set up Elevator motor
@@ -75,7 +76,7 @@ public class Elevator {
 		}else {
 			//Invert Motor
 			_elevatorMotor.setInverted(false);
-			_elevatorMotor.setSensorPhase(false);
+			_elevatorMotor.setSensorPhase(true);
 			
 			//Init Encoders
 			_elevatorMotor.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
@@ -109,6 +110,18 @@ public class Elevator {
 		return initElevator;
 	}
 	
+	public boolean getElevatorTop() {
+		int pos = _elevatorMotor.getSelectedSensorPosition(0);
+		if(pos >= 71000) {return true;}
+		else {return false;}
+	}
+	
+	public boolean getElevatorBottom() {
+		int pos = _elevatorMotor.getSelectedSensorPosition(0);
+		if(pos <= 20) {return true;}
+		else {return false;}
+	}
+	
 	//Raises the Elevator based on speed
 	//in:speed
 	//out:Nothing
@@ -123,19 +136,18 @@ public class Elevator {
 		}else {
 			upperSensorPressed = upperSwitch.getstate();
 			System.out.println("ele upper sen: " + upperSensorPressed);
-			if(!upperSensorPressed) {
-				_elevatorMotor.set(ControlMode.Velocity, speed);
+			int pos = _elevatorMotor.getSelectedSensorPosition(0);
+			if(!upperSensorPressed ) { //71000
+				//_elevatorMotor.set(ControlMode.Velocity, speed);
+				_elevatorMotor.set(1);
 				System.out.println("ele up: " + speed);
 				if(button) {
 					raise = true;
 					lower = false;
-					raiseSpd = speed;
 				}
 				else {
 					raise = false;
 					lower = false;
-					raiseSpd = 0;
-					lowerSpd = 0;
 				}
 			} else {
 				_elevatorMotor.set(ControlMode.Velocity, 0);
@@ -159,8 +171,13 @@ public class Elevator {
     	}else {
     		upperSensorPressed = upperSwitch.getstate();
     		if(!upperSensorPressed) {
-    			_elevatorMotor.set(ControlMode.Position, dis);
+    			if (Math.abs(_elevatorMotor.getSelectedSensorPosition(0) - dis) > moveRange) {
+    			raiseDis = dis;
+    			_elevatorMotor.set(ControlMode.MotionMagic, dis);
+    			raise = true;
+    			lower = false;
     			return true;
+    			}
     		}
     		else { SmartDashboard.putBoolean("Elevator Max", true); return false; }   		
     	}
@@ -180,18 +197,17 @@ public class Elevator {
     		System.err.println("Error: Elevator moter not initialized");
     	}else {
     		lowerSensorPressed = lowerSwitch.getstate();
+    		int pos = _elevatorMotor.getSelectedSensorPosition(0);
     		if(!lowerSensorPressed) {
-    			_elevatorMotor.set(ControlMode.Velocity, -speed);
+    			//_elevatorMotor.set(ControlMode.Velocity, -speed);
+    			_elevatorMotor.set(-1);
     			if(button) {
 				lower = true;
 				raise = false;
-				lowerSpd = -speed;
 			}
     			else {
     				raise = false;
     				lower = false;
-    				raiseSpd = 0;
-    				lowerSpd = 0;
     			}
     		} else {
     			_elevatorMotor.set(ControlMode.Velocity, 0);
@@ -214,9 +230,13 @@ public class Elevator {
     	}else {
     		lowerSensorPressed = lowerSwitch.getstate();
     		if(!lowerSensorPressed) {
-    			if (_elevatorMotor.getSelectedSensorPosition(0) > 0)
-    			_elevatorMotor.set(ControlMode.Position, dis);
+    			if (Math.abs(_elevatorMotor.getSelectedSensorPosition(0) - dis) > moveRange) {
+    				lowerDis = dis;
+    			_elevatorMotor.set(ControlMode.MotionMagic, dis);
+    			raise = false;
+    			lower = true;
     			return true;
+    			}
     		}
     		else { SmartDashboard.putBoolean("Elevator Min", true); return false;}
     	}
@@ -276,15 +296,22 @@ public class Elevator {
 			if(upperSensorPressed) { SmartDashboard.putBoolean("Elevator Max", true); raise = false; lower = false; }
 			if(lowerSensorPressed) { SmartDashboard.putBoolean("Elevator Min", true); lower = false; raise = false; } 
 	
-			if ((!upperSensorPressed && !switchOverride) && (raise && !lower)) { 
-				_elevatorMotor.set(ControlMode.Velocity, raiseSpd);
-			}else if((!lowerSensorPressed && !switchOverride) && (lower && !raise)) { 
-				_elevatorMotor.set(ControlMode.Velocity, lowerSpd); 
+			if ((!upperSensorPressed && !switchOverride) && (raise && !lower) && (Math.abs(_elevatorMotor.getSelectedSensorPosition(0) - raiseDis) > moveRange)) { 
+				_elevatorMotor.set(ControlMode.MotionMagic, raiseDis);
+			}else if((!lowerSensorPressed && !switchOverride) && (lower && !raise) && (Math.abs(_elevatorMotor.getSelectedSensorPosition(0) - lowerDis) > moveRange)) {
+				_elevatorMotor.set(ControlMode.MotionMagic, lowerDis); 
 			}else {
 				_elevatorMotor.set(ControlMode.Velocity, 0);
 				raise = false;
 				lower = false;		
 			}	  	
     	}
+    }
+    
+    public boolean getTopSwitch() {
+    	return upperSwitch.getstate();
+    }
+    public boolean getBottomSwitch() {
+    	return lowerSwitch.getstate();
     }
 }
