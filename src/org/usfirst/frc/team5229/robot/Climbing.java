@@ -115,7 +115,7 @@ public class Climbing {
 				}
 			}else { 
 				_climbMotor.set(ControlMode.Velocity, 0); 
-				SmartDashboard.putBoolean("Climb Max", true); 
+				
 			}
 		}
 	}
@@ -151,7 +151,7 @@ public class Climbing {
 				}
 			} else { 
 				_climbMotor.set(ControlMode.Velocity, 0);  
-				SmartDashboard.putBoolean("Climb Min", true); 
+				
 			}
 		}
 	}
@@ -170,12 +170,9 @@ public class Climbing {
 
 			if ((!topSensorpressed && !switchOverride) && (raise && !lower)) { 
 				_climbMotor.set(ControlMode.Velocity, raiseSpd); 
-				SmartDashboard.putBoolean("Climb Max", false);
-				SmartDashboard.putBoolean("Climb Min", false);
+				
 			}else if((!bottomSensorpressed && !switchOverride) && (lower && !raise)) { 
 				_climbMotor.set(ControlMode.Velocity, -lowerSpd);  
-				SmartDashboard.putBoolean("Climb Max", false);
-				SmartDashboard.putBoolean("Climb Min", false);
 			}else {
 				_climbMotor.set(ControlMode.Velocity, 0);
 				raise = false;

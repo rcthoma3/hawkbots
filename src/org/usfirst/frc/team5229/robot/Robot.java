@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
 	boolean turnRight = true;
 	boolean turnLeft = true;
 	boolean follow = true;
-	int pos;
+	
 
 	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
 	//TODO: Uncomment the second controller once it is ready
@@ -115,8 +115,7 @@ public class Robot extends IterativeRobot {
 		
 		gyro.calibrate();
 		
-		myAutonRobot.setAutoChooser();
-		
+
 		topClimbSwitch = new DigitalInput(topClimbPort);
 		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
 		topElevatorSwitch = new DigitalInput(topElevatorPort);
@@ -134,7 +133,7 @@ public class Robot extends IterativeRobot {
 		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
 		myRobot.initEncoders();
 
-		pos = myAutonRobot.getPositoin();
+		
 	}
 	
 
@@ -151,26 +150,7 @@ public class Robot extends IterativeRobot {
 		myAutonRobot.setSensor(myRobot);
 		myAutonRobot.setElevator(myElevator);
 
-		String gameMsg = myAutonRobot.getGameMsg();
 		
-		SmartDashboard.putString("Game message", gameMsg);
-		if(pos == 0) {
-			SmartDashboard.putString("Position", "Left");
-		}else if(pos == 1) {
-			SmartDashboard.putString("Position", "Center");
-		}else if(pos == 2) {
-			SmartDashboard.putString("Position", "Right");
-		}
-		
-		int goal = myAutonRobot.getGlobalGoal();
-		if(goal == 0) {
-			SmartDashboard.putString("Goal", "Switch");
-		}else if(goal == 1) {
-			SmartDashboard.putString("Goal", "Scale");
-		}else if(goal == 2) {
-			SmartDashboard.putString("Goal", "Neither");
-		}
-		else {SmartDashboard.putString("Goal", "Error");}
 		
 		// For Testing - Remove in final code
 		forward = true;
@@ -255,21 +235,8 @@ public class Robot extends IterativeRobot {
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 		else { myElevator.ejectBlock(0); }
 	
-		SmartDashboard.putNumber("Climb Motor Current", _climbMotor.getOutputCurrent());
-		SmartDashboard.putNumber("Climb Motor Voltage", _climbMotor.getMotorOutputVoltage());
-		SmartDashboard.putNumber("Climb Motor Percent Output", _climbMotor.getMotorOutputPercent());
-		SmartDashboard.putNumber("Climb Position", _climbMotor.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Climb Velocity", _climbMotor.getSelectedSensorVelocity(0));
-		SmartDashboard.putBoolean("Climb Max Height", myClimber.getTopSwitch());
-		SmartDashboard.putBoolean("Climb Min Height", myClimber.getBottomSwitch());
+		populateSmartDashboard() ;
 		
-		SmartDashboard.putNumber("Elevator Motor Current", _elevatorMotor.getOutputCurrent());
-		SmartDashboard.putNumber("Elevator Motor Voltage", _elevatorMotor.getMotorOutputVoltage());
-		SmartDashboard.putNumber("Elevator Motor Percent Output", _elevatorMotor.getMotorOutputPercent());
-		SmartDashboard.putNumber("Elevator Position", _elevatorMotor.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Elevator Veocity", _elevatorMotor.getSelectedSensorVelocity(0));
-		SmartDashboard.putBoolean("Elevator Max Height", myElevator.getElevatorTop());
-		SmartDashboard.putBoolean("Elevator Min Height", myElevator.getElevatorBottom());
 		
 		Timer.delay(0.005);
 
@@ -290,4 +257,53 @@ public class Robot extends IterativeRobot {
 		myRobot.stopRobot();
 		follow = false;
 	}
+	
+	public void populateSmartDashboard ()
+	{
+		SmartDashboard.putNumber("Climb Motor Current", _climbMotor.getOutputCurrent());
+		SmartDashboard.putNumber("Climb Motor Voltage", _climbMotor.getMotorOutputVoltage());
+		SmartDashboard.putNumber("Climb Motor Percent Output", _climbMotor.getMotorOutputPercent());
+		SmartDashboard.putNumber("Climb Position", _climbMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Climb Velocity", _climbMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putBoolean("Climb Max Height", myClimber.getTopSwitch());
+		SmartDashboard.putBoolean("Climb Min Height", myClimber.getBottomSwitch());
+		
+		SmartDashboard.putNumber("Elevator Motor Current", _elevatorMotor.getOutputCurrent());
+		SmartDashboard.putNumber("Elevator Motor Voltage", _elevatorMotor.getMotorOutputVoltage());
+		SmartDashboard.putNumber("Elevator Motor Percent Output", _elevatorMotor.getMotorOutputPercent());
+		SmartDashboard.putNumber("Elevator Position", _elevatorMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Elevator Veocity", _elevatorMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putBoolean("Elevator Max Height", myElevator.getElevatorTop());
+		SmartDashboard.putBoolean("Elevator Min Height", myElevator.getElevatorBottom());
+	
+		myAutonRobot.setAutoChooser();
+		
+		
+		String gameMsg = myAutonRobot.getGameMsg();
+		SmartDashboard.putString("Game message", gameMsg);
+		
+		int pos = myAutonRobot.getPositoin();
+		if(pos == 0) {
+			SmartDashboard.putString("Position", "Left");
+		}else if(pos == 1) {
+			SmartDashboard.putString("Position", "Center");
+		}else if(pos == 2) {
+			SmartDashboard.putString("Position", "Right");
+		}
+		
+		int goal = myAutonRobot.getGlobalGoal();
+		if(goal == 0) {
+			SmartDashboard.putString("Goal", "Switch");
+		}else if(goal == 1) {
+			SmartDashboard.putString("Goal", "Scale");
+		}else if(goal == 2) {
+			SmartDashboard.putString("Goal", "Neither");
+		}
+		else {SmartDashboard.putString("Goal", "Error");}
+		
+		myRobot.updateDashboard(); 
+		
+	}
+	
+	
 }

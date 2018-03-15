@@ -151,7 +151,7 @@ public class Elevator {
 				}
 			} else {
 				_elevatorMotor.set(ControlMode.Velocity, 0);
-				SmartDashboard.putBoolean("Elevator Max", true);
+				
 			}
 
 		}	
@@ -179,7 +179,7 @@ public class Elevator {
     			return true;
     			}
     		}
-    		else { SmartDashboard.putBoolean("Elevator Max", true); return false; }   		
+    		else {  return false; }   		
     	}
     	return false;
     }
@@ -211,7 +211,7 @@ public class Elevator {
     			}
     		} else {
     			_elevatorMotor.set(ControlMode.Velocity, 0);
-    			SmartDashboard.putBoolean("Elevator Min", true);
+    			
     		}
     	}
     }
@@ -238,7 +238,7 @@ public class Elevator {
     			return true;
     			}
     		}
-    		else { SmartDashboard.putBoolean("Elevator Min", true); return false;}
+    		else {  return false;}
     	}
     	return false;
     }
@@ -260,7 +260,7 @@ public class Elevator {
     		}else {
     			_leftMoter.setSpeed(0);
     			_rightMoter.setSpeed(0);
-    			SmartDashboard.putBoolean("Block Grabbed", true);
+    		
     		}
     	}
     }
@@ -293,9 +293,7 @@ public class Elevator {
 			upperSensorPressed = upperSwitch.getstate();
 			
 			//TODO: Determine encoder count for max elevator position
-			if(upperSensorPressed) { SmartDashboard.putBoolean("Elevator Max", true); raise = false; lower = false; }
-			if(lowerSensorPressed) { SmartDashboard.putBoolean("Elevator Min", true); lower = false; raise = false; } 
-	
+			
 			if ((!upperSensorPressed && !switchOverride) && (raise && !lower) && (Math.abs(_elevatorMotor.getSelectedSensorPosition(0) - raiseDis) > moveRange)) { 
 				_elevatorMotor.set(ControlMode.MotionMagic, raiseDis);
 			}else if((!lowerSensorPressed && !switchOverride) && (lower && !raise) && (Math.abs(_elevatorMotor.getSelectedSensorPosition(0) - lowerDis) > moveRange)) {
