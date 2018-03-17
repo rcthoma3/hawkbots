@@ -280,6 +280,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Elevator Veocity", _elevatorMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putBoolean("Elevator Max Height", myElevator.getElevatorTop());
 		SmartDashboard.putBoolean("Elevator Min Height", myElevator.getElevatorBottom());
+		SmartDashboard.getNumber("Foward Dis", 5);
 	
 		myAutonRobot.setAutoChooser();
 		
