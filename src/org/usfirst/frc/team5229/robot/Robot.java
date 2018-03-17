@@ -230,6 +230,15 @@ public class Robot extends IterativeRobot {
 		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(300, false); }
 		else { myClimber.checkSwitches(false); }
 		
+		if (myController.getButtonA() ) { myElevator.extendClaws(0.3); } 
+		else if (myController.getButtonB() ) { myElevator.closeClaws(0.3); }
+		else { myElevator.extendClaws(0);
+		
+		if (myController.getRightJoyY() > 0.1) { myElevator.liftBlock(0.3);
+		}else if (myController.getRightJoyY() < -0.1) {myElevator.lowerBlock(0.3); }
+		else { myElevator.liftBlock(0); }
+		
+		
 		/*
 		if (myController.getbuttonA()) { myElevator.lowerElevatorDis() }
 		if (myController.getButtonX()) { myElevator.raiseElevatorDis(0.8, true); }
