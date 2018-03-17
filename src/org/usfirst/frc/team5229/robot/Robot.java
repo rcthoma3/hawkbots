@@ -213,6 +213,11 @@ public class Robot extends IterativeRobot {
 	    //TODO: Change all myController to myDriveController
 		_drive.driveCartesian(myDriveController.getLeftJoyX(), -myDriveController.getLeftJoyY(), myDriveController.getRightJoyX(), 0);	
 		
+		if (myDriveController.getButtonLeftBumber() && myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.5); }
+		else if (myDriveController.getButtonLeftBumber()) { _drive.setMaxOutput(.25); }
+		else if (myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.25); }
+		else { _drive.setMaxOutput(1.0); }
+		
 		if (myController.getButtonRightD()) { myClimber.raiseElevator(1200, true); }
 		if (myController.getButtonLeftD()) { myClimber.lowerElavator(400, true); }
 		
