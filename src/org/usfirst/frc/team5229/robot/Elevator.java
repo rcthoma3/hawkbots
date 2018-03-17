@@ -157,7 +157,7 @@ public class Elevator {
 			// PID controls
 			//TODO: Tune these
 			_liftMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-			_liftMoter.config_kF(0, 1.7 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
+			_liftMoter.config_kF(0, 0.5 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
 			_liftMoter.config_kP(0, 0, timeoutMs);
 			_liftMoter.config_kI(0, 0, timeoutMs);
 			_liftMoter.config_kD(0, 0, timeoutMs);
@@ -188,7 +188,7 @@ public class Elevator {
 			// PID controls
 			//TODO: Tune these
 			_extendRightMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-			_extendRightMoter.config_kF(0, 1.7 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
+			_extendRightMoter.config_kF(0, 0.5 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
 			_extendRightMoter.config_kP(0, 0, timeoutMs);
 			_extendRightMoter.config_kI(0, 0, timeoutMs);
 			_extendRightMoter.config_kD(0, 0, timeoutMs);
@@ -219,7 +219,7 @@ public class Elevator {
 			// PID controls
 			//TODO: Tune these
 			_extendLeftMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-			_extendLeftMoter.config_kF(0, 1.7 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
+			_extendLeftMoter.config_kF(0, 0.5 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
 			_extendLeftMoter.config_kP(0, 0, timeoutMs);
 			_extendLeftMoter.config_kI(0, 0, timeoutMs);
 			_extendLeftMoter.config_kD(0, 0, timeoutMs);
@@ -383,43 +383,54 @@ public class Elevator {
     	}
     }  
     
-    public void liftBlock() {
+    //Lifts the block
+    //in:speed
+    //out:nothing
+    public void liftBlock(double speed) {
     	if(!setClawMoters) {
     		System.err.println("Error : Claw Lift Moter not set up");
     	}else if(!initClawMoters) {
     		System.err.println("Error : Claw Lift Moter not initialize");
     	}else {
-    		
+    		_liftMoter.set(ControlMode.Velocity, speed);
     	}
     }
     
-    public void lowerBlock() {
+    //Lowers the block
+    //in:speed
+    //out:nothing
+    public void lowerBlock(double speed) {
     	if(!setClawMoters) {
     		System.err.println("Error : Claw Lift Moter not set up");
     	}else if(!initClawMoters) {
     		System.err.println("Error : Claw Lift Moter not initialize");
     	}else {
-    		
+    		_liftMoter.set(ControlMode.Velocity, -speed);
     	}
     }
     
-    public void extendClaws() {
+    //Extend/Opens the claws
+    //in:speed
+    //out:nothing
+    public void extendClaws(double speed) {
     	if(!setClawMoters) {
     		System.err.println("Error : Extend Motors not set up");
     	}else if(!setClawMoters) {
     		System.err.println("Error : Extend Motors not initialize");
     	}else {
-    		
+    		_extendLeftMoter.set(ControlMode.Velocity, speed);
+    		_extendRightMoter.set(ControlMode.Velocity, speed);
     	}
     }
     
-    public void closeClaws() {
+    public void closeClaws(double speed) {
     	if(!setClawMoters) {
     		System.err.println("Error : Extend Motors not set up");
     	}else if(!setClawMoters) {
     		System.err.println("Error : Extend Motors not initialize");
     	}else {
-    		
+    		_extendLeftMoter.set(ControlMode.Velocity, -speed);
+    		_extendRightMoter.set(ControlMode.Velocity, -speed);
     	}
     }
     
