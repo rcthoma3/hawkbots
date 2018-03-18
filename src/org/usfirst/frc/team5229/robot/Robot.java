@@ -230,15 +230,20 @@ public class Robot extends IterativeRobot {
 		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(400, false); }
 		else { myClimber.checkSwitches(false); }
 		
+		if (myController.getButtonA() ) { myElevator.openClaws(0.3); } 
+		else if (myController.getButtonB() ) { myElevator.closeClaws(0.3); }
+		else { myElevator.openClaws(0);}
 		
-		if (myController.getButtonA()) { myElevator.lowerElevatorDis(0); }
+		if (myController.getRightJoyY() > 0.1) { myElevator.tiltClawUp(0.3);}
+		else if (myController.getRightJoyY() < -0.1) {myElevator.tiltClawDown(0.3); }
+		else { myElevator.tiltClawUp(0); }
+		
+		if (myController.getButtonB()) { myElevator.lowerElevatorDis(0); }
 		if (myController.getButtonX()) { myElevator.raiseElevatorDis(20000); } //Switch height
 		if (myController.getButtonY()) { myElevator.raiseElevatorDis(70000); } //Scale height
 		
 		if (myController.getLeftJoyY() < -0.1) { myElevator.raiseElevator(myController.getLeftJoyY()*-600, false); }
 		else if (myController.getLeftJoyY() > 0.1) { myElevator.lowerElevator(myController.getLeftJoyY()*600, false); }
-		//if (myController.getLeftJoyY() > 0.1) { System.out.println(myController.getLeftJoyY()); }
-		//else if (myController.getLeftJoyY() < -0.1) { System.out.println(myController.getLeftJoyY()); }
 		else { myElevator.checkSwitches(false); }
 		
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
