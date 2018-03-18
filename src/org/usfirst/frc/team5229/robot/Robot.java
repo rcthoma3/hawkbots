@@ -84,6 +84,7 @@ public class Robot extends IterativeRobot {
 	
 	double whlSize = 8; // Wheel diameter in inches (Final Robot)
 	double roboDim = 30; // Diagonal distance between wheels in inches (Final Robot)
+	String gameMsg = "XXX";
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -132,8 +133,9 @@ public class Robot extends IterativeRobot {
 		
 		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
 		myRobot.initEncoders();
-
 		
+		myAutonRobot.setAutoChooser();	
+		populateSmartDashboard();
 	}
 	
 
@@ -150,7 +152,8 @@ public class Robot extends IterativeRobot {
 		myAutonRobot.setSensor(myRobot);
 		myAutonRobot.setElevator(myElevator);
 
-		
+		gameMsg= myAutonRobot.getGameMsg();
+		populateSmartDashboard() ;
 		
 		// For Testing - Remove in final code
 		forward = true;
@@ -203,6 +206,8 @@ public class Robot extends IterativeRobot {
 		_rearRightMotor.setInverted(false);
 		_frontLeftMotor.setInverted(false);
 		_rearLeftMotor.setInverted(false);
+		
+		populateSmartDashboard() ;
 	}
 
 	/**
@@ -241,8 +246,7 @@ public class Robot extends IterativeRobot {
 		else { myElevator.ejectBlock(0); }
 	
 		populateSmartDashboard() ;
-		
-		
+
 		Timer.delay(0.005);
 
 	}
@@ -280,12 +284,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Elevator Veocity", _elevatorMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putBoolean("Elevator Max Height", myElevator.getElevatorTop());
 		SmartDashboard.putBoolean("Elevator Min Height", myElevator.getElevatorBottom());
-		SmartDashboard.getNumber("Foward Dis", 5);
-	
-		myAutonRobot.setAutoChooser();
 		
-		
-		String gameMsg = myAutonRobot.getGameMsg();
 		SmartDashboard.putString("Game message", gameMsg);
 		
 		int pos = myAutonRobot.getPositoin();
@@ -307,9 +306,6 @@ public class Robot extends IterativeRobot {
 		}
 		else {SmartDashboard.putString("Goal", "Error");}
 		
-		myRobot.updateDashboard(); 
-		
-	}
-	
-	
+		myRobot.updateDashboard(); 	
+	}		
 }
