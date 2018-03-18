@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -22,6 +23,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 	
+	WPI_TalonSRX _testMotor;
+	//https://wpilib.screenstepslive.com/s/3120/m/7912/l/85635-using-counters
+	DigitalInput halSensor;
+	ControllerLogitech testController = new ControllerLogitech(1);
+	Boolean senPrev;
+	
+	/*
 	// For Testing - Remove in final code
 	boolean forward = true;
 	boolean backward = true;
@@ -81,6 +89,7 @@ public class Robot extends IterativeRobot {
 	
 	//double whlSize = 8; // Wheel diameter in inches (Final Robot)
 	//double roboDim = 30; // Diagonal distance between wheels in inches (Final Robot)
+	*/
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -88,7 +97,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		_testMotor = new WPI_TalonSRX(6);
+		halSensor = new DigitalInput(0);
 		
+		/*
 		_frontLeftMotor = new WPI_TalonSRX(frontLeftMotorPort); 
 		_rearLeftMotor = new WPI_TalonSRX(rearLeftMotorPort);
 		_frontRightMotor = new WPI_TalonSRX(frontRightMotorPort);
@@ -124,6 +136,7 @@ public class Robot extends IterativeRobot {
 		//myElevator.initElevator();
 		myElevator.setSwitches(topElevatorSwitch, bottomElevatorSwitch, grabSwitch);
 		myElevator.setGrabMotors(_leftClawMotor, _rightClawMotor);
+		*/
 	}
 	
 
@@ -133,6 +146,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		
+		/*
 		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
 		myRobot.setWheelSize(whlSize);
 		myRobot.setChassisSize(roboDim);	
@@ -158,6 +172,7 @@ public class Robot extends IterativeRobot {
 		turnRight = true;
 		turnLeft = true;
 		follow = true;
+		*/
 	}
 
 	/**
@@ -170,9 +185,9 @@ public class Robot extends IterativeRobot {
 		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnRight) {System.out.println("Doing Rigt Turn"); turnRight = !myRobot.turnRobotRight(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeft(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
-		if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
+		//if(follow) { follow = !myAutonRobot.followPath(); System.out.println("Done"); }
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
-		myRobot.stopRobot();
+		//myRobot.stopRobot();
 		
 		Timer.delay(0.005);
 	}
@@ -183,7 +198,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopInit() {	
-		
+		/*
 		// Initialize mecanum drive
 		_drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);		
 		
@@ -198,7 +213,9 @@ public class Robot extends IterativeRobot {
 		_frontRightMotor.setInverted(false);
 		_rearRightMotor.setInverted(false);
 		_frontLeftMotor.setInverted(false);
-		_rearLeftMotor.setInverted(false);		
+		_rearLeftMotor.setInverted(false);	
+		*/
+		senPrev = halSensor.get();
 	}
 
 	/**
@@ -206,7 +223,16 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-			
+		int count = 0;
+		if(testController.getButtonA()) { _testMotor.set(1); }
+		else if(testController.getButtonB()) { _testMotor.set(-1); }
+		else { _testMotor.set(0); }
+		
+		boolean sen = halSensor.get();
+		System.out.println(sen);
+		if(sen!=senPrev) {count++; senPrev=sen;}
+		System.out.println(count);
+		/*	
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);	
 		
 		if (myController.getButtonY()) { myClimber.raiseElevator(1, true); }
@@ -218,14 +244,11 @@ public class Robot extends IterativeRobot {
 		
 		if (myController.getButtonX()) { myElevator.raiseElevator(0.3, true); }
 		if (myController.getButtonB()) { myElevator.lowerElevator(0.3, true); }
-		/*
-		if (myController.getLeftTrigger() > 0) { myElevator.raiseElevator(myController.getLeftTrigger()*0.3, false); }
-		else if (myController.getRightTrigger() < 0) { myElevator.lowerElevatorDis(myController.getRightTrigger()*0.3, false); }
-		else { myElevator.checkSwitches(false); }
-		*/
+		
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 		else { myElevator.ejectBlock(0); }
+		*/
 		
 		Timer.delay(0.005);
 	}
@@ -241,7 +264,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void disabledInit() {
-		myRobot.setOverride(true);
-		myRobot.stopRobot();
+		//myRobot.setOverride(true);
+		//myRobot.stopRobot();
 	}
 }
