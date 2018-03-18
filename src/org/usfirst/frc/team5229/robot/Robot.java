@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -30,9 +31,7 @@ public class Robot extends IterativeRobot {
 	boolean turnLeft = true;
 	boolean follow = true;
 	
-
 	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
-	//TODO: Uncomment the second controller once it is ready
 	ControllerLogitech myDriveController = new ControllerLogitech(2);
 	Climbing myClimber = new Climbing();
 	Elevator myElevator = new Elevator();
@@ -84,6 +83,11 @@ public class Robot extends IterativeRobot {
 	
 	double whlSize = 8; // Wheel diameter in inches (Final Robot)
 	double roboDim = 30; // Diagonal distance between wheels in inches (Final Robot)
+	String gameMsg = "XXX";
+	
+
+	public SendableChooser<Boolean> autonTune;
+	public SendableChooser<Integer> autonAction;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -133,6 +137,41 @@ public class Robot extends IterativeRobot {
 		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
 		myRobot.initEncoders();
 
+		autonTune = new SendableChooser<Boolean>();
+		autonTune.addDefault("Off", false);
+		autonTune.addObject("On", true);
+		
+		autonAction = new SendableChooser<Integer>();
+		autonAction.addDefault("Stop", 0);
+		autonAction.addObject("Drive Forward", 1);
+		autonAction.addObject("Drive Backward", 2);
+		autonAction.addObject("Turn Left", 3);
+		autonAction.addObject("Turn Right", 4);
+		autonAction.addObject("Raise Elevator", 5);
+		autonAction.addObject("Lower Elevator", 6);
+		autonAction.addObject("Grab Cube", 7);
+		autonAction.addObject("Eject Cube", 8);
+		autonAction.addObject("Open Claw", 9);
+		autonAction.addObject("Close Claw", 10);
+		autonAction.addObject("Tilt Claw Up", 11);
+		autonAction.addObject("Tilt Claw Up", 12);
+
+		myAutonRobot.setAutoChooser();
+		
+		SmartDashboard.putNumber("Forward Distance", 0);
+		SmartDashboard.putNumber("Backward Distance", 0);
+		SmartDashboard.putNumber("Turning Left", 0);
+		SmartDashboard.putNumber("Turning Right", 0);
+		SmartDashboard.putNumber("Raise Elevator", 0);
+		SmartDashboard.putNumber("Lower Elevator", 0);
+		SmartDashboard.putNumber("Grab Block", 0);
+		SmartDashboard.putNumber("Eject Block", 0);
+		SmartDashboard.putNumber("Lift Block", 0);
+		SmartDashboard.putNumber("Lower Block", 0);
+		SmartDashboard.putNumber("Open claws", 0);
+		SmartDashboard.putNumber("Close claws", 0);
+		
+		populateSmartDashboard();
 		
 	}
 	
@@ -143,6 +182,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		
+		gameMsg = myAutonRobot.getGameMsg();
+		
 		myRobot.setWheelSize(whlSize);
 		myRobot.setChassisSize(roboDim);	
 		myRobot.setOverride(false);
@@ -150,8 +191,6 @@ public class Robot extends IterativeRobot {
 		myAutonRobot.setSensor(myRobot);
 		myAutonRobot.setElevator(myElevator);
 
-		
-		
 		// For Testing - Remove in final code
 		forward = true;
 		backward = true;
@@ -203,6 +242,8 @@ public class Robot extends IterativeRobot {
 		_rearRightMotor.setInverted(false);
 		_frontLeftMotor.setInverted(false);
 		_rearLeftMotor.setInverted(false);
+		
+		populateSmartDashboard();
 	}
 
 	/**
@@ -210,41 +251,45 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-	    //TODO: Change all myController to myDriveController
-		_drive.driveCartesian(myDriveController.getLeftJoyX(), -myDriveController.getLeftJoyY(), myDriveController.getRightJoyX(), 0);	
 		
-		if (myDriveController.getButtonLeftBumber() && myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.5); }
-		else if (myDriveController.getButtonLeftBumber()) { _drive.setMaxOutput(.25); }
-		else if (myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.25); }
-		else { _drive.setMaxOutput(1.0); }
-		
-		if (myController.getButtonRightD()) { myClimber.raiseElevator(1200, true); }
-		if (myController.getButtonLeftD()) { myClimber.lowerElavator(400, true); }
-		
-		if (myController.getButtonUpD() ) { myClimber.raiseElevator(1200, false); }
-		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(400, false); }
-		else { myClimber.checkSwitches(false); }
-		
-		
-		if (myController.getButtonA()) { myElevator.lowerElevatorDis(0); }
-		if (myController.getButtonX()) { myElevator.raiseElevatorDis(20000); } //Switch height
-		if (myController.getButtonY()) { myElevator.raiseElevatorDis(70000); } //Scale height
-		
-		if (myController.getLeftJoyY() < -0.1) { myElevator.raiseElevator(myController.getLeftJoyY()*-600, false); }
-		else if (myController.getLeftJoyY() > 0.1) { myElevator.lowerElevator(myController.getLeftJoyY()*600, false); }
-		//if (myController.getLeftJoyY() > 0.1) { System.out.println(myController.getLeftJoyY()); }
-		//else if (myController.getLeftJoyY() < -0.1) { System.out.println(myController.getLeftJoyY()); }
-		else { myElevator.checkSwitches(false); }
-		
-		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
-		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
-		else { myElevator.ejectBlock(0); }
+		if(!autonTune.getSelected())
+		{
+			_drive.driveCartesian(myDriveController.getLeftJoyX(), -myDriveController.getLeftJoyY(), myDriveController.getRightJoyX(), 0);	
+			
+			if (myDriveController.getButtonLeftBumber() && myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.5); }
+			else if (myDriveController.getButtonLeftBumber()) { _drive.setMaxOutput(.25); }
+			else if (myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.25); }
+			else { _drive.setMaxOutput(1.0); }
+			
+			if (myController.getButtonRightD()) { myClimber.raiseElevator(1200, true); }
+			if (myController.getButtonLeftD()) { myClimber.lowerElavator(400, true); }
+			
+			if (myController.getButtonUpD() ) { myClimber.raiseElevator(1200, false); }
+			else if (myController.getButtonDownD() ) { myClimber.lowerElavator(400, false); }
+			else { myClimber.checkSwitches(false); }
+			
+			
+			if (myController.getButtonA()) { myElevator.lowerElevatorDis(0); }
+			if (myController.getButtonX()) { myElevator.raiseElevatorDis(20000); } //Switch height
+			if (myController.getButtonY()) { myElevator.raiseElevatorDis(70000); } //Scale height
+			
+			if (myController.getLeftJoyY() < -0.1) { myElevator.raiseElevator(myController.getLeftJoyY()*-600, false); }
+			else if (myController.getLeftJoyY() > 0.1) { myElevator.lowerElevator(myController.getLeftJoyY()*600, false); }
+			//if (myController.getLeftJoyY() > 0.1) { System.out.println(myController.getLeftJoyY()); }
+			//else if (myController.getLeftJoyY() < -0.1) { System.out.println(myController.getLeftJoyY()); }
+			else { myElevator.checkSwitches(false); }
+			
+			if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
+			else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
+			else { myElevator.ejectBlock(0); }
+		}
+		else {
+			autonTune();
+		}
 	
-		populateSmartDashboard() ;
-		
-		
-		Timer.delay(0.005);
+		populateSmartDashboard();
 
+		Timer.delay(0.005);
 	}
 
 	/**
@@ -282,10 +327,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("Elevator Min Height", myElevator.getElevatorBottom());
 		SmartDashboard.getNumber("Foward Dis", 5);
 	
-		myAutonRobot.setAutoChooser();
-		
-		
-		String gameMsg = myAutonRobot.getGameMsg();
 		SmartDashboard.putString("Game message", gameMsg);
 		
 		int pos = myAutonRobot.getPositoin();
@@ -307,9 +348,69 @@ public class Robot extends IterativeRobot {
 		}
 		else {SmartDashboard.putString("Goal", "Error");}
 		
-		myRobot.updateDashboard(); 
-		
+		myRobot.updateDashboard(); 		
 	}
 	
-	
+	public void autonTune() {
+		
+		int autonChoice = autonAction.getSelected();
+		
+		switch(autonChoice) {
+	    
+		case 1:
+			myRobot.driveFowardAuto((int)SmartDashboard.getNumber("Forward Distance", 0));
+			myRobot.stopRobot();
+			break;
+		case 2:
+			myRobot.driveBackwardAuto((int)SmartDashboard.getNumber("Backward Distance", 0));
+			myRobot.stopRobot();
+			break;
+		case 3:			
+			myRobot.turnRobotLeftGyro(SmartDashboard.getNumber("Turning Left", 0));
+			myRobot.stopRobot();
+			break;
+		case 4:			
+			myRobot.turnRobotRightGyro(SmartDashboard.getNumber("Turning Right", 0));
+			myRobot.stopRobot();
+			break;
+		case 5:			
+			myElevator.raiseElevatorDis(SmartDashboard.getNumber("Raise Elevator", 0));
+			myRobot.stopRobot();
+			break;
+		case 6:			
+			myElevator.lowerElevatorDis(SmartDashboard.getNumber("Lower Elevator", 0));
+			myRobot.stopRobot();
+			break;
+		case 7:			
+			myElevator.grabBlock(SmartDashboard.getNumber("Grab Block", 0));
+			myRobot.stopRobot();
+			break;
+		case 8:			
+			myElevator.ejectBlock(SmartDashboard.getNumber("Eject Block", 0));
+			myRobot.stopRobot();
+			break;
+		case 9:			
+			SmartDashboard.getNumber("Lift Block", 0);
+			myRobot.stopRobot();
+			break;
+		case 10:			
+			SmartDashboard.getNumber("Lower Block", 0);
+			myRobot.stopRobot();
+			break;
+		case 11:			
+			SmartDashboard.getNumber("Open claws", 0);
+			myRobot.stopRobot();
+			break;
+		case 12:			
+			SmartDashboard.getNumber("Close claws", 0);
+			myRobot.stopRobot();
+			break;
+	    default:
+	    	myRobot.stopRobot();
+			myElevator.raiseElevatorDis(0);
+			myElevator.grabBlock(0);	
+			break;
+	    
+		}
+	}	
 }
