@@ -13,8 +13,8 @@ public class Sensors {
 	private int timeoutMs = 10;
 	private int pidIdx = 0;
 	private int encTicksPerRot = 1440;
-	private int acc = 150; // Acceleration
-	private int cruiseVel = 300; // Cruise Velocity 
+	private int acc = 300; // Acceleration
+	private int cruiseVel = 600; // Cruise Velocity 
 	public int threshold = 50;
 	private boolean override = false;
 	
@@ -181,37 +181,36 @@ public class Sensors {
 			System.err.println("ERROR: Encoders Not Set");
 		}
 		else {
-			// PID controls Front Left Motor
 			_frontLeftMotor.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-			_frontLeftMotor.config_kF(0, 0.7, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
-			_frontLeftMotor.config_kP(0, 3.0, timeoutMs);
+			_frontLeftMotor.config_kF(0, 1.3, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
+			_frontLeftMotor.config_kP(0, 4.0, timeoutMs);
 			_frontLeftMotor.config_kI(0, 0.03, timeoutMs);
 			_frontLeftMotor.config_kD(0, 30, timeoutMs);
 			_frontLeftMotor.config_IntegralZone(0, 20, timeoutMs);
-			
+
 			// PID controls Rear Left Motor
 			_rearLeftMotor.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-			_rearLeftMotor.config_kF(0, 0.84, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
-			_rearLeftMotor.config_kP(0,3, timeoutMs);
-			_rearLeftMotor.config_kI(0, 0.01, timeoutMs);
-			_rearLeftMotor.config_kD(0, 30, timeoutMs);
+			_rearLeftMotor.config_kF(0, 1.4, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
+			_rearLeftMotor.config_kP(0, 4, timeoutMs);
+			_rearLeftMotor.config_kI(0, 0.02, timeoutMs);
+			_rearLeftMotor.config_kD(0, 40, timeoutMs);
 			_rearLeftMotor.config_IntegralZone(0, 20, timeoutMs);
-			
+
 			// PID controls Front Right Motor
 			_frontRightMotor.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-			_frontRightMotor.config_kF(0, 0.01, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
-			_frontRightMotor.config_kP(0, 3.0, timeoutMs);
+			_frontRightMotor.config_kF(0, 2.3, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
+			_frontRightMotor.config_kP(0, 4.0, timeoutMs);
 			_frontRightMotor.config_kI(0, 0.03, timeoutMs);
-			_frontRightMotor.config_kD(0, 30, timeoutMs);
+			_frontRightMotor.config_kD(0, 50, timeoutMs);
 			_frontRightMotor.config_IntegralZone(0, 20, timeoutMs);
-			
+
 			// PID controls Rear Right Motor
 			_rearRightMotor.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-			_rearRightMotor.config_kF(0, 0.5, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
-			_rearRightMotor.config_kP(0, 3.0, timeoutMs);
-			_rearRightMotor.config_kI(0, 0, timeoutMs);
-			_rearRightMotor.config_kD(0, 30, timeoutMs);
-			_rearRightMotor.config_IntegralZone(0, 0, timeoutMs);
+			_rearRightMotor.config_kF(0, 1.4, timeoutMs);     //(int slotIdx, double value, int timeoutMs)
+			_rearRightMotor.config_kP(0, 4.0, timeoutMs);
+			_rearRightMotor.config_kI(0, 0.02, timeoutMs);
+			_rearRightMotor.config_kD(0, 5, timeoutMs);
+			_rearRightMotor.config_IntegralZone(0, 20, timeoutMs);
 
 			return true; 
 		}
