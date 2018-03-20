@@ -30,11 +30,6 @@ public class Robot extends IterativeRobot {
 	boolean turnRight = true;
 	boolean turnLeft = true;
 	boolean follow = true;
-	private int timeoutMs = 10;
-	private int pidIdx = 0;
-	public int threshold = 50;
-	private int acc = 300; // Acceleration
-	private int cruiseVel = 600; // Cruise Velocity 
 	
 	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
 	ControllerLogitech myDriveController = new ControllerLogitech(2);
