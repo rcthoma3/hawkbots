@@ -347,7 +347,10 @@ public class Robot extends IterativeRobot {
 		}
 		else {SmartDashboard.putString("Goal", "Error");}
 		
-		myRobot.updateDashboard(); 				
+		myRobot.updateDashboard(); 
+		int avgDis = (_frontLeftMotor + _rearLeftMotor + _frontRightMotor + _rearRightMotor)/4;
+		SmartDashboard.putNumber("Avg Dis", myRobot.encToDis(avgDis));
+			
 	}
 	
 	public void autonTune() {
