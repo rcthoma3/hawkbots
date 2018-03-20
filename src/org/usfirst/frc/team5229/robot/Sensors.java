@@ -13,8 +13,8 @@ public class Sensors {
 	private int timeoutMs = 10;
 	private int pidIdx = 0;
 	private int encTicksPerRot = 1440;
-	private int acc = 150; // Acceleration
-	private int cruiseVel = 300; // Cruise Velocity 
+	private int acc = 300; // Acceleration
+	private int cruiseVel = 600; // Cruise Velocity 
 	public int threshold = 50;
 	private boolean override = false;
 	
