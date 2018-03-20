@@ -347,9 +347,12 @@ public class Robot extends IterativeRobot {
 		}
 		else {SmartDashboard.putString("Goal", "Error");}
 		
-		myRobot.updateDashboard(); 
-		int avgDis = (_frontLeftMotor + _rearLeftMotor + _frontRightMotor + _rearRightMotor)/4;
+		myRobot.updateDashboard();
+		
+		int avgDis = (_frontLeftMotor.getSelectedSensorPosition(0) + _rearLeftMotor.getSelectedSensorPosition(0)+
+					_frontRightMotor.getSelectedSensorPosition(0) + _rearRightMotor.getSelectedSensorPosition(0))/4;
 		SmartDashboard.putNumber("Avg Dis", myRobot.encToDis(avgDis));
+		SmartDashboard.putNumber("Gyro", gyro.getAngle());
 			
 	}
 	
