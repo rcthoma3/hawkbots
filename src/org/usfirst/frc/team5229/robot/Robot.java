@@ -169,7 +169,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {	
 		
-		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(240); System.out.println("Done Going Forward"); myRobot.stopRobot(); .delay(0.010);}
+		//if (forward) {System.out.println("Going Forward"); forward = !myRobot.driveFowardAuto(100); System.out.println("Done Going Forward"); myRobot.stopRobot(); Timer.delay(0.010);}
+		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (backward) {System.out.println("Going Backward"); backward = !myRobot.driveBackwardAuto(120); System.out.println("Done Going Backward"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnRight) {System.out.println("Doing Right Turn"); turnRight = !myRobot.turnRobotRightGyro(90); System.out.println("Done Turning Right"); myRobot.stopRobot(); Timer.delay(0.010);}
 		//if (turnLeft) {System.out.println("Doing Left Turn"); turnLeft = !myRobot.turnRobotLeftGyro(90); System.out.println("Done Turning Left"); myRobot.stopRobot(); Timer.delay(0.010);}
@@ -292,7 +293,7 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putString("Game message", gameMsg);
 		
-		int pos = myAutonRobot.getPositoin();
+		int pos = myAutonRobot.getPosition();
 		if(pos == 0) {
 			SmartDashboard.putString("Position", "Left");
 		}else if(pos == 1) {
