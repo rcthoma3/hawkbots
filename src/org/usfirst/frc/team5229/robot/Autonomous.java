@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Autonomous {
 	
 	private String gameData;//String obtain that is used to tell ownership of the scales and switches for the alliance
-	private int startpos = 1;//Determine the start position of the robot
-	private int startgoal = 0;//Determine the goal we are trying to reach
+	private int startpos = 0;//Determine the start position of the robot
+	private int startgoal = 2;//Determine the goal we are trying to reach
 	private SendableChooser<Integer> postionChooser;//Created a method that allowed driver to input position
 	private SendableChooser<Integer> goalChooser;//Created a method that allowed the driver to choose thier goal
 	private boolean setAutoChooser = false;//Check if AutoChooser is set up
@@ -50,14 +50,14 @@ public class Autonomous {
 	//out:setAutoChooser
    public boolean setAutoChooser() {
 	   postionChooser = new SendableChooser<Integer>();
-	   postionChooser.addDefault("Center", 1);//0 show that the robot is on the left side
-	   postionChooser.addObject("Left", 0);//1 show that the robot is in the center
+	   postionChooser.addDefault("Left", 0);//0 show that the robot is on the left side
+	   postionChooser.addObject("Center", 1);//1 show that the robot is in the center
 	   postionChooser.addObject("Right", 2);//2 show that the robot is on the right side
 	   SmartDashboard.putData("Position Mode Chooser", postionChooser);
 	   goalChooser = new SendableChooser<Integer>();
-	   goalChooser.addDefault("Switch", 0);//2 show that the robot is doing neither
+	   goalChooser.addDefault("Neither", 2);//2 show that the robot is doing neither
 	   goalChooser.addObject("Scale", 1);//1 show that the robot is going to the scale
-	   goalChooser.addObject("Neither", 2);//0 show that the robot is going to the switch
+	   goalChooser.addObject("Switch", 0);//0 show that the robot is going to the switch
 	   SmartDashboard.putData("Goal Mode Chooser", goalChooser);
 	   setAutoChooser = true; 
 	   
