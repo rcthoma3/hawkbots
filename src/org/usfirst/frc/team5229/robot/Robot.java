@@ -140,6 +140,7 @@ public class Robot extends IterativeRobot {
 		autonTune = new SendableChooser<Boolean>();
 		autonTune.addDefault("Off", false);
 		autonTune.addObject("On", true);
+		SmartDashboard.putData("Auton Tune", autonTune);
 		
 		autonAction = new SendableChooser<Integer>();
 		autonAction.addDefault("Stop", 0);
@@ -155,6 +156,7 @@ public class Robot extends IterativeRobot {
 		autonAction.addObject("Close Claw", 10);
 		autonAction.addObject("Tilt Claw Up", 11);
 		autonAction.addObject("Tilt Claw Up", 12);
+		SmartDashboard.putData("Auton Actions", autonAction);
 
 		myAutonRobot.setAutoChooser();
 		
