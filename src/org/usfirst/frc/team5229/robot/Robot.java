@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -28,6 +29,8 @@ public class Robot extends IterativeRobot {
 	DigitalInput halSensor;
 	ControllerLogitech testController = new ControllerLogitech(1);
 	Boolean senPrev;
+	AnalogTrigger trigger;
+	int count;
 	
 	/*
 	// For Testing - Remove in final code
@@ -99,6 +102,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		_testMotor = new WPI_TalonSRX(6);
 		halSensor = new DigitalInput(0);
+		trigger = new AnalogTrigger(3);
 		
 		/*
 		_frontLeftMotor = new WPI_TalonSRX(frontLeftMotorPort); 
@@ -215,7 +219,9 @@ public class Robot extends IterativeRobot {
 		_frontLeftMotor.setInverted(false);
 		_rearLeftMotor.setInverted(false);	
 		*/
-		senPrev = halSensor.get();
+		count = 0;
+		senPrev = trigger.getInWindow();		
+		trigger.setLimitsVoltage(3.5, 5.0);
 	}
 
 	/**
@@ -223,14 +229,22 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		int count = 0;
-		if(testController.getButtonA()) { _testMotor.set(1); }
-		else if(testController.getButtonB()) { _testMotor.set(-1); }
+		boolean sen = trigger.getInWindow();
+		if(testController.getButtonA()) { 
+			_testMotor.set(1); 
+			if(sen!=senPrev) {count++; senPrev=sen;}
+		}
+		else if(testController.getButtonB()) { 
+			_testMotor.set(-1); 
+			if(sen!=senPrev) {count--; senPrev=sen;}
+		}
 		else { _testMotor.set(0); }
 		
-		boolean sen = halSensor.get();
+		
+			
+		
 		System.out.println(sen);
-		if(sen!=senPrev) {count++; senPrev=sen;}
+		
 		System.out.println(count);
 		/*	
 		_drive.driveCartesian(myController.getLeftJoyX(), -myController.getLeftJoyY(), myController.getRightJoyX(), 0);	
