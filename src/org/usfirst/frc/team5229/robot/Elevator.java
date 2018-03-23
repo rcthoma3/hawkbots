@@ -2,6 +2,8 @@ package org.usfirst.frc.team5229.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +22,9 @@ public class Elevator {
 	private WPI_TalonSRX _leftClawMoter; //This motor should extend the left claw
 	private WPI_TalonSRX _rightClawMoter;//This motor should extend the right claw
 	private boolean  setMoters;
-	
+	private AnalogTrigger clawTiltTrigger;
+	private AnalogTrigger rightClawArmTrigger;
+	private AnalogTrigger leftClawArmTrigger;
 	
 	private int timeoutMs = 10;
 	private int pidIdx = 0;
@@ -38,6 +42,12 @@ public class Elevator {
 	private double raiseDis = 0;
 	private double lowerDis = 0;
 	private int moveRange = 20;
+	private int rightClawCnt = 0;
+	private int leftClawCnt = 0;
+	private int tiltCnt = 0;
+	private boolean tiltSenPrev;
+	private boolean rightClawSenPrev;
+	private boolean leftClawSenPrev;
 			
 	
 	//Set up Elevator motor
@@ -76,10 +86,10 @@ public class Elevator {
 	//Set up the new motors for the claws
 	//in:_tiltMoterIn, _rightClawMoterIn, _leftClawMoterIn
 	//out:setClawMoters
-	public boolean setClawMotors(WPI_TalonSRX _tiltMoterIn ,  WPI_TalonSRX _rightClawMoterIn, WPI_TalonSRX _leftClawMoterIn ) {
-		_tiltMoter = _tiltMoterIn;
-		_rightClawMoter = _rightClawMoterIn;
-		_leftClawMoter = _leftClawMoterIn;
+	public boolean setClawMotors(WPI_TalonSRX _tiltMotorIn ,  WPI_TalonSRX _rightClawMotorIn, WPI_TalonSRX _leftClawMotorIn ) {
+		_tiltMoter = _tiltMotorIn;
+		_rightClawMoter = _rightClawMotorIn;
+		_leftClawMoter = _leftClawMotorIn;
 		setClawMoters = true;
 		return setClawMoters;
 	}
@@ -128,109 +138,132 @@ public class Elevator {
 	}
 	
 	//Initialize Claw Motors
-		//in:nothing
-		//out:initClawMoters
-		public boolean initClawMoters() {
-			if(!setClawMoters) {
-				System.err.println("Error : Claw Motors are not set up yet");
-			}else {
-				//Invert Motor
-				_tiltMoter.setInverted(false);
-				_tiltMoter.setSensorPhase(false);
-				
-				//Init Encoders
-				_tiltMoter.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-				
-				// Set the peak and nominal outputs, 12V means full
-				_tiltMoter.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
-				_tiltMoter.configNominalOutputReverse(0, timeoutMs);
-				_tiltMoter.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
-				_tiltMoter.configPeakOutputReverse(-1, timeoutMs);
-				
-				// Current Limiting
-				_tiltMoter.configPeakCurrentLimit(peakCurrent, timeoutMs); /* 39 A */
-				_tiltMoter.configPeakCurrentDuration(peakCurrentDur, timeoutMs); /* 0ms */
-				_tiltMoter.configContinuousCurrentLimit(contCurrent, timeoutMs); /* 37A */
-				_tiltMoter.enableCurrentLimit(true); /* turn it on */
-				
-				// Init Sensor to zero
-				_tiltMoter.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs)
-				
-				// PID controls
-				//TODO: Tune these
-				_tiltMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-				_tiltMoter.config_kF(0, 0.5 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
-				_tiltMoter.config_kP(0, 0, timeoutMs);
-				_tiltMoter.config_kI(0, 0, timeoutMs);
-				_tiltMoter.config_kD(0, 0, timeoutMs);
-				_tiltMoter.config_IntegralZone(0, 0, timeoutMs);
-				
-				//Invert Motor
-				_rightClawMoter.setInverted(false);
-				_rightClawMoter.setSensorPhase(false);
-				
-				//Init Encoders
-				_rightClawMoter.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-				
-				// Set the peak and nominal outputs, 12V means full
-				_rightClawMoter.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
-				_rightClawMoter.configNominalOutputReverse(0, timeoutMs);
-				_rightClawMoter.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
-				_rightClawMoter.configPeakOutputReverse(-1, timeoutMs);
-				
-				// Current Limiting
-				_rightClawMoter.configPeakCurrentLimit(peakCurrent, timeoutMs); /* 39 A */
-				_rightClawMoter.configPeakCurrentDuration(peakCurrentDur, timeoutMs); /* 0ms */
-				_rightClawMoter.configContinuousCurrentLimit(contCurrent, timeoutMs); /* 37A */
-				_rightClawMoter.enableCurrentLimit(true); /* turn it on */
-				
-				// Init Sensor to zero
-				_rightClawMoter.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs)
-				
-				// PID controls
-				//TODO: Tune these
-				_rightClawMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-				_rightClawMoter.config_kF(0, 0.5 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
-				_rightClawMoter.config_kP(0, 0, timeoutMs);
-				_rightClawMoter.config_kI(0, 0, timeoutMs);
-				_rightClawMoter.config_kD(0, 0, timeoutMs);
-				_rightClawMoter.config_IntegralZone(0, 0, timeoutMs);
-				
-				//Invert Motor
-				_leftClawMoter.setInverted(false);
-				_leftClawMoter.setSensorPhase(false);
-				
-				//Init Encoders
-				_leftClawMoter.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-				
-				// Set the peak and nominal outputs, 12V means full
-				_leftClawMoter.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
-				_leftClawMoter.configNominalOutputReverse(0, timeoutMs);
-				_leftClawMoter.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
-				_leftClawMoter.configPeakOutputReverse(-1, timeoutMs);
-				
-				// Current Limiting
-				_leftClawMoter.configPeakCurrentLimit(peakCurrent, timeoutMs); /* 39 A */
-				_leftClawMoter.configPeakCurrentDuration(peakCurrentDur, timeoutMs); /* 0ms */
-				_leftClawMoter.configContinuousCurrentLimit(contCurrent, timeoutMs); /* 37A */
-				_leftClawMoter.enableCurrentLimit(true); /* turn it on */
-				
-				// Init Sensor to zero
-				_leftClawMoter.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs)
-				
-				// PID controls
-				//TODO: Tune these
-				_leftClawMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
-				_leftClawMoter.config_kF(0, 0.5 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
-				_leftClawMoter.config_kP(0, 0, timeoutMs);
-				_leftClawMoter.config_kI(0, 0, timeoutMs);
-				_leftClawMoter.config_kD(0, 0, timeoutMs);
-				_leftClawMoter.config_IntegralZone(0, 0, timeoutMs);
-				
-				initClawMoters = true;
-			}
-			return initClawMoters;
+	//in:nothing
+	//out:initClawMoters
+	public boolean initClawMotors() {
+		if(!setClawMoters) {
+			System.err.println("Error : Claw Motors are not set up yet");
+		}else {
+			
+			
+			//Invert Motor
+			_tiltMoter.setInverted(false);
+			_tiltMoter.setSensorPhase(false);
+			
+			//Init Encoders
+			_tiltMoter.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+			
+			// Set the peak and nominal outputs, 12V means full
+			_tiltMoter.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
+			_tiltMoter.configNominalOutputReverse(0, timeoutMs);
+			_tiltMoter.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
+			_tiltMoter.configPeakOutputReverse(-1, timeoutMs);
+			
+			// Current Limiting
+			_tiltMoter.configPeakCurrentLimit(4, timeoutMs); 
+			_tiltMoter.configPeakCurrentDuration(peakCurrentDur, timeoutMs); /* 0ms */
+			_tiltMoter.configContinuousCurrentLimit(3, timeoutMs); 
+			_tiltMoter.enableCurrentLimit(true); /* turn it on */
+			
+			// Init Sensor to zero
+			_tiltMoter.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs)
+			
+			// PID controls
+			//TODO: Tune these
+			_tiltMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
+			_tiltMoter.config_kF(0, 0.5 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
+			_tiltMoter.config_kP(0, 0, timeoutMs);
+			_tiltMoter.config_kI(0, 0, timeoutMs);
+			_tiltMoter.config_kD(0, 0, timeoutMs);
+			_tiltMoter.config_IntegralZone(0, 0, timeoutMs);
+			
+			//Invert Motor
+			_rightClawMoter.setInverted(false);
+			_rightClawMoter.setSensorPhase(false);
+			
+			//Init Encoders
+			_rightClawMoter.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+			
+			// Set the peak and nominal outputs, 12V means full
+			_rightClawMoter.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
+			_rightClawMoter.configNominalOutputReverse(0, timeoutMs);
+			_rightClawMoter.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
+			_rightClawMoter.configPeakOutputReverse(-1, timeoutMs);
+			
+			// Current Limiting
+			_rightClawMoter.configPeakCurrentLimit(7, timeoutMs);
+			_rightClawMoter.configPeakCurrentDuration(peakCurrentDur, timeoutMs); /* 0ms */
+			_rightClawMoter.configContinuousCurrentLimit(6, timeoutMs);
+			_rightClawMoter.enableCurrentLimit(true); /* turn it on */
+			
+			// Init Sensor to zero
+			_rightClawMoter.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs)
+			
+			// PID controls
+			//TODO: Tune these
+			_rightClawMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
+			_rightClawMoter.config_kF(0, 0.5 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
+			_rightClawMoter.config_kP(0, 0, timeoutMs);
+			_rightClawMoter.config_kI(0, 0, timeoutMs);
+			_rightClawMoter.config_kD(0, 0, timeoutMs);
+			_rightClawMoter.config_IntegralZone(0, 0, timeoutMs);
+			
+			//Invert Motor
+			_leftClawMoter.setInverted(false);
+			_leftClawMoter.setSensorPhase(false);
+			
+			//Init Encoders
+			_leftClawMoter.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+			
+			// Set the peak and nominal outputs, 12V means full
+			_leftClawMoter.configNominalOutputForward(0, timeoutMs); //(double percentOut, int timeoutMs)
+			_leftClawMoter.configNominalOutputReverse(0, timeoutMs);
+			_leftClawMoter.configPeakOutputForward(1, timeoutMs); //(double percentOut, int timeoutMs)
+			_leftClawMoter.configPeakOutputReverse(-1, timeoutMs);
+			
+			// Current Limiting
+			_leftClawMoter.configPeakCurrentLimit(7, timeoutMs);
+			_leftClawMoter.configPeakCurrentDuration(peakCurrentDur, timeoutMs); /* 0ms */
+			_leftClawMoter.configContinuousCurrentLimit(6, timeoutMs);
+			_leftClawMoter.enableCurrentLimit(true); /* turn it on */
+			
+			// Init Sensor to zero
+			_leftClawMoter.setSelectedSensorPosition(0, pidIdx, timeoutMs); //(int sensorPos, int pidIdx, int timeoutMs)
+			
+			// PID controls
+			//TODO: Tune these
+			_leftClawMoter.selectProfileSlot(0, pidIdx); //(int slotIdx, int pidIdx) pidIdx should be 0
+			_leftClawMoter.config_kF(0, 0.5 , timeoutMs); //(int slotIdx, double value, int timeoutMs)
+			_leftClawMoter.config_kP(0, 0, timeoutMs);
+			_leftClawMoter.config_kI(0, 0, timeoutMs);
+			_leftClawMoter.config_kD(0, 0, timeoutMs);
+			_leftClawMoter.config_IntegralZone(0, 0, timeoutMs);
+			
+			initClawMoters = true;
 		}
+		return initClawMoters;
+	}
+		
+	public boolean setClawTriggers(AnalogTrigger clawTiltTriggerIn, AnalogTrigger rightClawArmTriggerIn, AnalogTrigger leftClawArmTriggerIn) {
+		clawTiltTrigger = clawTiltTriggerIn;
+		rightClawArmTrigger = rightClawArmTriggerIn;
+		leftClawArmTrigger = leftClawArmTriggerIn;
+		
+		return true;
+	}
+	
+	public boolean initClawTriggers() {
+		
+		clawTiltTrigger.setLimitsVoltage(3.5, 5.0);
+		rightClawArmTrigger.setLimitsVoltage(3.5, 5.0);
+		leftClawArmTrigger.setLimitsVoltage(3.5, 5.0);
+		
+		tiltSenPrev = clawTiltTrigger.getInWindow();				
+		rightClawSenPrev = rightClawArmTrigger.getInWindow();				
+		leftClawSenPrev = leftClawArmTrigger.getInWindow();		
+		
+		return true;
+	}
 	
 	public boolean getElevatorTop() {
 		int pos = _elevatorMotor.getSelectedSensorPosition(0);
@@ -259,7 +292,7 @@ public class Elevator {
 			upperSensorPressed = upperSwitch.getstate();
 			System.out.println("ele upper sen: " + upperSensorPressed);
 			int pos = _elevatorMotor.getSelectedSensorPosition(0);
-			if(!upperSensorPressed ) { //71000
+			if(!upperSensorPressed && pos < 71000) { //71000
 				//_elevatorMotor.set(ControlMode.Velocity, speed);
 				_elevatorMotor.set(1);
 				System.out.println("ele up: " + speed);
@@ -320,7 +353,7 @@ public class Elevator {
     	}else {
     		lowerSensorPressed = lowerSwitch.getstate();
     		int pos = _elevatorMotor.getSelectedSensorPosition(0);
-    		if(!lowerSensorPressed) {
+    		if(!lowerSensorPressed && pos > 0) {
     			//_elevatorMotor.set(ControlMode.Velocity, -speed);
     			_elevatorMotor.set(-1);
     			if(button) {
@@ -402,6 +435,12 @@ public class Elevator {
     	}
     } 
     
+    public void printClawPos() {
+    	SmartDashboard.putNumber("Claw Tilt Position", tiltCnt);
+    	SmartDashboard.putNumber("Right Claw Position", rightClawCnt);
+    	SmartDashboard.putNumber("Left Claw Position", leftClawCnt);
+    }
+    
   //Lifts the block
     //in:speed
     //out:nothing
@@ -412,6 +451,8 @@ public class Elevator {
     		System.err.println("Error : Claw Lift Moter not initialize");
     	}else {
     		_tiltMoter.set(ControlMode.Velocity, speed);
+    		boolean sen = clawTiltTrigger.getInWindow();
+    		if(sen!=tiltSenPrev) {tiltCnt++; tiltSenPrev=sen;}
     	}
     }
     
@@ -425,6 +466,8 @@ public class Elevator {
     		System.err.println("Error : Claw Lift Moter not initialize");
     	}else {
     		_tiltMoter.set(ControlMode.Velocity, -speed);
+    		boolean sen = clawTiltTrigger.getInWindow();
+    		if(sen!=tiltSenPrev) {tiltCnt--; tiltSenPrev=sen;}
     	}
     }
     
@@ -439,6 +482,10 @@ public class Elevator {
     	}else {
     		_leftClawMoter.set(ControlMode.Velocity, speed);
     		_rightClawMoter.set(ControlMode.Velocity, speed);
+    		boolean senRight = clawTiltTrigger.getInWindow();
+    		boolean senLeft = clawTiltTrigger.getInWindow();
+    		if(senRight!=rightClawSenPrev) {rightClawCnt++; rightClawSenPrev=senRight;}
+    		if(senLeft!=leftClawSenPrev) {leftClawCnt++; leftClawSenPrev=senLeft;}
     	}
     }
     
@@ -450,6 +497,10 @@ public class Elevator {
     	}else {
     		_leftClawMoter.set(ControlMode.Velocity, -speed);
     		_rightClawMoter.set(ControlMode.Velocity, -speed);
+    		boolean senRight = clawTiltTrigger.getInWindow();
+    		boolean senLeft = clawTiltTrigger.getInWindow();
+    		if(senRight!=rightClawSenPrev) {rightClawCnt--; rightClawSenPrev=senRight;}
+    		if(senLeft!=leftClawSenPrev) {leftClawCnt--; leftClawSenPrev=senLeft;}
     	}
     }
     

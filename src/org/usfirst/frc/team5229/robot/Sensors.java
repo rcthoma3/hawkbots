@@ -802,6 +802,7 @@ public class Sensors {
 	public void updateDashboard() {
 		
 		//Updates wheel position
+		/*
 		SmartDashboard.putNumber("Front Left Pos: ", _frontLeftMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Front Right Pos: ", _frontRightMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Rear Left Pos: ", _rearLeftMotor.getSelectedSensorPosition(0));
@@ -812,7 +813,7 @@ public class Sensors {
 		SmartDashboard.putNumber("Front Right Vel: ", _frontRightMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Rear Left Vel: ", _rearLeftMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Rear Right Vel: ", _rearRightMotor.getSelectedSensorVelocity(0));
-		
+		*/
 		//Updates whether or not the wheel encoders are valid
 		SmartDashboard.putBoolean("Front Right Valid", frontRightValid);
 		SmartDashboard.putBoolean("Front Left Valid", frontLeftValid);

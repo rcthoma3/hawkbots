@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -52,14 +53,21 @@ public class Robot extends IterativeRobot {
 	WPI_TalonSRX _rearRightMotor;
 	WPI_TalonSRX _elevatorMotor;
 	WPI_TalonSRX _climbMotor;
-	VictorSP _leftClawMotor;
-	VictorSP _rightClawMotor;
+	WPI_TalonSRX _leftClawArmMotor;
+	WPI_TalonSRX _rightClawArmMotor;
+	WPI_TalonSRX _clawTiltMotor;
+	VictorSP _leftClawWheelMotor;
+	VictorSP _rightClawWheelMotor;
 	// Switch Declarations
 	DigitalInput topClimbSwitch;
 	DigitalInput bottomClimbSwitch;
 	DigitalInput topElevatorSwitch;
 	DigitalInput bottomElevatorSwitch;
 	DigitalInput grabSwitch;
+	// Analog Declarations
+	AnalogTrigger clawTiltTrigger;
+	AnalogTrigger rightClawArmTrigger;
+	AnalogTrigger leftClawArmTrigger;
 
 	// These values correspond to roboRIO ports
 	//Talons - CAN
@@ -69,6 +77,9 @@ public class Robot extends IterativeRobot {
 	int rearRightMotorPort = 2;
 	int elevatorMotorPort = 1;
 	int climbMotorPort = 4;
+	int clawTiltMotorPort = 7;
+	int rightClawArmMotorPort = 8;
+	int leftClawArmMotorPort = 9;
 	//Switches - DIO
 	int topElevatorPort = 2;
 	int bottomElevatorPort = 1;
@@ -78,6 +89,10 @@ public class Robot extends IterativeRobot {
 	//Victors - PWM
 	int leftClawPort = 0;
 	int rightClawPort = 1;
+	//Bosch Motor Sensors - Analog
+	int clawTiltTriggerPort = 0;
+	int rightClawArmTriggerPort = 1;
+	int leftClawArmTriggerPort = 2;
 		
 	//double whlSize = 8; // Wheel diameter in inches (Test Robot)
 	//double roboDim = 30; // Diagonal distance between wheels in inches (Test Robot)
@@ -99,9 +114,13 @@ public class Robot extends IterativeRobot {
 		_rearRightMotor = new WPI_TalonSRX(rearRightMotorPort);
 		
 		_climbMotor = new WPI_TalonSRX(climbMotorPort);
-		_leftClawMotor = new VictorSP(leftClawPort);
-		_rightClawMotor = new VictorSP(rightClawPort);
+		_leftClawWheelMotor = new VictorSP(leftClawPort);
+		_rightClawWheelMotor = new VictorSP(rightClawPort);
 		_elevatorMotor = new WPI_TalonSRX(elevatorMotorPort);
+		_clawTiltMotor = new WPI_TalonSRX(clawTiltMotorPort);
+		_rightClawArmMotor = new WPI_TalonSRX(rightClawArmMotorPort);
+		_leftClawArmMotor = new WPI_TalonSRX(leftClawArmMotorPort);
+
 		
 		Camera1 = CameraServer.getInstance().startAutomaticCapture();
 		Camera2 = CameraServer.getInstance().startAutomaticCapture();
@@ -113,9 +132,11 @@ public class Robot extends IterativeRobot {
 		_rearRightMotor.set(0);
 		_climbMotor.set(0);
 		_elevatorMotor.set(0);
+		_clawTiltMotor.set(0);
+		_rightClawArmMotor.set(0);
+		_leftClawArmMotor.set(0);
 		
-		gyro.calibrate();
-		
+		gyro.calibrate();	
 
 		topClimbSwitch = new DigitalInput(topClimbPort);
 		bottomClimbSwitch = new DigitalInput(bottomClimbPort);
@@ -123,18 +144,28 @@ public class Robot extends IterativeRobot {
 		bottomElevatorSwitch = new DigitalInput(bottomElevatorPort);
 		grabSwitch = new DigitalInput(grabSwitchPort);
 		
+		clawTiltTrigger = new AnalogTrigger(clawTiltTriggerPort);
+		rightClawArmTrigger = new AnalogTrigger(rightClawArmTriggerPort);
+		leftClawArmTrigger = new AnalogTrigger(leftClawArmTriggerPort);
+		
 		myClimber.setClimbMotor(_climbMotor);
 		myClimber.initElevator();
 		myClimber.setSwitches(topClimbSwitch, bottomClimbSwitch);
+		
 		myElevator.setElevator(_elevatorMotor);
 		myElevator.initElevator();
 		myElevator.setSwitches(topElevatorSwitch, bottomElevatorSwitch, grabSwitch);
-		myElevator.setGrabMotors(_leftClawMotor, _rightClawMotor);
+		myElevator.setGrabMotors(_leftClawWheelMotor, _rightClawWheelMotor);
+		myElevator.setClawMotors(_clawTiltMotor, _rightClawArmMotor, _leftClawArmMotor);
+		myElevator.initClawMotors();
 		
 		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
 		myRobot.initEncoders();
+		myRobot.setWheelSize(whlSize);
+		myRobot.setChassisSize(roboDim);
 		
-		myAutonRobot.setAutoChooser();	
+		myAutonRobot.setAutoChooser();
+		
 		populateSmartDashboard();
 	}
 	
@@ -144,23 +175,24 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		
-		myRobot.setWheelSize(whlSize);
-		myRobot.setChassisSize(roboDim);	
+					
 		myRobot.setOverride(false);
 		myRobot.setGyro(gyro);
 		myAutonRobot.setSensor(myRobot);
 		myAutonRobot.setElevator(myElevator);
 
 		gameMsg= myAutonRobot.getGameMsg();
+		
 		populateSmartDashboard() ;
+		
+		follow = true;
 		
 		// For Testing - Remove in final code
 		forward = true;
 		backward = true;
 		turnRight = true;
 		turnLeft = true;
-		follow = true;
+		
 	}
 
 	/**
@@ -216,7 +248,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-	    //TODO: Change all myController to myDriveController
+
 		_drive.driveCartesian(myDriveController.getLeftJoyX(), -myDriveController.getLeftJoyY(), myDriveController.getRightJoyX(), 0);	
 		
 		if (myDriveController.getButtonLeftBumber() && myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.5); }
@@ -239,8 +271,7 @@ public class Robot extends IterativeRobot {
 		else if (myController.getRightJoyY() < -0.1) {myElevator.tiltClawDown(0.3); }
 		else { myElevator.tiltClawUp(0); }
 		
-		if (myController.getButtonB()) { myElevator.lowerElevatorDis(0); }
-		if (myController.getButtonX()) { myElevator.raiseElevatorDis(20000); } //Switch height
+		if (myController.getButtonX()) { myElevator.raiseElevatorDis(15000); } //Switch height
 		if (myController.getButtonY()) { myElevator.raiseElevatorDis(70000); } //Scale height
 		
 		if (myController.getLeftJoyY() < -0.1) { myElevator.raiseElevator(myController.getLeftJoyY()*-600, false); }
@@ -254,7 +285,6 @@ public class Robot extends IterativeRobot {
 		populateSmartDashboard() ;
 
 		Timer.delay(0.005);
-
 	}
 
 	/**
@@ -276,16 +306,16 @@ public class Robot extends IterativeRobot {
 	public void populateSmartDashboard ()
 	{
 		SmartDashboard.putNumber("Climb Motor Current", _climbMotor.getOutputCurrent());
-		SmartDashboard.putNumber("Climb Motor Voltage", _climbMotor.getMotorOutputVoltage());
-		SmartDashboard.putNumber("Climb Motor Percent Output", _climbMotor.getMotorOutputPercent());
+		//SmartDashboard.putNumber("Climb Motor Voltage", _climbMotor.getMotorOutputVoltage());
+		//SmartDashboard.putNumber("Climb Motor Percent Output", _climbMotor.getMotorOutputPercent());
 		SmartDashboard.putNumber("Climb Position", _climbMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Climb Velocity", _climbMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putBoolean("Climb Max Height", myClimber.getTopSwitch());
 		SmartDashboard.putBoolean("Climb Min Height", myClimber.getBottomSwitch());
 		
 		SmartDashboard.putNumber("Elevator Motor Current", _elevatorMotor.getOutputCurrent());
-		SmartDashboard.putNumber("Elevator Motor Voltage", _elevatorMotor.getMotorOutputVoltage());
-		SmartDashboard.putNumber("Elevator Motor Percent Output", _elevatorMotor.getMotorOutputPercent());
+		//SmartDashboard.putNumber("Elevator Motor Voltage", _elevatorMotor.getMotorOutputVoltage());
+		//SmartDashboard.putNumber("Elevator Motor Percent Output", _elevatorMotor.getMotorOutputPercent());
 		SmartDashboard.putNumber("Elevator Position", _elevatorMotor.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Elevator Veocity", _elevatorMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putBoolean("Elevator Max Height", myElevator.getElevatorTop());
@@ -312,6 +342,7 @@ public class Robot extends IterativeRobot {
 		}
 		else {SmartDashboard.putString("Goal", "Error");}
 		
-		myRobot.updateDashboard(); 	
+		myRobot.updateDashboard();
+		myElevator.printClawPos();
 	}		
 }

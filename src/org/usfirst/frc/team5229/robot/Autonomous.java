@@ -16,7 +16,7 @@ public class Autonomous {
 	Sensors sensor;
 	Elevator elevator;
 	public double autoSpeed = 1;
-	public int autoDis = 20000;
+	public int autoDis = 15000;
 	boolean validMsg = false;
 	Timer time = new Timer();
 	int globalGoal = 5;
