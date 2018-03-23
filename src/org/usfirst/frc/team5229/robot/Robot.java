@@ -256,6 +256,12 @@ public class Robot extends IterativeRobot {
 		else if (myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.25); }
 		else { _drive.setMaxOutput(1.0); }
 		
+		if (myDriveController.getButtonA() && myDriveController.getButtonLeftD()) {myElevator.moveLeftClaw(0.3);}
+		else if (myDriveController.getButtonA() && myDriveController.getButtonRightD()) {myElevator.moveLeftClaw(-0.3);}
+
+		if (myDriveController.getButtonB() && myDriveController.getButtonLeftD()) {myElevator.moveRightClaw(0.3);}
+		else if (myDriveController.getButtonB() && myDriveController.getButtonRightD()) {myElevator.moveRightClaw(-0.3);}
+		
 		if (myController.getButtonRightD()) { myClimber.raiseElevator(1200, true); }
 		if (myController.getButtonLeftD()) { myClimber.lowerElavator(400, true); }
 		
@@ -320,6 +326,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Elevator Veocity", _elevatorMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putBoolean("Elevator Max Height", myElevator.getElevatorTop());
 		SmartDashboard.putBoolean("Elevator Min Height", myElevator.getElevatorBottom());
+		
+		SmartDashboard.putNumber("Right Arm Current", _rightClawArmMotor.getOutputCurrent());
+		SmartDashboard.putNumber("Left Arm Current", _leftClawArmMotor.getOutputCurrent());
 		
 		SmartDashboard.putString("Game message", gameMsg);
 		

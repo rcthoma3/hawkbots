@@ -450,7 +450,7 @@ public class Elevator {
     	}else if(!initClawMoters) {
     		System.err.println("Error : Claw Lift Moter not initialize");
     	}else {
-    		_tiltMoter.set(ControlMode.Velocity, speed);
+    		_tiltMoter.set(speed);
     		boolean sen = clawTiltTrigger.getInWindow();
     		if(sen!=tiltSenPrev) {tiltCnt++; tiltSenPrev=sen;}
     	}
@@ -465,10 +465,24 @@ public class Elevator {
     	}else if(!initClawMoters) {
     		System.err.println("Error : Claw Lift Moter not initialize");
     	}else {
-    		_tiltMoter.set(ControlMode.Velocity, -speed);
+    		_tiltMoter.set(-speed);
     		boolean sen = clawTiltTrigger.getInWindow();
     		if(sen!=tiltSenPrev) {tiltCnt--; tiltSenPrev=sen;}
     	}
+    }
+    
+    public void moveLeftClaw(double speed) {
+    	boolean senLeft = clawTiltTrigger.getInWindow();
+    	_leftClawMoter.set(speed);
+		if(senLeft!=leftClawSenPrev && speed < 0) {leftClawCnt++; leftClawSenPrev=senLeft;}
+		if(senLeft!=leftClawSenPrev && speed > 0) {leftClawCnt--; leftClawSenPrev=senLeft;}
+    }
+    
+    public void moveRightClaw(double speed) {
+		boolean senRight = clawTiltTrigger.getInWindow();
+		_rightClawMoter.set(speed);
+		if(senRight!=rightClawSenPrev && speed > 0) {rightClawCnt++; rightClawSenPrev=senRight;}
+		if(senRight!=rightClawSenPrev && speed < 0) {rightClawCnt--; rightClawSenPrev=senRight;}
     }
     
     //Extend/Opens the claws
@@ -480,8 +494,8 @@ public class Elevator {
     	}else if(!setClawMoters) {
     		System.err.println("Error : Extend Motors not initialize");
     	}else {
-    		_leftClawMoter.set(ControlMode.Velocity, speed);
-    		_rightClawMoter.set(ControlMode.Velocity, speed);
+    		_leftClawMoter.set(speed);
+    		_rightClawMoter.set(speed);
     		boolean senRight = clawTiltTrigger.getInWindow();
     		boolean senLeft = clawTiltTrigger.getInWindow();
     		if(senRight!=rightClawSenPrev) {rightClawCnt++; rightClawSenPrev=senRight;}
@@ -495,8 +509,8 @@ public class Elevator {
     	}else if(!setClawMoters) {
     		System.err.println("Error : Extend Motors not initialize");
     	}else {
-    		_leftClawMoter.set(ControlMode.Velocity, -speed);
-    		_rightClawMoter.set(ControlMode.Velocity, -speed);
+    		_leftClawMoter.set(-speed);
+    		_rightClawMoter.set(-speed);
     		boolean senRight = clawTiltTrigger.getInWindow();
     		boolean senLeft = clawTiltTrigger.getInWindow();
     		if(senRight!=rightClawSenPrev) {rightClawCnt--; rightClawSenPrev=senRight;}
