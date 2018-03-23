@@ -16,7 +16,7 @@ public class Autonomous {
 	Sensors sensor;
 	Elevator elevator;
 	public double autoSpeed = 1;
-	public int autoDis = 15000;
+	public int autoDis = 13000;
 	boolean validMsg = false;
 	Timer time = new Timer();
 	int globalGoal = 5;
@@ -150,7 +150,9 @@ public class Autonomous {
 				exit = true;
 				
 			}else if (mySwitch == 'R') {
-				sensor.driveFowardAuto(218);
+				sensor.driveFowardAuto(126);
+				sensor.stopRobot();
+				/*sensor.driveFowardAuto(218);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
@@ -163,7 +165,7 @@ public class Autonomous {
 				sensor.driveFowardAuto(24);
 				sensor.stopRobot();
 				elevator.ejectBlock(autoSpeed);
-				sensor.stopRobot();
+				sensor.stopRobot();*/
 				exit = true;
 			}
 		}else if(myPosition == 1) { //Center
@@ -184,6 +186,7 @@ public class Autonomous {
 				//sensor.stopRobot();
 				exit = true;
 			}else if(mySwitch == 'R') { 
+				
 				sensor.driveFowardAuto(100); //48
 				sensor.stopRobot();
 				//sensor.turnRobotRightGyro(90);
@@ -215,7 +218,9 @@ public class Autonomous {
 				exit = true;
 				
 			}else if(mySwitch == 'L') {
-				sensor.driveFowardAuto(218);
+				sensor.driveFowardAuto(126);
+				sensor.stopRobot();
+				/*sensor.driveFowardAuto(218);
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
@@ -228,7 +233,7 @@ public class Autonomous {
 				sensor.driveFowardAuto(24);
 				sensor.stopRobot();
 				elevator.ejectBlock(autoSpeed);
-				sensor.stopRobot();
+				sensor.stopRobot();*/
                 exit = true;
 			}
 			
@@ -331,7 +336,9 @@ public class Autonomous {
 				sensor.stopRobot();
 				exit = true;
 			}else if(myPosition == 1) { //Center
-			   sensor.driveFowardAuto(55);
+				sensor.driveFowardAuto(126);
+				sensor.stopRobot();
+			   /*sensor.driveFowardAuto(55);
 			   sensor.stopRobot();
 			   sensor.turnRobotRightGyro(90);
 		       sensor.stopRobot();
@@ -339,7 +346,7 @@ public class Autonomous {
 		       sensor.stopRobot();
 		       sensor.turnRobotLeftGyro(90);
 		       sensor.driveFowardAuto(40);
-		       sensor.stopRobot();
+		       sensor.stopRobot(); */
 		       exit = true;
 			}else if(myPosition == 2) { //Right
 				sensor.driveFowardAuto(126);

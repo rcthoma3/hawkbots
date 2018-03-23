@@ -160,9 +160,9 @@ public class Elevator {
 			_tiltMoter.configPeakOutputReverse(-1, timeoutMs);
 			
 			// Current Limiting
-			_tiltMoter.configPeakCurrentLimit(4, timeoutMs); 
+			_tiltMoter.configPeakCurrentLimit(11, timeoutMs); 
 			_tiltMoter.configPeakCurrentDuration(peakCurrentDur, timeoutMs); /* 0ms */
-			_tiltMoter.configContinuousCurrentLimit(3, timeoutMs); 
+			_tiltMoter.configContinuousCurrentLimit(10, timeoutMs); 
 			_tiltMoter.enableCurrentLimit(true); /* turn it on */
 			
 			// Init Sensor to zero
@@ -410,7 +410,7 @@ public class Elevator {
     	}else {
     		grabSensorPressed = grabSwitch.getstate();
     		if(!grabSensorPressed){
-    			_leftWheelMoter.setSpeed(-speed);
+    			_leftWheelMoter.setSpeed(speed);
     			_rightWheelMoter.setSpeed(-speed);		
     		}else {
     			_leftWheelMoter.setSpeed(0);
@@ -430,7 +430,7 @@ public class Elevator {
     	}else if(!setSwitches){
     		System.err.println("Error: Grab Switch not set up");
     	}else {    		
-    		_leftWheelMoter.setSpeed(speed);
+    		_leftWheelMoter.setSpeed(-speed);
     		_rightWheelMoter.setSpeed(speed);
     	}
     } 
@@ -495,7 +495,7 @@ public class Elevator {
     		System.err.println("Error : Extend Motors not initialize");
     	}else {
     		_leftClawMoter.set(speed);
-    		_rightClawMoter.set(speed);
+    		_rightClawMoter.set(-speed);
     		boolean senRight = clawTiltTrigger.getInWindow();
     		boolean senLeft = clawTiltTrigger.getInWindow();
     		if(senRight!=rightClawSenPrev) {rightClawCnt++; rightClawSenPrev=senRight;}
@@ -510,7 +510,7 @@ public class Elevator {
     		System.err.println("Error : Extend Motors not initialize");
     	}else {
     		_leftClawMoter.set(-speed);
-    		_rightClawMoter.set(-speed);
+    		_rightClawMoter.set(speed);
     		boolean senRight = clawTiltTrigger.getInWindow();
     		boolean senLeft = clawTiltTrigger.getInWindow();
     		if(senRight!=rightClawSenPrev) {rightClawCnt--; rightClawSenPrev=senRight;}

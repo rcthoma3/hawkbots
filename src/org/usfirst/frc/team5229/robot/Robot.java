@@ -158,6 +158,7 @@ public class Robot extends IterativeRobot {
 		myElevator.setGrabMotors(_leftClawWheelMotor, _rightClawWheelMotor);
 		myElevator.setClawMotors(_clawTiltMotor, _rightClawArmMotor, _leftClawArmMotor);
 		myElevator.initClawMotors();
+		myElevator.setClawTriggers(clawTiltTrigger, rightClawArmTrigger, leftClawArmTrigger);
 		
 		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
 		myRobot.initEncoders();
@@ -182,6 +183,8 @@ public class Robot extends IterativeRobot {
 		myAutonRobot.setElevator(myElevator);
 
 		gameMsg= myAutonRobot.getGameMsg();
+		
+		myAutonRobot.setAutoChooser();
 		
 		populateSmartDashboard() ;
 		
@@ -256,11 +259,12 @@ public class Robot extends IterativeRobot {
 		else if (myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.25); }
 		else { _drive.setMaxOutput(1.0); }
 		
-		if (myDriveController.getButtonA() && myDriveController.getButtonLeftD()) {myElevator.moveLeftClaw(0.3);}
-		else if (myDriveController.getButtonA() && myDriveController.getButtonRightD()) {myElevator.moveLeftClaw(-0.3);}
+		System.out.println("A button: " + myDriveController.getButtonA());
+		if (myDriveController.getButtonA()) {myElevator.moveLeftClaw(0.8);}
+		else if (myDriveController.getButtonB()) {myElevator.moveLeftClaw(-0.8);}
 
-		if (myDriveController.getButtonB() && myDriveController.getButtonLeftD()) {myElevator.moveRightClaw(0.3);}
-		else if (myDriveController.getButtonB() && myDriveController.getButtonRightD()) {myElevator.moveRightClaw(-0.3);}
+		if (myDriveController.getButtonX()) {myElevator.moveRightClaw(0.8);}
+		else if (myDriveController.getButtonY()) {myElevator.moveRightClaw(-0.8);}
 		
 		if (myController.getButtonRightD()) { myClimber.raiseElevator(1200, true); }
 		if (myController.getButtonLeftD()) { myClimber.lowerElavator(400, true); }
@@ -269,23 +273,23 @@ public class Robot extends IterativeRobot {
 		else if (myController.getButtonDownD() ) { myClimber.lowerElavator(400, false); }
 		else { myClimber.checkSwitches(false); }
 		
-		if (myController.getButtonA() ) { myElevator.openClaws(0.3); } 
-		else if (myController.getButtonB() ) { myElevator.closeClaws(0.3); }
+		if (myController.getButtonA() ) { myElevator.openClaws(0.8); } 
+		else if (myController.getButtonB() ) { myElevator.closeClaws(0.8); }
 		else { myElevator.openClaws(0);}
 		
-		if (myController.getRightJoyY() > 0.1) { myElevator.tiltClawUp(0.3);}
-		else if (myController.getRightJoyY() < -0.1) {myElevator.tiltClawDown(0.3); }
+		if (myController.getRightJoyY() > 0.1) { myElevator.tiltClawUp(.8);}
+		else if (myController.getRightJoyY() < -0.1) {myElevator.tiltClawDown(0.8); }
 		else { myElevator.tiltClawUp(0); }
 		
-		if (myController.getButtonX()) { myElevator.raiseElevatorDis(15000); } //Switch height
+		if (myController.getButtonX()) { myElevator.raiseElevatorDis(13000); } //Switch height
 		if (myController.getButtonY()) { myElevator.raiseElevatorDis(70000); } //Scale height
 		
 		if (myController.getLeftJoyY() < -0.1) { myElevator.raiseElevator(myController.getLeftJoyY()*-600, false); }
 		else if (myController.getLeftJoyY() > 0.1) { myElevator.lowerElevator(myController.getLeftJoyY()*600, false); }
 		else { myElevator.checkSwitches(false); }
 		
-		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
-		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
+		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(0.5); }
+		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(0.5); }
 		else { myElevator.ejectBlock(0); }
 	
 		populateSmartDashboard() ;
