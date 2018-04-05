@@ -134,9 +134,7 @@ public class Climbing {
 		}else {
 			
 			bottomSensorpressed = bottomSwitch.getstate(); 
-			System.out.println("bottom sensor: " + bottomSensorpressed);
 			if(!bottomSensorpressed) {
-				System.out.println("lowering at: " + -speed);
 				_climbMotor.set(ControlMode.Velocity, -speed);
 				if(button) {
 					lower = true;

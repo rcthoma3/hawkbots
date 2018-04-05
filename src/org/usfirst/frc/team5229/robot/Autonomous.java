@@ -15,8 +15,9 @@ public class Autonomous {
 	private boolean setAutoChooser = false;//Check if AutoChooser is set up
 	Sensors sensor;
 	Elevator elevator;
-	public double autoSpeed = 1;
+	public double autoSpeed = 0.25;
 	public int autoDis = 13000;
+	public int autoDis2 = 70000;
 	boolean validMsg = false;
 	Timer time = new Timer();
 	int globalGoal = 5;
@@ -37,10 +38,10 @@ public class Autonomous {
 	public String getGameMsg(){
 		time.start();
 		do {
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		if (gameData.compareTo("LLL") == 0 || gameData.compareTo("LRL") == 0 || gameData.compareTo("RRR") == 0 || gameData.compareTo("RLR") == 0) {
-			validMsg = true;
-		}
+			gameData = DriverStation.getInstance().getGameSpecificMessage();
+				if (gameData.compareTo("LLL") == 0 || gameData.compareTo("LRL") == 0 || gameData.compareTo("RRR") == 0 || gameData.compareTo("RLR") == 0) {
+					validMsg = true;
+				}
 		} while (!time.hasPeriodPassed(2) && !validMsg);
 		return gameData;
 	} 
@@ -122,6 +123,7 @@ public class Autonomous {
 	//out:exitd
 	public boolean followPath() {
 		boolean exit = false;
+		boolean clawDown = false;
 		int myPosition = getPosition();
 		int myGoal = getGoal();
 		char myScale = 'X';
@@ -137,58 +139,73 @@ public class Autonomous {
 		if(myGoal == 0) { //Switch
 		if(myPosition == 0) { //Left
 			if(mySwitch == 'L') {
-				sensor.driveFowardAuto(145);
+				sensor.driveForwardAuto(145);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
-				//elevator.raiseElevatorDis(autoDis);
-				//sensor.stopRobot();
-				sensor.driveFowardAuto(25);
+				do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+				elevator.openClaws(0.8);
+				elevator.raiseElevatorDis(autoDis);
+				Timer.delay(3);
+				sensor.driveForwardAuto(30);
 				sensor.stopRobot();	
-				//elevator.ejectBlock(autoSpeed);
-				//sensor.stopRobot();
+				elevator.ejectBlock(autoSpeed);
+				elevator.openClaws(0);
+				Timer.delay(0.5);
+				elevator.stopWheels();
 				exit = true;
 				
 			}else if (mySwitch == 'R') {
-				sensor.driveFowardAuto(126);
+				sensor.driveForwardAuto(150);
 				sensor.stopRobot();
-				/*sensor.driveFowardAuto(218);
-				sensor.stopRobot();
-				sensor.turnRobotRightGyro(90);
-				sensor.stopRobot();
-				sensor.driveFowardAuto(168);
+				/*sensor.driveForwardAuto(210);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
-				sensor.stopRobot();
+				do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+				elevator.openClaws(0.8);
 				elevator.raiseElevatorDis(autoDis);
-				sensor.stopRobot();
-				sensor.driveFowardAuto(24);
-				sensor.stopRobot();
+				sensor.driveForwardAuto(165);
+				sensor.turnRobotRightGyro(135);
+				sensor.driveForwardAuto(40);
 				elevator.ejectBlock(autoSpeed);
-				sensor.stopRobot();*/
+				elevator.noGrip();
+				Timer.delay(0.5);
+				elevator.stopWheels(); Use this later*/
 				exit = true;
 			}
 		}else if(myPosition == 1) { //Center
 			if(mySwitch == 'L') {
-				sensor.driveFowardAuto(45); //48
+				sensor.driveForwardAuto(45); //48
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(110);
+				sensor.driveForwardAuto(110);
 				sensor.stopRobot();
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
-				//elevator.raiseElevatorDis(autoDis);
-				//sensor.stopRobot();				
-				sensor.driveFowardAuto(55);
+				do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+				elevator.openClaws(0.8);
+				elevator.raiseElevatorDis(autoDis);
+				Timer.delay(1.5);				
+				sensor.driveForwardAuto(65);
 				sensor.stopRobot();
-				//elevator.ejectBlock(autoSpeed);
-				//sensor.stopRobot();
+				elevator.ejectBlock(autoSpeed);
+				elevator.noGrip();
+				Timer.delay(0.5);
+				elevator.stopWheels();
 				exit = true;
 			}else if(mySwitch == 'R') { 
-				
-				sensor.driveFowardAuto(100); //48
+				System.out.println("Im running");
+				do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+				elevator.openClaws(0.8);
+				elevator.raiseElevatorDis(autoDis);			
+				Timer.delay(1);
+				sensor.driveForwardAuto(100); //48
 				sensor.stopRobot();
+				elevator.ejectBlock(autoSpeed);
+				elevator.noGrip();
+				Timer.delay(0.5);
+				elevator.stopWheels();
 				//sensor.turnRobotRightGyro(90);
 				//sensor.stopRobot();
 				//sensor.driveFowardAuto(60);
@@ -205,20 +222,24 @@ public class Autonomous {
 			}
 		}else if(myPosition == 2) { //Right
 			if(mySwitch == 'R') {
-				sensor.driveFowardAuto(145);
+				sensor.driveForwardAuto(145);
 				sensor.stopRobot();
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
-				//elevator.raiseElevatorDis(autoDis);
-				//sensor.stopRobot();
-				sensor.driveFowardAuto(25);
+				do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+				elevator.openClaws(0.8);
+				elevator.raiseElevatorDis(autoDis);
+				Timer.delay(3);
+				sensor.driveForwardAuto(30);
 				sensor.stopRobot();	
-				//elevator.ejectBlock(autoSpeed);
-				//sensor.stopRobot();
+				elevator.ejectBlock(autoSpeed);
+				elevator.noGrip();
+				Timer.delay(0.5);
+				elevator.stopWheels();
 				exit = true;
 				
 			}else if(mySwitch == 'L') {
-				sensor.driveFowardAuto(126);
+				sensor.driveForwardAuto(150);
 				sensor.stopRobot();
 				/*sensor.driveFowardAuto(218);
 				sensor.stopRobot();
@@ -241,28 +262,48 @@ public class Autonomous {
 		}else if(myGoal == 1) { //Scale
 			if(myPosition == 0) { //Left
 				if(myScale == 'L') {
-					sensor.driveFowardAuto(323);
+					do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+					elevator.openClaws(0.8);
+					elevator.raiseElevatorDis(autoDis2);
+					sensor.driveForwardAuto(300);
 					sensor.stopRobot();
-					sensor.turnRobotRightGyro(90);
+					Timer.delay(2);
+					sensor.turnRobotLeftGyro(90);
 					sensor.stopRobot();
-					elevator.raiseElevatorDis(autoDis);
-					sensor.stopRobot();
+					//elevator.raiseElevatorDis(autoDis);
+					//sensor.stopRobot();
 					elevator.ejectBlock(autoSpeed);
-					//sensor.stopRobot()
+					elevator.noGrip();
+					Timer.delay(0.5);
+					elevator.stopWheels();
 					exit = true;
 				}else if(myScale == 'R') {
-					sensor.driveFowardAuto(218);
+					sensor.driveForwardAuto(150);
 					sensor.stopRobot();
 					sensor.turnRobotRightGyro(90);
 					sensor.stopRobot();
-					sensor.driveFowardAuto(240);
+					do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+					elevator.openClaws(0.8);
+					elevator.raiseElevatorDis(autoDis2);
+					sensor.driveForwardAuto(240);
+					sensor.stopRobot();
+					Timer.delay(3);
+					sensor.turnRobotLeftGyro(90);
+					sensor.stopRobot();
+					elevator.ejectBlock(0.8);
+					elevator.noGrip();
+					Timer.delay(0.5);
+					elevator.stopWheels();
+					/*sensor.turnRobotRightGyro(90);
+					sensor.stopRobot();
+					sensor.driveForwardAuto(240);
 					sensor.stopRobot();
 					sensor.turnRobotLeftGyro(90);
 					sensor.stopRobot();
-					sensor.driveFowardAuto(68);
+					sensor.driveForwardAuto(68);
 					sensor.stopRobot();
 					sensor.turnRobotLeftGyro(90);
-					sensor.stopRobot();
+					sensor.stopRobot();*/
 					//elevator.raiseElevatorDis(autoDis);
 					//sensor.stopRobot();
 					//elevator.ejectBlock(autoSpeed);
@@ -271,28 +312,66 @@ public class Autonomous {
 				}
 			}else if(myPosition == 1) { //Center
 				if(myScale == 'R') {
-					sensor.turnRobotRightGyro(31);
+					sensor.driveForwardAuto(45);
 					sensor.stopRobot();
-					sensor.driveFowardAuto(140);
+					sensor.turnRobotRightGyro(90);
+					sensor.stopRobot();
+					sensor.driveForwardAuto(30);
+					sensor.stopRobot();
+					sensor.turnRobotLeftGyro(90);
+					sensor.stopRobot();
+					do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+					elevator.openClaws(0.8);
+					elevator.raiseElevatorDis(autoDis2);
+					sensor.driveForwardAuto(265);
+					sensor.stopRobot();
+					sensor.turnRobotLeftGyro(90);
+					sensor.stopRobot();
+					elevator.ejectBlock(0.8);
+					elevator.noGrip();
+					Timer.delay(0.5);
+					elevator.stopWheels();
+					/*sensor.turnRobotRightGyro(31);
+					sensor.stopRobot();
+					sensor.driveForwardAuto(140);
 					sensor.stopRobot();
 					sensor.turnRobotLeftGyro(31);
 					sensor.stopRobot();
-					sensor.driveFowardAuto(204);
+					sensor.driveForwardAuto(204);
 					sensor.turnRobotLeftGyro(90);
-					sensor.stopRobot();
+					sensor.stopRobot();*/
 					//elevator.raiseElevatorDis(autoDis);
 					//sensor.stopRobot();
 					//elevator.ejectBlock(autoSpeed);
 					//sensor.stopRobot()
 					exit = true;
 				}else if(myScale == 'L') {
-					sensor.turnRobotLeftGyro(45);
-					sensor.stopRobot();
-					sensor.driveFowardAuto(170);
-					sensor.turnRobotRightGyro(45);
-					sensor.driveFowardAuto(204);
+					sensor.driveForwardAuto(45);
 					sensor.turnRobotRightGyro(90);
+					sensor.driveForwardAuto(140);
 					sensor.stopRobot();
+					sensor.driveForwardAuto(30);
+					sensor.stopRobot();
+					sensor.turnRobotLeftGyro(90);
+					sensor.stopRobot();
+					do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+					elevator.openClaws(0.8);
+					elevator.raiseElevatorDis(autoDis2);
+					sensor.driveForwardAuto(265);
+					sensor.stopRobot();
+					sensor.turnRobotLeftGyro(90);
+					sensor.stopRobot();
+					elevator.ejectBlock(0.8);
+					elevator.noGrip();
+					Timer.delay(0.5);
+					elevator.stopWheels();
+					/*sensor.turnRobotLeftGyro(45);
+					sensor.stopRobot();
+					sensor.driveForwardAuto(170);
+					sensor.turnRobotRightGyro(45);
+					sensor.driveForwardAuto(204);
+					sensor.turnRobotRightGyro(90);
+					sensor.stopRobot();*/
 					//elevator.raiseElevatorDis(autoDis);
 					//sensor.stopRobot();
 					//elevator.ejectBlock(autoSpeed);
@@ -301,42 +380,50 @@ public class Autonomous {
 				}
 			}else if(myPosition == 2) { //Right
 				if(myScale == 'R');
-				sensor.driveFowardAuto(323);
+				do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+				elevator.openClaws(0.8);
+				elevator.raiseElevatorDis(autoDis2);
+				sensor.driveForwardAuto(300);
 				sensor.stopRobot();
+				Timer.delay(2);
 				sensor.turnRobotLeftGyro(90);
 				sensor.stopRobot();
 				//elevator.raiseElevatorDis(autoDis);
 				//sensor.stopRobot();
-				//elevator.ejectBlock(autoSpeed);
-				//sensor.stopRobot()
+				elevator.ejectBlock(autoSpeed);
+				elevator.noGrip();
+				Timer.delay(0.5);
+				elevator.stopWheels();
 				exit = true;
 			}else if(myScale == 'L') {
-				sensor.driveFowardAuto(218);
+				sensor.driveForwardAuto(150);
 				sensor.stopRobot();
+				sensor.turnRobotLeftGyro(90);
+				sensor.stopRobot();
+				do {clawDown = elevator.tiltClawDown(0.8);}while(!clawDown);
+				elevator.openClaws(0.8);
+				elevator.raiseElevatorDis(autoDis2);
+				sensor.driveForwardAuto(240);
+				sensor.stopRobot();
+				Timer.delay(3);
 				sensor.turnRobotRightGyro(90);
 				sensor.stopRobot();
-				sensor.driveFowardAuto(240);
+				sensor.driveForwardAuto(50);
 				sensor.stopRobot();
-				sensor.turnRobotLeftGyro(90);
-				sensor.stopRobot();
-				sensor.driveFowardAuto(68);
-				sensor.stopRobot();
-				sensor.turnRobotLeftGyro(90);
-				sensor.stopRobot();
-				//elevator.raiseElevatorDis(autoDis);
-				//sensor.stopRobot();
-				//elevator.ejectBlock(autoSpeed);
-				//sensor.stopRobot()
+				elevator.ejectBlock(autoSpeed);
+				elevator.noGrip();
+				Timer.delay(0.5);
+				elevator.stopWheels();
 				exit = true;
 			}
 			
 		}else if(myGoal == 2) { //Neither
 			if(myPosition == 0) { //Left
-				sensor.driveFowardAuto(126);
+				sensor.driveForwardAuto(126);
 				sensor.stopRobot();
 				exit = true;
 			}else if(myPosition == 1) { //Center
-				sensor.driveFowardAuto(126);
+				sensor.driveForwardAuto(100);
 				sensor.stopRobot();
 			   /*sensor.driveFowardAuto(55);
 			   sensor.stopRobot();
@@ -349,7 +436,7 @@ public class Autonomous {
 		       sensor.stopRobot(); */
 		       exit = true;
 			}else if(myPosition == 2) { //Right
-				sensor.driveFowardAuto(126);
+				sensor.driveForwardAuto(126);
 				sensor.stopRobot();
 				exit = true;
 			}

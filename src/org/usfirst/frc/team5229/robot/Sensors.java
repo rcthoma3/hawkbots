@@ -54,7 +54,6 @@ public class Sensors {
 	}
 	
 	public boolean setOverride(boolean input) {
-		System.out.println("Override set");
 		override = input;
 		return true;
 	}
@@ -286,7 +285,7 @@ public class Sensors {
 	//Make a robot move forward during autonomous
 	//in:Distance, 4 motor controllers
 	//out:nothing
-	public boolean driveFowardAuto(int dis) {
+	public boolean driveForwardAuto(int dis) {
 		
 		if (!setEnc) {
 			System.err.println("ERROR: Encoders Not Set");
@@ -765,7 +764,6 @@ public class Sensors {
 					else if (rearRightValid) { _frontLeftMotor.follow(_rearRightMotor); }
 					else { _frontLeftMotor.follow(_frontRightMotor); }
 					frontLeftValid = false;
-					System.out.println("frontLeftError");
 				}
 				if (badPosition == 2) {
 					
@@ -774,7 +772,6 @@ public class Sensors {
 					else if (rearLeftValid) { _frontRightMotor.follow(_rearLeftMotor); }
 					else { _frontRightMotor.follow(_frontLeftMotor); }
 					frontRightValid = false;
-					System.out.println("frontRightError");
 				}
 				if (badPosition == 3) {
 					
@@ -783,7 +780,6 @@ public class Sensors {
 					else if (frontRightValid) { _rearLeftMotor.follow(_frontRightMotor); }
 					else { _rearLeftMotor.follow(_rearRightMotor); }
 					rearLeftValid = false;
-					System.out.println("rearLeftError");
 				}
 				if (badPosition == 4) {
           
@@ -792,7 +788,6 @@ public class Sensors {
 					else if (frontLeftValid) { _rearRightMotor.follow(_frontLeftMotor); }
 					else { _rearRightMotor.follow(_rearLeftMotor); }
 					rearRightValid = false;
-					System.out.println("rearRightError");
 				}
 			}
 		}

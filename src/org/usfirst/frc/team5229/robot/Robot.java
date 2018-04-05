@@ -65,9 +65,9 @@ public class Robot extends IterativeRobot {
 	DigitalInput bottomElevatorSwitch;
 	DigitalInput grabSwitch;
 	// Analog Declarations
-	AnalogTrigger clawTiltTrigger;
-	AnalogTrigger rightClawArmTrigger;
-	AnalogTrigger leftClawArmTrigger;
+	//AnalogTrigger clawTiltTrigger;
+	//AnalogTrigger rightClawArmTrigger;
+	//AnalogTrigger leftClawArmTrigger;
 
 	// These values correspond to roboRIO ports
 	//Talons - CAN
@@ -90,9 +90,9 @@ public class Robot extends IterativeRobot {
 	int leftClawPort = 0;
 	int rightClawPort = 1;
 	//Bosch Motor Sensors - Analog
-	int clawTiltTriggerPort = 0;
-	int rightClawArmTriggerPort = 1;
-	int leftClawArmTriggerPort = 2;
+	//int clawTiltTriggerPort = 0;
+	//int rightClawArmTriggerPort = 1;
+	//int leftClawArmTriggerPort = 2;
 		
 	//double whlSize = 8; // Wheel diameter in inches (Test Robot)
 	//double roboDim = 30; // Diagonal distance between wheels in inches (Test Robot)
@@ -144,9 +144,9 @@ public class Robot extends IterativeRobot {
 		bottomElevatorSwitch = new DigitalInput(bottomElevatorPort);
 		grabSwitch = new DigitalInput(grabSwitchPort);
 		
-		clawTiltTrigger = new AnalogTrigger(clawTiltTriggerPort);
-		rightClawArmTrigger = new AnalogTrigger(rightClawArmTriggerPort);
-		leftClawArmTrigger = new AnalogTrigger(leftClawArmTriggerPort);
+		//clawTiltTrigger = new AnalogTrigger(clawTiltTriggerPort);
+		//rightClawArmTrigger = new AnalogTrigger(rightClawArmTriggerPort);
+		//leftClawArmTrigger = new AnalogTrigger(leftClawArmTriggerPort);
 		
 		myClimber.setClimbMotor(_climbMotor);
 		myClimber.initElevator();
@@ -158,7 +158,7 @@ public class Robot extends IterativeRobot {
 		myElevator.setGrabMotors(_leftClawWheelMotor, _rightClawWheelMotor);
 		myElevator.setClawMotors(_clawTiltMotor, _rightClawArmMotor, _leftClawArmMotor);
 		myElevator.initClawMotors();
-		myElevator.setClawTriggers(clawTiltTrigger, rightClawArmTrigger, leftClawArmTrigger);
+		//myElevator.setClawTriggers(clawTiltTrigger, rightClawArmTrigger, leftClawArmTrigger);
 		
 		myRobot.setEncoders (_frontLeftMotor, _rearLeftMotor, _frontRightMotor,  _rearRightMotor);
 		myRobot.initEncoders();
@@ -259,13 +259,6 @@ public class Robot extends IterativeRobot {
 		else if (myDriveController.getButtonRightBumber()) { _drive.setMaxOutput(.25); }
 		else { _drive.setMaxOutput(1.0); }
 		
-		System.out.println("A button: " + myDriveController.getButtonA());
-		if (myDriveController.getButtonA()) {myElevator.moveLeftClaw(0.8);}
-		else if (myDriveController.getButtonB()) {myElevator.moveLeftClaw(-0.8);}
-
-		if (myDriveController.getButtonX()) {myElevator.moveRightClaw(0.8);}
-		else if (myDriveController.getButtonY()) {myElevator.moveRightClaw(-0.8);}
-		
 		if (myController.getButtonRightD()) { myClimber.raiseElevator(1200, true); }
 		if (myController.getButtonLeftD()) { myClimber.lowerElavator(400, true); }
 		
@@ -275,6 +268,10 @@ public class Robot extends IterativeRobot {
 		
 		if (myController.getButtonA() ) { myElevator.openClaws(0.8); } 
 		else if (myController.getButtonB() ) { myElevator.closeClaws(0.8); }
+		else if (myDriveController.getButtonA() && myDriveController.getButtonLeftD()) {myElevator.moveLeftClaw(0.8);}
+		else if (myDriveController.getButtonA() && myDriveController.getButtonRightD()) {myElevator.moveLeftClaw(-0.8);}
+		else if (myDriveController.getButtonB() && myDriveController.getButtonLeftD()) {myElevator.moveRightClaw(0.8);}
+		else if (myDriveController.getButtonB() && myDriveController.getButtonRightD()) {myElevator.moveRightClaw(-0.8);}
 		else { myElevator.openClaws(0);}
 		
 		if (myController.getRightJoyY() > 0.1) { myElevator.tiltClawUp(.8);}
@@ -333,7 +330,7 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putNumber("Right Arm Current", _rightClawArmMotor.getOutputCurrent());
 		SmartDashboard.putNumber("Left Arm Current", _leftClawArmMotor.getOutputCurrent());
-		
+		SmartDashboard.putNumber("Claw Tilt Current", _clawTiltMotor.getOutputCurrent());
 		SmartDashboard.putString("Game message", gameMsg);
 		
 		int pos = myAutonRobot.getPosition();
