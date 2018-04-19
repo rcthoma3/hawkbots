@@ -31,13 +31,13 @@ public class Robot extends IterativeRobot {
 	boolean turnLeft = true;
 	boolean follow = true;
 	
-	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
-	ControllerLogitech myDriveController = new ControllerLogitech(2);
+	ControllerLogitech myController = new ControllerLogitech(2); // input is usb value for drive station
+	ControllerLogitech myDriveController = new ControllerLogitech(1);
 	Climbing myClimber = new Climbing();
 	Elevator myElevator = new Elevator();
 	Sensors myRobot = new Sensors();
 	Autonomous myAutonRobot = new Autonomous();
-	ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+	//ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	
 	UsbCamera Camera1;
 	UsbCamera Camera2;
@@ -95,12 +95,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		/*
+		
 		_frontLeftMotor = new VictorSP(frontLeftMotorPort); 
 		_rearLeftMotor = new VictorSP(rearLeftMotorPort);
 		_frontRightMotor = new VictorSP(frontRightMotorPort);
 		_rearRightMotor = new VictorSP(rearRightMotorPort);
 		
+		/*
 		_climbMotor = new WPI_TalonSRX(climbMotorPort);
 		_leftClawMotor = new VictorSP(leftClawPort);
 		_rightClawMotor = new VictorSP(rightClawPort);
@@ -236,9 +237,9 @@ public class Robot extends IterativeRobot {
 		// Something to do with safety 
 		_drive.setSafetyEnabled(false);
 		_drive.setExpiration(0.1);
-		w
+		
 		// Set Max output
-		_drive.setMaxOutput(1.0);	
+		_drive.setMaxOutput(0.6);	
 		
 		// Motors should not be inverted for WPILib MecanumDrive Function
 		_frontRightMotor.setInverted(false);
@@ -257,7 +258,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic()
 	{
 		
-		if(!autonTune.getSelected())
+		//if(!autonTune.getSelected())
 		{
 			_drive.driveCartesian(myDriveController.getLeftJoyX(), -myDriveController.getLeftJoyY(), myDriveController.getRightJoyX(), 0);	
 			/*
@@ -286,7 +287,7 @@ public class Robot extends IterativeRobot {
 			else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 			else { myElevator.ejectBlock(0); }
 		*/}
-		else { autonTune(); }
+		//else { autonTune(); }
 	
 		populateSmartDashboard();
 
@@ -423,4 +424,4 @@ public class Robot extends IterativeRobot {
 	    */
 		}
 	}	
-}
+
