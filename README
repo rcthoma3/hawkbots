@@ -65,12 +65,15 @@ LINKS:
 	  Added and revised function for telling one motor to follow another during auton(turning, in sensors branch). -Ethan
 
 	8/29/2018
-		Now using VS Code (Visual Studio Code) for Java interface instead of Eclipse. Changed due to FIRST moving to it. Below is the link to download VS Studio 
-		and all resources required for FIRST. Also linked below is a video guiding you through the instalation of GIT, as it is required in VS Studio to pull things
+		Now using VS Code (Visual Studio Code) for Java interface instead of Eclipse. Changed due to FIRST moving to it. Below is the link to download VS Code 
+		and all resources required for FIRST. Also linked below is a video guiding you through the instalation of GIT, as it is required in VS Code to pull things
 		from GitHub.
 
-		Guide from FIRST for VS Studio and resource instalation: https://wpilib.screenstepslive.com/s/currentCS/m/79833/l/932382-installing-vs-code
+		Guide from FIRST for VS Code and resource instalation: https://wpilib.screenstepslive.com/s/currentCS/m/79833/l/932382-installing-vs-code
 		Guide for GIT instalation and use: https://www.youtube.com/watch?v=NTY5VELbCWI
 		-Ethan
 
+	8/30/2018
+		Also, here is a link to a FIRST frc page that shows how to deploy code using VS Code as well as how to make a new project for a robot: 
+		https://wpilib.screenstepslive.com/s/currentCS/m/79833/l/932465-creating-a-new-wpilib-project-in-vscode
 		
