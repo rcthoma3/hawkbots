@@ -63,4 +63,14 @@ LINKS:
 	2/3/2018 
 	  Added and revised function for telling one motor to follow another during auton(going straight). -Ethan
 	  Added and revised function for telling one motor to follow another during auton(turning, in sensors branch). -Ethan
-	 
+
+	8/29/2018
+		Now using VS Code (Visual Studio Code) for Java interface instead of Eclipse. Changed due to FIRST moving to it. Below is the link to download VS Studio 
+		and all resources required for FIRST. Also linked below is a video guiding you through the instalation of GIT, as it is required in VS Studio to pull things
+		from GitHub.
+
+		Guide from FIRST for VS Studio and resource instalation: https://wpilib.screenstepslive.com/s/currentCS/m/79833/l/932382-installing-vs-code
+		Guide for GIT instalation and use: https://www.youtube.com/watch?v=NTY5VELbCWI
+		-Ethan
+
+		
