@@ -31,6 +31,9 @@ public class Robot extends IterativeRobot {
 	boolean turnLeft = true;
 	boolean follow = true;
 	
+	private int timeoutMs = 10;
+	private int pidIdx = 0;
+	
 
 	ControllerLogitech myController = new ControllerLogitech(1); // input is usb value for drive station
 	//TODO: Uncomment the second controller once it is ready
@@ -186,7 +189,7 @@ public class Robot extends IterativeRobot {
 		
 		myAutonRobot.setAutoChooser();
 		
-		populateSmartDashboard() ;
+		populateSmartDashboard();
 		
 		follow = true;
 		
@@ -288,6 +291,11 @@ public class Robot extends IterativeRobot {
 		if (myController.getButtonLeftBumber()) { myElevator.grabBlock(0.5); }
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(0.5); }
 		else { myElevator.ejectBlock(0); }
+		
+		if (myController.getRightTrigger() > 0 && myController.getLeftTrigger() < 0) {
+			myElevator.bottomLimitOverride = true;
+		}
+		else { myElevator.bottomLimitOverride = false; }
 	
 		populateSmartDashboard() ;
 

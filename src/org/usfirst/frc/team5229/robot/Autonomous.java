@@ -191,7 +191,7 @@ public class Autonomous {
 				sensor.stopRobot();
 				elevator.ejectBlock(autoSpeed);
 				elevator.noGrip();
-				Timer.delay(0.5);
+				Timer.delay(1.0);
 				elevator.stopWheels();
 				exit = true;
 			}else if(mySwitch == 'R') { 

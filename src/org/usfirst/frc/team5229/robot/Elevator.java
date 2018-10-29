@@ -22,6 +22,7 @@ public class Elevator {
 	private WPI_TalonSRX _leftClawMotor; //This motor should extend the left claw
 	private WPI_TalonSRX _rightClawMotor;//This motor should extend the right claw
 	private boolean  setMotors;
+	public boolean bottomLimitOverride;
 	//private AnalogTrigger clawTiltTrigger;
 	//private AnalogTrigger rightClawArmTrigger;
 	//private AnalogTrigger leftClawArmTrigger;
@@ -273,7 +274,7 @@ public class Elevator {
 	
 	public boolean getElevatorBottom() {
 		int pos = _elevatorMotor.getSelectedSensorPosition(0);
-		if(pos <= 20) {return true;}
+		if(pos <= 20 && !bottomLimitOverride) {return true;}
 		else {return false;}
 	}
 	
