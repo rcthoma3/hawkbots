@@ -292,10 +292,10 @@ public class Robot extends IterativeRobot {
 		else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(0.5); }
 		else { myElevator.ejectBlock(0); }
 		
-		if (myController.getRightTrigger() > 0 && myController.getLeftTrigger() < 0) {
-			myElevator.bottomLimitOverride = true;
+		if (myController.getRightTrigger() > 0 && myController.getLeftTrigger() > 0) {
+			bottomLimitOverride = true;
 		}
-		else { myElevator.bottomLimitOverride = false; }
+		else { bottomLimitOverride = false; }
 	
 		populateSmartDashboard() ;
 
@@ -340,6 +340,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Left Arm Current", _leftClawArmMotor.getOutputCurrent());
 		SmartDashboard.putNumber("Claw Tilt Current", _clawTiltMotor.getOutputCurrent());
 		SmartDashboard.putString("Game message", gameMsg);
+		 
 		
 		int pos = myAutonRobot.getPosition();
 		if(pos == 0) {
