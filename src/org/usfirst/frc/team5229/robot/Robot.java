@@ -59,6 +59,9 @@ public class Robot extends IterativeRobot {
 	DigitalInput topElevatorSwitch;
 	DigitalInput bottomElevatorSwitch;
 	DigitalInput grabSwitch;
+	
+	private Sensors topSwitch = new Sensors();
+	private Sensors bottomSwitch = new Sensors();
 
 	// These values correspond to roboRIO ports
 	//Talons - CAN
@@ -89,6 +92,8 @@ public class Robot extends IterativeRobot {
 	public SendableChooser<Boolean> autonTune;
 	public SendableChooser<Integer> autonAction;
 	
+	ValveDA cyc;
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -101,6 +106,9 @@ public class Robot extends IterativeRobot {
 		_frontRightMotor = new VictorSP(frontRightMotorPort);
 		_rearRightMotor = new VictorSP(rearRightMotorPort);
 		
+		cyc = new ValveDA(1, 0);
+		topClimbSwitch = new DigitalInput(topClimbPort);
+		bottomClimbSwitch= new DigitalInput(bottomClimbPort);;
 		/*
 		_climbMotor = new WPI_TalonSRX(climbMotorPort);
 		_leftClawMotor = new VictorSP(leftClawPort);
@@ -226,7 +234,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopInit() {	
-		
+		/*
 		myRobot.setOverride(true);
 		myRobot.stopRobot();
 		follow = false;
@@ -248,7 +256,7 @@ public class Robot extends IterativeRobot {
 		_rearLeftMotor.setInverted(false);
 		
 		populateSmartDashboard();
-		
+		*/
 	}
 
 	/**
@@ -258,6 +266,13 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic()
 	{
 		
+		if(!topClimbSwitch.get()) {
+			cyc.Open();
+		}
+		if(!bottomClimbSwitch.get()) {
+			cyc.Close();
+		}
+		/*
 		//if(!autonTune.getSelected())
 		{
 			_drive.driveCartesian(myDriveController.getLeftJoyX(), -myDriveController.getLeftJoyY(), myDriveController.getRightJoyX(), 0);	
@@ -286,13 +301,13 @@ public class Robot extends IterativeRobot {
 			if (myController.getButtonLeftBumber()) { myElevator.grabBlock(1); }
 			else if (myController.getButtonRightBumber()) { myElevator.ejectBlock(1); }
 			else { myElevator.ejectBlock(0); }
-		*/}
+		*//*}
 		//else { autonTune(); }
 	
 		populateSmartDashboard();
 
 		Timer.delay(0.005);
-		
+		*/
 	}
 
 	/**
